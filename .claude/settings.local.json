@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /c/git_projects/capstone_prompt_injection mv data_validation.ipynb notebooks/01_data_validation.ipynb)",
+      "Bash(git -C /c/git_projects/capstone_prompt_injection status --short)",
+      "WebSearch"
+    ]
+  }
+}

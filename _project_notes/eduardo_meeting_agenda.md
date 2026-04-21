@@ -1,6 +1,14 @@
+| Purpose | Slim agenda for office meeting with Eduardo |
+| Status | Ephemeral — delete after meeting; answers integrated into state.md and methodology_decisions.md |
+| Created | 2026-04-21 |
+| Meeting date | TBD this week |
+| After meeting | Integrate answers into [capstone_state.md](./capstone_state.md) and [capstone_methodology_decisions.md](./capstone_methodology_decisions.md), then delete this file |
+
+---
+
 # Meeting Agenda with Eduardo
 
-*Office meeting. Target length 20-30 min. Reference for deeper detail: `capstone_decisions_for_eduardo.md`.*
+Office meeting. Target length 20-30 min. Reference for deeper detail: [capstone_methodology_decisions.md](./capstone_methodology_decisions.md).
 
 ---
 
@@ -24,7 +32,7 @@ Proposing a stratified sample of ~4,546 rows rather than the full 20,949:
 
 **Question**: Is the stratified sample acceptable as primary analysis? Or do you prefer a full-dataset primary pass?
 
-Reference: Decision #1 in `capstone_decisions_for_eduardo.md` for pros/cons/citations.
+Reference: Decision #1 in [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) for pros/cons/citations.
 
 ### 2b. Rigor priorities
 
@@ -40,7 +48,7 @@ Planned methodological rigor items:
 
 **Question**: Any rigor expectation I am missing? Anything you want me to emphasize or de-emphasize?
 
-Reference: Methodological additions M1-M4 in `capstone_decisions_for_eduardo.md`.
+Reference: Methodological additions M1-M4 in [capstone_methodology_decisions.md](./capstone_methodology_decisions.md).
 
 ## 3. Interim logistics (5 min)
 
@@ -61,9 +69,9 @@ The CEU language says "Student submits interim progress report to program coordi
 
 ## Docs to show if asked for depth
 
-- `capstone_decisions_for_eduardo.md`: comprehensive scope and methodological decisions with citations
+- [capstone_methodology_decisions.md](./capstone_methodology_decisions.md): comprehensive scope and methodological decisions with citations
 - `capstone_plan.md`: week-by-week plan with checkboxes
-- `capstone_project_state-04-21.md`: project state as of April 21, post-interview
+- [capstone_state.md](./capstone_state.md): current project state snapshot
 
 ## What I want to leave with
 

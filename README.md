@@ -30,7 +30,7 @@ capstone_prompt_injection/
 
 ## Status
 
-Active implementation. See `_project_notes/capstone_project_state-04-21.md` for latest project state and `_project_notes/capstone_plan.md` for the detailed plan.
+Active implementation. See `_project_notes/INDEX.md` for navigation. Latest state at `_project_notes/capstone_state.md`, detailed plan at `_project_notes/capstone_plan.md`.
 
 ## Deliverables
 

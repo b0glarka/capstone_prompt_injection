@@ -1,48 +1,40 @@
-# Capstone Plan of Action
-
-*Created: 2026-04-21. Interim due 2026-05-11. Final due 2026-06-08. Living document; check off items as completed.*
+| Purpose | Active work tracker: phases, checkboxes, hours, dependencies. Check off items as they are done. |
+| Status | Active |
+| Created | 2026-04-21 |
+| Last edited | 2026-04-21 |
+| Related | [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot) |
 
 ---
 
-## Purpose
+# Capstone Plan of Action
 
-Step-by-step plan to complete the capstone by June 8 with a quality level defensible to Eduardo and useful to Hiflylabs. Built from the 11 scope decisions in the 2026-04-21 interview plus the 5 top-concern additions identified in that session. All decisions are summarized for Eduardo review in `capstone_decisions_for_eduardo.md`.
+Interim due 2026-05-11. Final due 2026-06-08. Decision rationale lives in [capstone_methodology_decisions.md](./capstone_methodology_decisions.md).
 
-## How to use this file
+## How to use
 
-- Check boxes as work completes. Prefer marking done immediately rather than batching.
+- Check boxes as work completes.
 - Hours are estimates; revise inline if they prove wrong.
-- Phases have target date ranges but flex inside them. Phase boundaries are the schedule, not daily tasks.
+- Phase boundaries are the schedule, not daily targets.
+- Only bump "Last edited" above when structure changes (new phase, new task), not per checkbox.
 - Go/no-go checkpoints are explicit; do not expand scope without hitting them.
 
-## Total time budget
+## Time budget
 
 - Available: 30+ hrs/week × 7 weeks = 210+ hrs
 - Blackouts: DS4 exam prep ~8 hrs (May 17-20), geospatial project ~10 hrs (May 22-25)
-- Net capstone: ~192 hrs
-- Scope estimate: ~175 hrs
-- Buffer: ~17 hrs (plus headroom for scope additions if decisions-checkpoints go)
-
-## Scope decisions (locked unless re-opened)
-
-- Stratified evaluation set: ~4,546 rows total (all 546 deepset rows, 2,000 from neuralchemy, 2,000 from SPML). Stratification by label within each dataset and by neuralchemy subcategory on the injection side. Seed 42. Frozen to `results/eval_set.parquet`. deepset's 546-row total is below the 2,000 target, so we use all of it rather than resample with replacement.
-- Paired evaluation: same prompts through all defenses
-- Defense A: ProtectAI DeBERTa and Meta Llama Prompt Guard, run on Colab Pro
-- Defense B agent: Llama 3.3 70B via Groq paid tier, simulated via system prompt (BIPIA methodology)
-- Defense B judge: Claude Sonnet 4.6 primary + GPT-4o sensitivity on 500-row subsample, Cohen's kappa reported
-- Prompt augmentation baseline: 3 conditions (no-aug control, instruction-only, combined)
-- BIPIA: phased (email QA first, checkpoint decision to expand)
-- Caching: JSONL append log per call type, temperature=0, gitignored, published as supplementary artifact
+- Net capstone: ~192 hrs, Scope estimate: ~175 hrs, Buffer: ~17 hrs
 
 ## Deferred scope additions (go/no-go at checkpoints)
 
-- Custom adversarial test set (50-100 prompts you craft)
-- Defense transfer analysis (fine-tune on one dataset, test on others)
-- Error taxonomy (qualitative coding of false negatives)
+Not in baseline. Decide at phase checkpoints.
+
+- Custom adversarial test set (50-100 crafted prompts)
+- Defense transfer analysis
+- Error taxonomy on false negatives
 - Defense C combined A+B pipeline
-- BIPIA expansion (web QA, code QA, summarization, table QA)
-- Prompt augmentation decomposition (all 5 variants)
-- Second-annotator gold labeling (Hiflylabs engineer or CEU classmate)
+- BIPIA expansion beyond email QA
+- Prompt augmentation decomposition (5 variants)
+- Second-annotator gold labeling
 
 ---
 
@@ -104,7 +96,7 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
 
 - [ ] Email Eduardo to confirm interim format expectations (audience, document vs presentation, page target, rubric if any)
 - [ ] Push all Phase 0 commits to main
-- [ ] Update `_project_notes/capstone_project_state-04-21.md` with Phase 0 completion status
+- [ ] Update `_project_notes/capstone_state.md` with Phase 0 completion status
 
 ---
 
@@ -190,7 +182,7 @@ Target: ~23 active hrs. Goal: judge validation, interim report, everything commi
 ### Week 3 checkpoint (May 11 interim deadline)
 
 - [ ] Interim report submitted
-- [ ] Update `capstone_project_state-04-21.md` (or successor) with post-interim status
+- [ ] Update `capstone_state.md` with post-interim status
 - [ ] Capture any Eduardo or coordinator feedback for Phase 3 adjustments
 
 ---

@@ -1,3 +1,11 @@
+| Purpose | Historical snapshot at end of 2026-04-21 planning session. Bloated (duplicates content later split into plan/methodology_decisions/state). Kept for record. |
+| Status | Archived |
+| Memorializing | 2026-04-21 (afternoon) |
+| Archived | 2026-04-21 (same day, archived during doc reorg) |
+| Superseded by | [capstone_state.md](../capstone_state.md), [capstone_plan.md](../capstone_plan.md), [capstone_methodology_decisions.md](../capstone_methodology_decisions.md) |
+
+---
+
 # Capstone Project State
 *Updated: April 21, 2026 (afternoon, post-planning session)*
 

@@ -4,7 +4,7 @@
 ---
 
 ## Current Phase
-PID submitted to Eduardo and Francesca. Awaiting approval to circulate to Hiflylabs for Zsófi's signature.
+PID approved by Eduardo and Francesca. Sent to Zsófi Práger at Hiflylabs for sponsor signature. Awaiting her response.
 
 ---
 
@@ -33,10 +33,12 @@ PID submitted to Eduardo and Francesca. Awaiting approval to circulate to Hiflyl
 ---
 
 ## Open Questions
-- Eduardo and Francesca approval of revised PID
+- Zsófi signature on PID (sent, awaiting response)
 - Lakera PINT dataset access (form submitted, DocuSign link broken, emailed them)
 - Final LLM and inference provider selection (pending implementation start)
 - Hiflylabs API key offer for closed-source models: follow up with Zsófi when needed
+- Defense B judge prompt quality: the accuracy of output validation depends partly on how well the judge evaluation prompt is written. A poorly designed judge prompt could produce unreliable verdicts independent of whether the attack actually succeeded. This is a methodological variable that needs careful design and may warrant a brief sensitivity analysis in the report.
+- Agent pipeline simplicity: Eduardo specifically flagged that the agent + evaluation pipeline for Defense B must be simple and consistent enough that results are interpretable. Keep this in mind during implementation.
 
 ---
 
@@ -48,8 +50,11 @@ PID submitted to Eduardo and Francesca. Awaiting approval to circulate to Hiflyl
 - Built data validation notebook with label distributions, attack category breakdown, text length distributions, and summary table
 - Datasets saved locally to `data/` folder
 - Revised PID (v3) completed and submitted to CEU with dataset validation cover note
+- PID approved by Eduardo and Francesca
+- PID sent to Zsófi for sponsor signature
 - capstone conda environment created (Python 3.11)
-- Implementation notes saved to `capstone_implementation_notes.md`
+- GitHub repo initialized and pushed
+- Implementation notes and project state docs created
 
 ---
 

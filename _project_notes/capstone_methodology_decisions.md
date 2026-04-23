@@ -1,8 +1,8 @@
-| Purpose | Record of methodology decisions with rationale and citations. Reference when debugging or defending choices downstream. |
-| Status | Active |
-| Created | 2026-04-21 |
-| Last edited | 2026-04-21 |
-| Related | [capstone_plan.md](./capstone_plan.md), [capstone_state.md](./capstone_state.md) |
+- Purpose: record of methodology decisions with rationale and citations. Reference when debugging or defending choices downstream.
+- Status: active
+- Created: 2026-04-21
+- Last edited: 2026-04-21
+- Related: [capstone_plan.md](./capstone_plan.md), [capstone_state.md](./capstone_state.md)
 
 ---
 

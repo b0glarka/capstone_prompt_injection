@@ -1,8 +1,8 @@
-| Purpose | Historical snapshot of project state, March 31, 2026 |
-| Status | Archived |
-| Memorializing | 2026-03-31 |
-| Archived | 2026-04-21 |
-| Superseded by | [capstone_state.md](../capstone_state.md) |
+- Purpose: historical snapshot of project state, March 31, 2026
+- Status: archived
+- Memorializing: 2026-03-31
+- Archived: 2026-04-21
+- Superseded by: [capstone_state.md](../capstone_state.md)
 
 ---
 

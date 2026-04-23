@@ -1,8 +1,8 @@
-| Purpose | Active work tracker: phases, checkboxes, hours, dependencies. Check off items as they are done. |
-| Status | Active |
-| Created | 2026-04-21 |
-| Last edited | 2026-04-21 |
-| Related | [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot) |
+- Purpose: active work tracker with phases, checkboxes, hours, dependencies. Check off items as they are done.
+- Status: active
+- Created: 2026-04-21
+- Last edited: 2026-04-21
+- Related: [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot)
 
 ---
 

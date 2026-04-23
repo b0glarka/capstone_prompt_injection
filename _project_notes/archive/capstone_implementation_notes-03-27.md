@@ -1,8 +1,8 @@
-| Purpose | Pre-PID implementation context: inference provider landscape, prompt augmentation rationale, Zsófi meeting notes. Historical record. |
-| Status | Archived |
-| Memorializing | 2026-03-27 |
-| Archived | 2026-04-21 |
-| Superseded by | [capstone_methodology_decisions.md](../capstone_methodology_decisions.md) for active decisions; keep this for pre-decision context |
+- Purpose: pre-PID implementation context (inference provider landscape, prompt augmentation rationale, Zsófi meeting notes). Historical record.
+- Status: archived
+- Memorializing: 2026-03-27
+- Archived: 2026-04-21
+- Superseded by: [capstone_methodology_decisions.md](../capstone_methodology_decisions.md) for active decisions; keep this for pre-decision context
 
 ---
 

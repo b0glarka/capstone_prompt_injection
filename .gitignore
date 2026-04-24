@@ -214,5 +214,8 @@ cache/
 results/figures/*.png
 *.ipynb_checkpoints/
 
-# Local-only files (reviews, signed docs, drafts) — never push to GitHub
+# Local-only files (reviews, signed docs, drafts), never push to GitHub
 _local/
+
+# Personal Claude Code settings (per-user, not shareable)
+.claude/settings.local.json

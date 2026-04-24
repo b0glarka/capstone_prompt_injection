@@ -18,15 +18,17 @@ capstone_prompt_injection/
 ## Environment setup
 
 1. Clone the repo.
-2. Create the conda environment: `conda env create -f environment.yml` and activate `capstone`.
-3. Create a `.env` file at the repo root with:
+2. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) if not already present.
+3. Run `uv sync` from the repo root. This creates `.venv/` with exact pinned versions from `uv.lock`.
+4. Create a `.env` file at the repo root with:
    ```
    HF_TOKEN=hf_your_token
    GROQ_API_KEY=gsk_your_key
    ANTHROPIC_API_KEY=sk-ant-...
    OPENAI_API_KEY=sk-...
    ```
-4. Run `notebooks/01_data_validation.ipynb` Section 1 once to download the three datasets to `data/`.
+5. In VSCode, select `.venv/Scripts/python.exe` (Windows) or `.venv/bin/python` (macOS/Linux) as the kernel for notebooks in `notebooks/`.
+6. Run `notebooks/01_data_validation.ipynb` Section 1 once to download the three datasets to `data/`.
 
 ## Status
 

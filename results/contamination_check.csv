@@ -1,0 +1,10 @@
+source,training_prompts,deepset_matches,neuralchemy_matches,spml_matches,tier
+VMware/open-instruct,118015,2,4,3,v2-named
+alespalla/chatbot_instruction_prompts,296334,2,11,5,v2-named
+HuggingFaceH4/grok-conversation-harmless,17155,0,0,0,v2-named
+OpenSafetyLab/Salad-Data,21318,0,6,0,v2-named
+jackhhao/jailbreak-classification,1289,0,0,0,v2-named
+natolambert/xstest-v2-copy,451,0,69,0,v2-named
+HuggingFaceH4/ultrachat_200k,515292,0,1,8,v1-precaution
+fka/prompts.chat,1680,3,0,0,v1-precaution
+HuggingFaceH4/no_robots,9999,0,1,0,v1-precaution

@@ -209,9 +209,7 @@ __marimo__/
 # Project-specific
 data/
 *.parquet
-label_distributions.png
 cache/
-results/figures/*.png
 *.ipynb_checkpoints/
 
 # Local-only files (reviews, signed docs, drafts), never push to GitHub

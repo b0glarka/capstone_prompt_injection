@@ -19,7 +19,7 @@ capstone_prompt_injection/
 
 1. Clone the repo.
 2. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) if not already present.
-3. Run `uv sync` from the repo root. This creates `.venv/` with exact pinned versions from `uv.lock`.
+3. Run `uv sync --extra api` from the repo root. This creates `.venv/` with exact pinned versions from `uv.lock`, including the optional API client extras (`groq`, `anthropic`, `openai`) needed for Defense B and the API smoke tests. If you only need Defense A (HuggingFace classifier), plain `uv sync` is sufficient.
 4. Create a `.env` file at the repo root with:
    ```
    HF_TOKEN=hf_your_token
@@ -27,8 +27,9 @@ capstone_prompt_injection/
    ANTHROPIC_API_KEY=sk-ant-...
    OPENAI_API_KEY=sk-...
    ```
-5. In VSCode, select `.venv/Scripts/python.exe` (Windows) or `.venv/bin/python` (macOS/Linux) as the kernel for notebooks in `notebooks/`.
+5. In VSCode, select `.venv/Scripts/python.exe` (Windows) or `.venv/bin/python` (macOS/Linux) as the kernel for notebooks in `notebooks/`. The kernel is registered by the project as `capstone` if you ran the `ipykernel install` step; otherwise the default `python3` kernel pointing at the venv works too.
 6. Run `notebooks/01_data_validation.ipynb` Section 1 once to download the three datasets to `data/`.
+7. Verify the API keys with `.venv/Scripts/python.exe scripts/smoke_test_apis.py`. All three providers should report PASS.
 
 ## Status
 

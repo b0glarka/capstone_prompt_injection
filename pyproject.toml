@@ -22,6 +22,8 @@ dependencies = [
     "torch>=2.0",
     "safetensors>=0.4",
     "tokenizers>=0.20",
+    "sentencepiece>=0.2",
+    "protobuf>=4.0",
     # Notebook and utility
     "jupyter>=1.0",
     "ipykernel>=6.0",

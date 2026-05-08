@@ -1,0 +1,4 @@
+model,accuracy,precision,recall,f1
+DeBERTa v3 (ProtectAI v2),0.9515,0.9154,0.995,0.9535
+Majority class (always INJECTION),0.5,0.5,1.0,0.6667
+"Random (stratified, seed 42)",0.514,0.5141,0.51,0.512

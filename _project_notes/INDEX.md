@@ -1,7 +1,7 @@
 - Purpose: navigation index for `_project_notes/`. Start here to orient.
 - Status: active
 - Created: 2026-04-21
-- Last edited: 2026-04-24
+- Last edited: 2026-05-08
 
 ---
 

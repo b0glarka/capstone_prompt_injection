@@ -1,7 +1,7 @@
 - Purpose: record of methodology decisions with rationale and citations. Reference when debugging or defending choices downstream.
 - Status: active
 - Created: 2026-04-21
-- Last edited: 2026-04-21
+- Last edited: 2026-05-08 (Phase 0 work substantially complete; Eduardo sign-off resolved)
 - Related: [capstone_plan.md](./capstone_plan.md), [capstone_state.md](./capstone_state.md)
 
 ---
@@ -45,7 +45,7 @@ Decisions locked during the 2026-04-21 planning interview. Each entry: the choic
 - [Northcutt, Athalye, Mueller (2021), "Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks"](https://arxiv.org/abs/2103.14749), NeurIPS D&B 2021
 - [Artstein and Poesio (2008), "Inter-Coder Agreement for Computational Linguistics"](https://direct.mit.edu/coli/article/34/4/555/1999/Inter-Coder-Agreement-for-Computational)
 
-Pending Eduardo sign-off.
+Eduardo sign-off received 2026-04-24 (no substantive critiques).
 
 ---
 
@@ -139,6 +139,8 @@ Cross-reference ProtectAI v2 training data and Meta Prompt Guard 2 training data
 
 **Why**: evaluating a classifier on its own training data inflates performance. ProtectAI discloses sources; Meta does not fully. Catching this early is ~2 hours of work; catching it after full experiments would be a significant rework.
 
+**Status (2026-04-24)**: complete for ProtectAI v2 named sources. Decision: accept and caveat. Overlap rates: deepset 0.92%, neuralchemy 1.96%, SPML 0.4%. Limitations documented (Harelix removed from HF, 15 V2 sources disclosed by license category only, Meta Prompt Guard 2 enumerates zero training sources). See `results/contamination_report.md`.
+
 ### M4. Human-labeled gold subset
 Boga labels 150 agent outputs against operational definition. Compute kappa between Boga and each LLM judge. Optional extension: second annotator (Hiflylabs engineer or CEU classmate) labels 50 of the 150 for inter-annotator kappa.
 
@@ -163,14 +165,14 @@ Not in baseline plan. User-side decisions at planned checkpoints.
 
 ---
 
-## Questions for Eduardo (office meeting)
+## Questions for Eduardo (office meeting, 2026-04-24)
 
-Reproduced here for reference. Meeting agenda lives at [eduardo_meeting_agenda.md](./eduardo_meeting_agenda.md).
+All resolved at the 2026-04-24 office meeting. No substantive critiques of the implementation plan. No formal interim template required. Eduardo encouraged running the plan past additional LLM reviewers (which surfaced the business-decision-framework gap addressed in `implementation_plan_summary_v2.md` Section 6a).
 
-1. Stratified ~4,546-row eval set acceptable, or prefer full-dataset primary pass?
-2. Interim (May 11) format: document, presentation, repo walkthrough, combination? Page limit or template?
-3. Interim submitted to you, to program coordinator, or committee?
-4. Any rigor expectations I am missing?
+1. Stratified ~4,546-row eval set acceptable: yes.
+2. Interim (May 11) format: document; no specific page limit or template.
+3. Submission: standard process via Eduardo.
+4. Additional rigor expectations: none flagged.
 
 ---
 

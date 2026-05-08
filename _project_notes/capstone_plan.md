@@ -1,7 +1,7 @@
 - Purpose: active work tracker with phases, checkboxes, hours, dependencies. Check off items as they are done.
 - Status: active
 - Created: 2026-04-21
-- Last edited: 2026-04-21
+- Last edited: 2026-05-08
 - Related: [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot)
 
 ---
@@ -49,8 +49,8 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
 - [x] .gitignore updated for cache, figures, checkpoints
 - [x] `data_validation.ipynb` moved to `notebooks/01_data_validation.ipynb`, paths repo-root-relative
 - [x] Report outline drafted at `reports/final_report_outline.md`
-- [ ] Verify moved notebook runs end-to-end from new location (Restart Kernel + Run All, Section 1 prints 3 "skipping" lines)
-- [ ] Pin `environment.yml` to exact versions of all installed packages (`conda env export --no-builds > environment.yml`)
+- [x] Verify moved notebook runs end-to-end from new location
+- [x] Migrate from conda to uv (`pyproject.toml` + `uv.lock`); supersedes the planned `environment.yml` pin
 - [ ] Add short note in README about Colab-vs-local hybrid workflow
 
 ### Methodological foundation
@@ -66,12 +66,11 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
   - Record: agreement with dataset label, ambiguous cases, notes
   - Save to `results/label_audit_sample.parquet`
   - Write `reports/label_audit_report.md` with noise rate, ambiguity rate, notable examples
-- [ ] **Contamination check for Defense A classifiers** (~2 hrs)
-  - Read ProtectAI DeBERTa model card on HuggingFace; list training data sources
-  - Read Meta Llama Prompt Guard model card; list training data sources
-  - Cross-reference with deepset, neuralchemy, SPML
-  - Record findings in `results/contamination_report.md`
-  - Decide handling: remove overlap, stratify out, or caveat
+- [x] **Contamination check for Defense A classifiers** (done 2026-04-24, see `results/contamination_report.md`)
+  - ProtectAI DeBERTa V2 named sources cross-referenced with deepset, neuralchemy, SPML
+  - Result: max 1.96% overlap (neuralchemy), under 1% on deepset and SPML
+  - Decision: accept and caveat
+  - Limitations documented: Harelix removed from HuggingFace, 15 V2 sources disclosed by license category only, Meta Prompt Guard 2 enumerates zero training sources
 
 ### Evaluation set
 
@@ -87,16 +86,16 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
 
 ### Accounts and API verification
 
-- [ ] Groq paid tier activated, API key in `.env` as `GROQ_API_KEY`, test call with Llama 3.3 70B succeeds
-- [ ] Anthropic API key in `.env` as `ANTHROPIC_API_KEY`, test call with Claude Sonnet 4.6 succeeds
-- [ ] OpenAI API key in `.env` as `OPENAI_API_KEY`, test call with GPT-4o succeeds
+- [x] Groq API key in `.env`, smoke test with Llama 3.3 70B Versatile succeeds (done 2026-05-08, see `scripts/smoke_test_apis.py`)
+- [x] Anthropic API key in `.env`, smoke test with Claude Sonnet 4.6 succeeds (done 2026-05-08)
+- [x] OpenAI API key in `.env`, smoke test with GPT-4o succeeds (done 2026-05-08, after $10 credit top-up)
 - [ ] Optional: Gemini API key if used elsewhere
 
 ### Week 1 checkpoint
 
-- [ ] Email Eduardo to confirm interim format expectations (audience, document vs presentation, page target, rubric if any)
+- [x] Email Eduardo to confirm interim format expectations (resolved at 2026-04-24 office meeting: document, no formal template, standard submission)
 - [ ] Push all Phase 0 commits to main
-- [ ] Update `_project_notes/capstone_state.md` with Phase 0 completion status
+- [x] Update `_project_notes/capstone_state.md` with Phase 0 completion status (continuously updated 2026-04-24, 2026-05-08)
 
 ---
 
@@ -106,30 +105,36 @@ Target: ~29 active hrs. Goal: all defense pipelines working end-to-end on small 
 
 ### Shared infrastructure
 
-- [ ] `src/cache.py`: JSONL append-log utility with dedup-on-load (~2 hrs)
+- [x] `src/cache.py`: JSONL append-log utility with existing-keys lookup (done 2026-05-08)
 - [ ] `src/utils.py`: env logging helper, seed setter, pathing helpers (~1 hr)
 - [ ] `src/metrics.py`: accuracy, precision, recall, F1, Cohen's kappa, McNemar's test, bootstrap CI (~4 hrs)
 
 ### Defense A (input classifier)
 
-- [ ] `src/defense_a/deberta.py`: ProtectAI DeBERTa inference wrapper with JSONL caching (~2 hrs)
-- [ ] `src/defense_a/prompt_guard.py`: Meta Llama Prompt Guard inference wrapper (~2 hrs)
-- [ ] `notebooks/05_defense_a_run.ipynb`: local version, runs on CPU for testing (~1 hr)
-- [ ] `notebooks/colab_defense_a.ipynb`: Colab Pro version with GPU, writes predictions to Google Drive + committed CSV (~2 hrs)
-- [ ] Run Defense A on full ~4,546-row eval set, both classifiers, save `results/defense_a_predictions.csv` (~1 hr wait)
-- [ ] Run Defense A (both classifiers) on all 4,391 neuralchemy rows for supplementary per-subcategory analysis; save `results/defense_a_predictions_neuralchemy_full.csv` (~15 min wait)
+- [x] `src/defense_a/deberta.py`: ProtectAI DeBERTa v2 inference wrapper, batched, device auto-detect (done 2026-05-08)
+- [ ] `src/defense_a/prompt_guard.py`: Meta Llama Prompt Guard 2 inference wrapper (gated, license access pending)
+- [x] `notebooks/05_defense_a_pilot.ipynb`: local pilot, runs on CPU on the deepset 546-row subset (done 2026-05-08, see `results/defense_a_pilot.md`)
+- [ ] `notebooks/colab_defense_a.ipynb`: Colab Pro version with GPU for the full eval-set run
+- [ ] Run Defense A on full eval set, both classifiers, save `results/defense_a_predictions.csv` (after eval set is built)
+- [x] Run Defense A (DeBERTa) on all 4,391 neuralchemy rows for supplementary per-subcategory analysis (done 2026-05-08, see `notebooks/06_defense_a_neuralchemy.ipynb` and `results/defense_a_pilot.md`)
+- [x] Run Defense A (DeBERTa) on 2,000-row balanced SPML subsample (done 2026-05-08, see `notebooks/07_defense_a_spml.ipynb`)
 
 ### Prompt augmentation baseline
 
 - [ ] `src/augmentation/variants.py`: three templates (control, instruction-only, combined) (~1 hr)
-- [ ] `src/defense_b/agent.py`: Groq client for Llama 3.3 70B agent calls, JSONL caching, retry logic (~3 hrs)
+- [x] `src/defense_b/agent.py`: Groq client wrapper for Llama 3.3 70B Versatile (done 2026-05-08; sneak-preview level, no retry logic yet)
 - [ ] `notebooks/06_augmentation_run.ipynb`: drives the 3 conditions end-to-end agent + judge on 100-row pilot sample (~2 hrs)
 - [ ] Scale augmentation runs to full ~4,546 rows (background time, ~3-5 hrs wait)
 
 ### Defense B (LLM-as-judge)
 
-- [ ] `src/defense_b/judge.py`: Anthropic client for Sonnet 4.6, OpenAI client for GPT-4o, unified interface, JSONL caching (~3 hrs)
-- [ ] Judge rubric prompt (iteration 1), informed by operational definitions doc (~2 hrs)
+- [x] `src/defense_b/judge.py`: Anthropic client wrapper for Claude Sonnet 4.6 with structured JSON-verdict parsing (done 2026-05-08; minimum-rubric, OpenAI/GPT-4o leg still to add)
+- [x] Judge rubric prompt (sneak-preview iteration 0): minimal rubric in `src/defense_b/judge.py`. Production rubric pending operational-definitions integration in Phase 2.
+- [x] Sneak-preview Defense B runs on 24 hardest cases across three attack classes:
+  - 8 deepset role-play misses: judge flagged 4/8 hijacked
+  - 8 neuralchemy jailbreak misses: judge flagged 0/8 (Llama refused all 8 on alignment)
+  - 8 neuralchemy encoding-class misses: judge flagged 1/8 (agent treated encoded payloads as cipher puzzles, didn't comply)
+  - Artifacts: `results/defense_b_sneak_preview.md`, `results/defense_b_neuralchemy_jailbreak_preview.md`, `results/defense_b_neuralchemy_encoding_preview.md`
 - [ ] `notebooks/07_defense_b_run.ipynb`: agent + primary judge pipeline on 500-row pilot sample (~3 hrs)
 - [ ] Review judge outputs on pilot, refine rubric if needed (~2 hrs)
 

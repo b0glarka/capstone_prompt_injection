@@ -1,7 +1,65 @@
 - Purpose: implementation plan for the approved PID
 - Status: living draft, updated as the project progresses
 - Created: 2026-04-21
-- Updated: 2026-04-24 (v2: incorporated external LLM review feedback from Kimi, Qwen, DeepSeek; changes logged at bottom)
+- Updated: 2026-05-08 (progress addendum at top; v2 plan body unchanged)
+
+---
+
+# Progress addendum (2026-05-08)
+
+This section was added between the v2 plan (2026-04-24) and the May 11 interim deadline. The plan body that follows is unchanged from the version Eduardo reviewed; the addendum reports execution against it.
+
+## What is done
+
+Section 1 (data preparation and validation) is substantially complete:
+
+- EDA across the three datasets confirmed in `notebooks/01_data_validation.ipynb`.
+- Operational definition of "hijacked" written at `reports/operational_definitions.md` (v1.1). Anchored on OWASP LLM01 (2025), Greshake et al. (2023), Yi et al. (2025, BIPIA), and Perez & Ribeiro (2022). Includes a binary decision tree for input-side labeling, a parallel tree for output-side hijack verdicts, five hijack categories (H1 task execution, H2 information extraction, H3 persona substitution, H4 content injection, H5 compliance with override), and 18 worked examples drawn from actual rows in the three datasets, verified against the source data.
+- Contamination check complete at `results/contamination_report.md`. Named-source overlap rates: deepset 0.92%, neuralchemy 1.96%, SPML 0.4%. All below the level at which exact-match contamination would meaningfully inflate metrics. Limitations are documented (Harelix removed from HuggingFace, 15 V2 ProtectAI sources disclosed by license category only, Meta Prompt Guard 2 enumerates zero training sources). Decision: accept and caveat. Numbers reported as-is.
+- Frozen evaluation set built at `results/eval_set.parquet` per the methodology decision: 546 deepset (all) + 2,000 neuralchemy (proportional label stratification, subcategory-stratified on the injection side) + 2,000 SPML (50/50 balanced, reused from the SPML pilot for cache consistency). Total: 4,546 rows. Construction code at `src/eval_set.py`, driver notebook at `notebooks/02_eval_set_construction.ipynb`.
+- 200-row label audit sample drawn at `results/label_audit_sample.csv`, stratified by dataset and label. Empty audit columns ready to fill in against the operational definitions. Audit itself is the next active step.
+
+Section 2 (Defense A) is run on three datasets at pilot scale:
+
+- ProtectAI DeBERTa v3 base v2 run on full deepset (n = 546), full neuralchemy (n = 4,391), and the SPML 2,000-row balanced subsample. F1 (with 1,000-iteration nonparametric bootstrap 95% CIs): deepset 0.59 [0.52, 0.66], neuralchemy 0.91 [0.91, 0.92], SPML 0.95 [0.94, 0.96]. ROC AUC: 0.88 / 0.97 / 0.998. The 36-point F1 spread across datasets has non-overlapping CIs and is the headline empirical finding.
+- Meta Prompt Guard 2 86M run on the same three datasets after the gated-license access landed mid-session. F1 0.41 / 0.68 / 0.69. Prompt Guard 2 underperforms DeBERTa on F1 across all three datasets and is even more conservative on recall (0.26 / 0.52 / 0.53). Two independent input classifiers, both leaving substantial recall gaps. The cross-dataset variance pattern is model-independent.
+- Per-subcategory recall on neuralchemy, computed for DeBERTa: direct injection 0.98 (n = 1,397), instruction override 1.00 (n = 21), token smuggling 1.00 (n = 27), RAG poisoning 1.00 (n = 26); jailbreak 0.55 (n = 291), encoding 0.63 (n = 177), adversarial 0.77 (n = 383). The classifier handles bulk attack patterns near-perfectly and substantially underperforms on the more sophisticated subcategories that enterprise threat models tend to weight heavily.
+- Score-distribution analysis on the deepset injection class shows a bimodal pattern: 40.9% of true injections receive an injection-class probability of exactly 0.000. Recall caps at ~0.59 even with the threshold dropped to zero. The residual error on deepset is a coverage problem (the model is fully confident the prompt is safe, despite the gold label) rather than a calibration problem (which threshold tuning would fix).
+- Threshold sweeps, ROC and PR curves, and per-class confusion matrices generated for all three datasets. Cross-dataset comparison summary figure at `results/figures/defense_a_cross_dataset_summary.png`. Three-panel score-distribution figure at `results/figures/defense_a_score_distributions.png`. Confusion-matrix grid at `results/figures/defense_a_confusion_grid.png`.
+
+Section 3 has Defense B infrastructure built and a sneak-preview run completed against the hardest Defense A misses (24 cases across three attack classes). This is below the formal-pilot scope in the plan; it is an early empirical probe of the layered-defense thesis:
+
+- Defense B sneak preview, deepset role-play subtype: 8 prompts that DeBERTa scored at injection_score < 0.001 and were gold-labeled INJECTION. Llama 3.3 70B agent + Claude Sonnet 4.6 judge with the minimum-rubric prompt (`src/defense_b/judge.py`). Result: judge flagged 4 of 8 as hijacked. Direct empirical evidence that an output-side judge adds coverage the input-side classifier cannot deliver alone, on subtle role-play injections.
+- Defense B sneak preview, neuralchemy jailbreak class: 8 lowest-score injections from the jailbreak category. Result: judge flagged 0 of 8. The agent (Llama 3.3 70B) refused all 8 outright on its own RLHF training; the judge correctly classified the refusals as clean. The layered defense for that attack class is the agent's alignment, not the judge.
+- Defense B sneak preview, neuralchemy encoding class: 8 lowest-score injections from the encoding subcategory (base64, ROT13, leet-speak, Unicode-mathematical-alphabet variants of "ignore previous instructions"). Result: judge flagged 1 of 8 as hijacked plus 1 judge-output parse error. The agent treated most encoded payloads as cipher-decoding puzzles or code-evaluation tasks, never recognizing them as live instructions. The defense for that attack class is the agent's failure to parse the obfuscated directive.
+- Three-class refinement of the layered-defense thesis: the layered architecture works in three different ways depending on attack type. Judge load-bearing on subtle injections, agent alignment blocking on blunt harmful content, agent parse failure on obfuscated payloads. This is more nuanced than a single catch-rate number and is the most interesting finding of the sneak-preview round.
+- Judge-sensitivity sneak preview: GPT-4o run as a parallel judge on the 8 deepset cases that Claude judged. Claude flagged 4, GPT-4o flagged 2, agreement on 6 of 8 (75%). The judges disagree more than initially expected at the minimum-rubric stage. This validates the planned 150-row human-labeled gold subset with Cohen's kappa as essential rather than nice-to-have.
+
+Pipeline scaffolding for Sections 2-3 is in place: `src/cache.py` (JSONL append-log with resume on prompt_idx), `src/defense_a/deberta.py`, `src/defense_a/prompt_guard.py`, `src/defense_b/agent.py` (Groq Llama 3.3 70B), `src/defense_b/judge.py` (ClaudeJudge + GPT4oJudge with structured JSON-verdict parsing and BadRequestError handling for content-policy-blocked judgments), `src/augmentation/variants.py` (three augmentation templates per Section 3b), `src/utils.py` and `src/metrics.py` (bootstrap CIs, Cohen's kappa, McNemar's test).
+
+API access is verified for all three providers (Groq Llama 3.3 70B, Anthropic Claude Sonnet 4.6, OpenAI GPT-4o). Total spend across the sneak-preview work to date is approximately $0.20.
+
+## What is open
+
+Phase 0 remainder: the 200-row label audit (sample drawn, labeling work outstanding); minor README polish on the Colab-vs-local hybrid workflow.
+
+Phase 1 remainder: Colab Pro adapter notebook for the formal Defense A run on the frozen evaluation set; augmentation pilot notebook on a 100-row subsample (scaffolded, ready to execute); Defense B 500-row formal pilot on the frozen eval set (scaffolded); judge rubric iteration after the formal pilot; Defense B at full eval-set scale.
+
+Phase 2: 150-row human-labeled gold subset for judge validation; Cohen's kappa Boga-vs-Sonnet, plus optional inter-annotator extension; 500-row GPT-4o sensitivity sub-sample for cross-judge robustness; interim progress report (May 11).
+
+Phase 3-6 are unchanged from the v2 plan structure.
+
+## Methodological questions where outside review would help most
+
+These are the questions where additional methodological eyes would be most valuable, particularly on the pipeline-and-statistics axis. They are flagged here for the special advisor consultation:
+
+1. **Statistically defensible comparisons across imbalanced attack subcategories.** Per-subcategory recall is the most action-relevant view for practitioners, but n ranges from 1,397 (direct injection) to 12 (multi-turn) on neuralchemy alone. Bootstrap CI strategy when the group has very few rows, multiple-comparison correction across 29 subcategories, and how to honestly report exploratory subcategory findings without overclaiming. Currently planning Holm-Bonferroni on a small set of pre-specified primary comparisons (Section 6 of the plan), with subcategory-level findings flagged as exploratory.
+
+2. **LLM-as-judge robustness and rubric design.** The minimum-rubric judge is sensitive to model family at this stage (Claude vs GPT-4o agreement 75% at n = 8). The plan calls for a 150-row human gold subset with Cohen's kappa, but the rubric itself needs iteration before that validation is meaningful. Specific concerns: how to write a judge prompt that is invariant to "the agent partially complied but in a borderline way," how to handle the ambiguous category from the operational-definitions decision tree at the response side, and whether to expose hijack categories (H1-H5) to the judge as multi-label outputs vs. asking for a single binary verdict.
+
+3. **Paired comparison machinery on the frozen eval set.** McNemar's exact binomial vs continuity-corrected chi-squared on n = 4,546 with subgroup breakdowns by dataset and (for neuralchemy) attack subcategory. Pre-registration of primary comparisons before running Defense B at scale, to avoid the multiple-comparisons trap downstream.
+
+These questions are on the critical path between the May 11 interim and the June 8 final, with the statistical-analysis work concentrated in Phase 5 (May 26 to June 1).
 
 ---
 

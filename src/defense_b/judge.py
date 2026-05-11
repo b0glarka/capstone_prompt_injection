@@ -1,9 +1,13 @@
-"""Claude Sonnet 4.6 judge wrapper for Defense B sneak preview.
+"""Claude Sonnet 4.6 + GPT-4o judge wrappers for Defense B.
 
 The judge receives a (user prompt, agent response) pair and returns a JSON
-verdict on whether the agent was hijacked. This is a minimal-rubric implementation
-intended for the sneak-preview run; the production rubric will be developed
-during Phase 2.
+verdict on whether the agent was hijacked. The rubric is the minimum-rubric
+sneak-preview form; the production rubric will be developed during Phase 2
+judge validation.
+
+Both wrappers handle policy-blocked judgments gracefully: a `BadRequestError`
+or other API-level refusal is caught and recorded as `judge_blocked=True`,
+so a long Defense-B-at-scale run does not crash on a single flagged prompt.
 """
 
 from __future__ import annotations
@@ -13,7 +17,7 @@ import os
 import re
 
 import anthropic
-from openai import OpenAI
+from openai import OpenAI, BadRequestError as OpenAIBadRequest
 
 DEFAULT_MODEL = "claude-sonnet-4-6"
 DEFAULT_OPENAI_MODEL = "gpt-4o"
@@ -54,6 +58,39 @@ def _parse_verdict(raw: str) -> dict:
         return {"hijacked": None, "reasoning": "", "parse_error": f"{type(e).__name__}: {raw[:200]}"}
 
 
+def _blocked_record(model: str, error: Exception) -> dict:
+    """Return the canonical schema for a content-policy-blocked judgment.
+
+    judge_blocked records preserve enough info for downstream analysis to
+    distinguish 'judge refused to answer' from 'judge answered cleanly'.
+    """
+    return {
+        "model": model,
+        "raw_response": "",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "hijacked": None,
+        "reasoning": "",
+        "parse_error": None,
+        "judge_blocked": True,
+        "block_reason": f"{type(error).__name__}: {str(error)[:300]}",
+    }
+
+
+def _ok_record(model: str, raw: str, input_tokens: int, output_tokens: int) -> dict:
+    """Canonical schema for a successfully-completed judgment."""
+    verdict = _parse_verdict(raw)
+    return {
+        "model": model,
+        "raw_response": raw,
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "judge_blocked": False,
+        "block_reason": None,
+        **verdict,
+    }
+
+
 class ClaudeJudge:
     def __init__(
         self,
@@ -67,22 +104,18 @@ class ClaudeJudge:
         self.client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
     def judge(self, user_prompt: str, agent_response: str) -> dict:
-        resp = self.client.messages.create(
-            model=self.model,
-            system=JUDGE_SYSTEM,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
-            messages=[{"role": "user", "content": _format_user(user_prompt, agent_response)}],
-        )
+        try:
+            resp = self.client.messages.create(
+                model=self.model,
+                system=JUDGE_SYSTEM,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
+                messages=[{"role": "user", "content": _format_user(user_prompt, agent_response)}],
+            )
+        except (anthropic.BadRequestError, anthropic.PermissionDeniedError) as e:
+            return _blocked_record(self.model, e)
         raw = resp.content[0].text if resp.content else ""
-        verdict = _parse_verdict(raw)
-        return {
-            "model": self.model,
-            "raw_response": raw,
-            "input_tokens": resp.usage.input_tokens,
-            "output_tokens": resp.usage.output_tokens,
-            **verdict,
-        }
+        return _ok_record(self.model, raw, resp.usage.input_tokens, resp.usage.output_tokens)
 
 
 class GPT4oJudge:
@@ -100,21 +133,17 @@ class GPT4oJudge:
         self.client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     def judge(self, user_prompt: str, agent_response: str) -> dict:
-        resp = self.client.chat.completions.create(
-            model=self.model,
-            temperature=self.temperature,
-            max_tokens=self.max_tokens,
-            messages=[
-                {"role": "system", "content": JUDGE_SYSTEM},
-                {"role": "user", "content": _format_user(user_prompt, agent_response)},
-            ],
-        )
+        try:
+            resp = self.client.chat.completions.create(
+                model=self.model,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+                messages=[
+                    {"role": "system", "content": JUDGE_SYSTEM},
+                    {"role": "user", "content": _format_user(user_prompt, agent_response)},
+                ],
+            )
+        except OpenAIBadRequest as e:
+            return _blocked_record(self.model, e)
         raw = resp.choices[0].message.content or ""
-        verdict = _parse_verdict(raw)
-        return {
-            "model": self.model,
-            "raw_response": raw,
-            "input_tokens": resp.usage.prompt_tokens,
-            "output_tokens": resp.usage.completion_tokens,
-            **verdict,
-        }
+        return _ok_record(self.model, raw, resp.usage.prompt_tokens, resp.usage.completion_tokens)

@@ -1,0 +1,17 @@
+defense,scope,n,b_deberta_only_correct,c_challenger_only_correct,p_value
+PG2,overall,4546,931,128,0.0
+PG2,deepset,546,44,13,7.079528641296129e-05
+PG2,neuralchemy,2000,423,22,0.0
+PG2,spml,2000,464,93,0.0
+OR-gate,overall,4546,7,29,0.0004652581580710802
+OR-gate,deepset,546,1,9,0.026856695507524453
+OR-gate,neuralchemy,2000,6,19,0.0163950718491922
+OR-gate,spml,2000,0,1,1.0
+AND-gate,overall,4546,924,99,0.0
+AND-gate,deepset,546,43,4,2.975543256233948e-08
+AND-gate,neuralchemy,2000,417,3,0.0
+AND-gate,spml,2000,464,92,0.0
+Mean-score,overall,4546,133,77,0.000147429028844126
+Mean-score,deepset,546,15,7,0.13559300126630158
+Mean-score,neuralchemy,2000,115,4,0.0
+Mean-score,spml,2000,3,66,8.393286066166183e-14

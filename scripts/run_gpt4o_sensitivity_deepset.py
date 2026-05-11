@@ -41,13 +41,11 @@ def main() -> None:
 
     if len(todo) > 0:
         judge = GPT4oJudge()
-        new = []
         for _, row in todo.iterrows():
             agent_resp = agent_records[row["prompt_idx"]]["response"]
             print(f"  GPT-4o <- {row['prompt_idx']}")
             out = judge.judge(row["prompt"], agent_resp)
-            new.append({"prompt_idx": row["prompt_idx"], **out})
-        append_records(GPT4O_CACHE, new)
+            append_records(GPT4O_CACHE, [{"prompt_idx": row["prompt_idx"], **out}])
 
     gpt_records = {r["prompt_idx"]: r for r in load_records(GPT4O_CACHE)}
 

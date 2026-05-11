@@ -1,0 +1,6 @@
+defense,security_TPR_recall,security_FNR_missed_rate,usability_legit_pass_rate,usability_FPR_false_alarm_rate,E_cost_per_prompt_at_10x,E_cost_per_prompt_at_100x,E_cost_per_prompt_at_1000x
+DeBERTa (ProtectAI v2),0.8747,0.1253,0.9476,0.0524,0.689,6.6678,66.4567
+Prompt Guard 2 (Meta),0.5033,0.4967,0.9906,0.0094,2.6375,26.3352,263.3128
+Ensemble OR-gate,0.8867,0.1133,0.9443,0.0557,0.6267,6.0315,60.079
+Ensemble AND-gate,0.4913,0.5087,0.9939,0.0061,2.6997,26.9716,269.6905
+"Defense B (Llama+Claude judge) [PRELIMINARY, n=24 sneak preview]","see report; 4/8 caught on deepset role-play class, 0/8 on jailbreak, 1/8 on encoding",preliminary,preliminary,preliminary,preliminary,preliminary,preliminary

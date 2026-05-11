@@ -16,6 +16,7 @@ Cost ceiling: ~$5. Resumable: re-running picks up only the uncached rows.
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -29,7 +30,7 @@ sys.path.insert(0, str(REPO_ROOT))
 load_dotenv(REPO_ROOT / ".env")
 
 from src.cache import append_records, existing_keys, load_records
-from src.defense_b.agent import GroqAgent
+from src.defense_b.agent import make_agent
 from src.defense_b.judge import ClaudeJudge
 
 RES = REPO_ROOT / "results"
@@ -61,17 +62,21 @@ def select_pilot() -> pd.DataFrame:
     return pilot[["prompt_idx", "dataset", "prompt", "label", "subcategory"]]
 
 
-def run_agent(pilot: pd.DataFrame) -> dict[str, dict]:
+def run_agent(pilot: pd.DataFrame, provider: str = "together", max_rows: int | None = None) -> dict[str, dict]:
     done = existing_keys(AGENT_CACHE, key="prompt_idx")
     todo = pilot[~pilot["prompt_idx"].isin(done)]
-    print(f"\nagent cached: {len(done)}, to run: {len(todo)}")
+    if max_rows is not None and len(todo) > max_rows:
+        todo = todo.head(max_rows)
+        print(f"\nagent cached: {len(done)}, to run this session: {len(todo)} (max_rows cap)")
+    else:
+        print(f"\nagent cached: {len(done)}, to run: {len(todo)}")
     if len(todo) > 0:
-        agent = GroqAgent()
-        new = []
-        for _, row in tqdm(todo.iterrows(), total=len(todo), desc="agent"):
+        agent = make_agent(provider)
+        print(f"agent provider: {provider}, model: {agent.model}")
+        # Write incrementally per row so a crash mid-loop preserves progress.
+        for _, row in tqdm(todo.iterrows(), total=len(todo), desc=f"agent ({provider})"):
             out = agent.respond(row["prompt"])
-            new.append({"prompt_idx": row["prompt_idx"], **out})
-        append_records(AGENT_CACHE, new)
+            append_records(AGENT_CACHE, [{"prompt_idx": row["prompt_idx"], **out}])
     return {r["prompt_idx"]: r for r in load_records(AGENT_CACHE)}
 
 
@@ -81,12 +86,10 @@ def run_judge(pilot: pd.DataFrame, agent_out: dict[str, dict]) -> dict[str, dict
     print(f"\njudge cached: {len(done)}, to run: {len(todo)}")
     if len(todo) > 0:
         judge = ClaudeJudge()
-        new = []
         for _, row in tqdm(todo.iterrows(), total=len(todo), desc="judge"):
             agent_resp = agent_out[row["prompt_idx"]]["response"]
             out = judge.judge(row["prompt"], agent_resp)
-            new.append({"prompt_idx": row["prompt_idx"], **out})
-        append_records(JUDGE_CACHE, new)
+            append_records(JUDGE_CACHE, [{"prompt_idx": row["prompt_idx"], **out}])
     return {r["prompt_idx"]: r for r in load_records(JUDGE_CACHE)}
 
 
@@ -211,12 +214,21 @@ def write_markdown(results: pd.DataFrame, metrics: pd.DataFrame, cost: dict) -> 
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Defense B 500-row formal pilot.")
+    parser.add_argument("--provider", choices=["groq", "together"], default="together",
+                        help="Inference provider for the agent. Default: together (no daily quota).")
+    parser.add_argument("--max_rows", type=int, default=None,
+                        help="Cap the number of new agent rows this session. Use to fit within a daily quota.")
+    args = parser.parse_args()
+
     pilot = select_pilot()
     print(f"pilot rows: {len(pilot)}")
     print(pilot.groupby(["dataset", "label"]).size().to_string())
 
-    agent_out = run_agent(pilot)
-    judge_out = run_judge(pilot, agent_out)
+    agent_out = run_agent(pilot, provider=args.provider, max_rows=args.max_rows)
+    # Only run judge on cases that have agent output (in case of partial run)
+    pilot_with_agent = pilot[pilot["prompt_idx"].isin(agent_out.keys())]
+    judge_out = run_judge(pilot_with_agent, agent_out)
 
     results = build_results(pilot, agent_out, judge_out)
     metrics = compute_metrics(results)

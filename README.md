@@ -31,6 +31,14 @@ capstone_prompt_injection/
 6. Run `notebooks/01_data_validation.ipynb` Section 1 once to download the three datasets to `data/`.
 7. Verify the API keys with `.venv/Scripts/python.exe scripts/smoke_test_apis.py`. All three providers should report PASS.
 
+## Local CPU vs Colab Pro GPU split
+
+Defense A (HuggingFace transformer classifiers) and Defense B (API-driven agent + judge) can both run on a laptop CPU at pilot scale (~500-2,000 rows). The local pilot notebooks `05_defense_a_pilot.ipynb`, `06_augmentation_run.ipynb`, and `07_defense_b_pilot.ipynb` are designed for this.
+
+For the formal scale-up to the full 4,546-row frozen evaluation set, Defense A runs much faster on a GPU. Use `notebooks/colab_defense_a.ipynb` on a Colab Pro T4 instance: under 5 minutes wallclock for both classifiers vs ~25 minutes on CPU. Defense B is API-side and does not benefit from a Colab GPU; run it locally with caching to disk regardless of whether you are on Colab or laptop.
+
+Colab session checklist: upload `results/eval_set.parquet` (gitignored, build locally first), set `HF_TOKEN` in Colab Secrets, mount Drive for output, run the notebook, copy artifacts back. Detailed steps inside the Colab notebook.
+
 ## Status
 
 Active implementation. See `_project_notes/INDEX.md` for navigation. Latest state at `_project_notes/capstone_state.md`, detailed plan at `_project_notes/capstone_plan.md`.

@@ -1,7 +1,7 @@
 - Purpose: session-bridge snapshot for Claude conversation continuity. Read this first when resuming work.
 - Status: active (overwritten per update)
-- Memorializing: 2026-05-08 (Defense A on three datasets + Defense B sneak preview on three attack classes + judge sensitivity + Prompt Guard 2 in progress, immediately pre-Hiflylabs check-in)
-- Last updated: 2026-05-08 (final reconciliation pass)
+- Memorializing: 2026-05-11 (interim-day state: Defense B 500-row pilot underway, cheap-judge sweep queued, interim report drafted)
+- Last updated: 2026-05-11 (autonomous Phase 1 build + pilot launch)
 - Related: [capstone_plan.md](./capstone_plan.md), [capstone_methodology_decisions.md](./capstone_methodology_decisions.md), [implementation_plan_summary_v2.md](./implementation_plan_summary_v2.md)
 
 ---
@@ -54,14 +54,37 @@ Earlier (2026-04-21 to 2026-04-24): plan v2 with business decision framework, ex
 
 See [capstone_plan.md](./capstone_plan.md) Phase 0 checklist.
 
-High-priority (most Phase 0 setup is done; remaining items are substantive):
-- 200-row label audit against the operational definitions doc (sample already drawn at `results/label_audit_sample.csv`, ~5-6 hrs of human labeling time)
-- Build frozen ~4,546-row evaluation set with stratification (~4 hrs)
-- Wait for Prompt Guard 2 inference on neuralchemy + SPML to complete; then rebuild cross-dataset figure with both classifiers side by side
-- Hardening: add `BadRequestError` handling to `src/defense_b/judge.py` before scaling
-- Threshold sweep + bootstrap CIs on Defense A on the frozen eval set
-- Defense B at full scale (May 5-11 week, after judge validation)
-- Interim report due May 11
+Immediately pending as of 2026-05-11:
+- Defense B 500-row pilot is running in background; agent loop ~60% complete, judge loop has not started. ETA ~30 min total remaining.
+- Cheap-judge sweep (Haiku 4.5 + GPT-4o-mini on the same 500 cases) queued via `scripts/run_judge_cost_sweep.py`; fire after pilot completes.
+- Analysis writeup + interim-report integration happen when pilot + sweep are both done. Interim draft already at `reports/interim_progress_report.md` from existing material; only the pilot results section needs to be inserted.
+
+High-priority remaining (post-interim):
+- 200-row label audit against the operational definitions doc (sample drawn at `results/label_audit_sample.csv`, ~5-6 hrs of labeling time)
+- Judge rubric iteration after reviewing the formal pilot's 500 verdicts
+- 150-row human gold subset + Cohen's kappa judge validation (Phase 2)
+- Defense A full-eval-set run on Colab Pro GPU (notebook `colab_defense_a.ipynb` ready to upload + execute)
+- Defense B at full eval-set scale (cost-decision after the sweep results)
+- BIPIA email-QA adapter (Phase 3)
+- Final report writing (Phases 5-6)
+
+## Autonomous-session build (2026-05-11)
+
+Built and tested locally; user to commit at next pass.
+
+- **Frozen eval set** at `results/eval_set.parquet` (gitignored), 4,546 rows. Construction in `src/eval_set.py`, driver in `notebooks/02_eval_set_construction.ipynb`. Stratification: deepset 546 (all), neuralchemy 2,000 stratified by label and subcategory, SPML 2,000 reused from the SPML pilot for cache consistency.
+- **Defense B judge wrapper hardening**: `src/defense_b/judge.py` now catches `BadRequestError` and `PermissionDeniedError`, records as `judge_blocked=True` instead of crashing scaling runs. New `_blocked_record()` and `_ok_record()` helpers added.
+- **`src/utils.py`**: `repo_root()`, `env()` (presence-only token reporting), `set_seed()` (numpy + python + torch where available).
+- **`src/metrics.py`**: `headline_metrics()`, `bootstrap_ci()` (1k-iter nonparametric), `kappa()`, `mcnemar()` (exact binomial + chi-squared continuity-corrected option), `f_beta()`.
+- **`src/augmentation/variants.py`**: three prompt-augmentation templates (control, instruction_only, combined). Anchored on Perez & Ribeiro (2022).
+- **`notebooks/06_augmentation_run.ipynb`**: 3-condition pilot scaffold for 100-row eval-set subsample. Not yet executed.
+- **`notebooks/colab_defense_a.ipynb`**: Colab Pro GPU adapter for the full eval-set Defense A run. Both classifiers, joined per-row output, bootstrap CIs. Not yet executed.
+- **`scripts/run_defense_b_pilot.py`**: 500-row formal pilot driver. Currently running.
+- **`scripts/run_judge_cost_sweep.py`**: cheap-judge sweep (Haiku 4.5 + GPT-4o-mini) queued to fire after pilot.
+- **README**: Local-CPU-vs-Colab-GPU split section added.
+- **Interim progress report** drafted at `reports/interim_progress_report.md` from existing material; integration with pilot results is the last step before submission.
+- **Implementation plan v2 progress addendum**: added at the top of `_project_notes/implementation_plan_summary_v2.md` with current state of execution and three specific methodological questions surfaced for advisor consult (Professor Zoltan Toth).
+- **Zoltan Toth advisor outreach**: primer drafted at `_local/zoltan_primer.md` (1.5 pages, structured around the two methodology questions). Email sent 2026-05-08; Zoltan out of town, expecting reply mid-May.
 
 ## Post-meeting (2026-05-08) considerations
 

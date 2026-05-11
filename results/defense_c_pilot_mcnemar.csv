@@ -1,0 +1,25 @@
+comparison,scope,n,b,c,chi2,p_value,test
+C: DeBERTa + B vs A_deberta,overall,500,0,26,24.03846153846154,9.443043861301348e-07,chi2_continuity_corrected
+C: DeBERTa + B vs A_deberta,deepset,167,0,25,23.04,1.586656303897982e-06,chi2_continuity_corrected
+C: DeBERTa + B vs A_deberta,neuralchemy,167,0,1,0.0,1.0,chi2_continuity_corrected
+C: DeBERTa + B vs A_deberta,spml,166,0,0,,1.0,exact_binomial
+C: DeBERTa + B vs B_judge,overall,500,8,112,88.40833333333333,0.0,chi2_continuity_corrected
+C: DeBERTa + B vs B_judge,deepset,167,1,16,11.529411764705882,0.0006850368653792405,chi2_continuity_corrected
+C: DeBERTa + B vs B_judge,neuralchemy,167,1,36,31.243243243243242,2.2763840035189276e-08,chi2_continuity_corrected
+C: DeBERTa + B vs B_judge,spml,166,6,60,42.56060606060606,6.852574063742622e-11,chi2_continuity_corrected
+C: PG2 + B vs A_pg2,overall,500,0,46,44.02173913043478,3.247491164870553e-11,chi2_continuity_corrected
+C: PG2 + B vs A_pg2,deepset,167,0,34,32.029411764705884,1.5185595558797615e-08,chi2_continuity_corrected
+C: PG2 + B vs A_pg2,neuralchemy,167,0,6,4.166666666666667,0.041226833337163815,chi2_continuity_corrected
+C: PG2 + B vs A_pg2,spml,166,0,6,4.166666666666667,0.041226833337163815,chi2_continuity_corrected
+C: PG2 + B vs B_judge,overall,500,2,49,41.490196078431374,1.1846357228506577e-10,chi2_continuity_corrected
+C: PG2 + B vs B_judge,deepset,167,0,12,10.083333333333334,0.0014961642897455274,chi2_continuity_corrected
+C: PG2 + B vs B_judge,neuralchemy,167,2,12,5.785714285714286,0.01615693126118134,chi2_continuity_corrected
+C: PG2 + B vs B_judge,spml,166,0,25,23.04,1.586656303897982e-06,chi2_continuity_corrected
+C: Ensemble + B vs A_ensemble,overall,500,0,26,24.03846153846154,9.443043861301348e-07,chi2_continuity_corrected
+C: Ensemble + B vs A_ensemble,deepset,167,0,25,23.04,1.586656303897982e-06,chi2_continuity_corrected
+C: Ensemble + B vs A_ensemble,neuralchemy,167,0,1,0.0,1.0,chi2_continuity_corrected
+C: Ensemble + B vs A_ensemble,spml,166,0,0,,1.0,exact_binomial
+C: Ensemble + B vs B_judge,overall,500,9,114,87.9349593495935,0.0,chi2_continuity_corrected
+C: Ensemble + B vs B_judge,deepset,167,1,18,13.473684210526315,0.0002419327908607105,chi2_continuity_corrected
+C: Ensemble + B vs B_judge,neuralchemy,167,2,36,28.657894736842106,8.636119075422499e-08,chi2_continuity_corrected
+C: Ensemble + B vs B_judge,spml,166,6,60,42.56060606060606,6.852574063742622e-11,chi2_continuity_corrected

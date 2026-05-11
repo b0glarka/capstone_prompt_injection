@@ -1,0 +1,6 @@
+defense,n_attacks,attack_success_rate,n_clean,false_alarm_rate
+Defense A: DeBERTa (query only),750,1.0,50,0.0
+Defense A: DeBERTa (full prompt),750,0.656,50,0.38
+Defense A: Prompt Guard 2 (full prompt),750,0.9773,50,0.0
+Defense B: Sonnet judge,750,0.7813,50,0.0
+Defense C: DeBERTa (full prompt) + B,750,0.5173,50,0.38

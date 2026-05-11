@@ -58,12 +58,10 @@ def run_agent(hard: pd.DataFrame) -> dict[str, dict]:
     print(f"agent cached: {len(done)}, to run: {len(todo)}")
     if len(todo) > 0:
         agent = GroqAgent()
-        new = []
         for _, row in todo.iterrows():
             print(f"  agent <- {row['prompt_idx']}")
             out = agent.respond(row["text"])
-            new.append({"prompt_idx": row["prompt_idx"], **out})
-        append_records(AGENT_CACHE, new)
+            append_records(AGENT_CACHE, [{"prompt_idx": row["prompt_idx"], **out}])
     by_idx = {r["prompt_idx"]: r for r in load_records(AGENT_CACHE)}
     return {idx: by_idx[idx] for idx in hard["prompt_idx"]}
 
@@ -74,12 +72,10 @@ def run_judge(hard: pd.DataFrame, agent_out: dict[str, dict]) -> dict[str, dict]
     print(f"judge cached: {len(done)}, to run: {len(todo)}")
     if len(todo) > 0:
         judge = ClaudeJudge()
-        new = []
         for _, row in todo.iterrows():
             print(f"  judge <- {row['prompt_idx']}")
             out = judge.judge(row["text"], agent_out[row["prompt_idx"]]["response"])
-            new.append({"prompt_idx": row["prompt_idx"], **out})
-        append_records(JUDGE_CACHE, new)
+            append_records(JUDGE_CACHE, [{"prompt_idx": row["prompt_idx"], **out}])
     by_idx = {r["prompt_idx"]: r for r in load_records(JUDGE_CACHE)}
     return {idx: by_idx[idx] for idx in hard["prompt_idx"]}
 

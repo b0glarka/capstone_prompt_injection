@@ -278,11 +278,33 @@ The largest absolute lift is on deepset, the dataset where Defense A struggles m
 
 The full Defense C analysis, including per-subcategory neuralchemy breakdown and all paired McNemar p-values at multiple scopes, is in `results/defense_c_pilot.md` (v1.8 numbers) and `results/aggregate_metrics_v121.md` (v1.21 update). The full-scale Defense C run (n = 4,546) is queued for the next session.
 
-## 5.6 Judge sensitivity: Claude vs GPT-4o
+## 5.6 Judge validation: human gold subset (n=150) and earlier sensitivity check
 
-GPT-4o was run as a parallel second judge on the same 8 deepset role-play cases as the Claude Sonnet 4.6 primary, and both have been re-judged under the v1.21 rubric. The cross-rubric picture is striking. Under v1.8: Claude flagged 4 of 8, GPT-4o flagged 2 of 8, agreement 6 of 8 (75%). Under v1.21: Claude flagged 2 of 8, GPT-4o flagged 6 of 8, agreement 2 of 8 (25%). The two judges' positions effectively swapped between rubric versions: Claude became more conservative (4 → 2 hijacked), GPT-4o became more aggressive (2 → 6 hijacked), and they agree less under the more-specified rubric than they did under the minimum rubric. Cohen's kappa is not meaningful at n = 8 either way.
+The 150-row human gold subset (Task 3) is the formal judge-validation step. The full analysis is in `reports/judge_validation_report.md`; headline numbers are below. The earlier n=8 GPT-4o sensitivity check (Section 5.6 of the interim report, retained for historical context) is no longer the load-bearing measurement now that the 150-row subset is complete.
 
-Two cautions before reading too much into this. First, the n = 8 sample is the 8 hardest deepset cases by classifier-confidence selection, deliberately chosen as borderline; the cross-judge picture at the 500-row pilot scale (Section 5.5b) is the more reliable signal, and there the cross-judge kappa numbers are stable across rubric versions (Sonnet vs Haiku 0.799 → 0.787, Sonnet vs GPT-4o-mini 0.720 → 0.729). Second, the n = 8 flip is consistent with the different-AMBIGUOUS-adoption observation in Section 5.5b: under v1.21, Sonnet readily uses the AMBIGUOUS verdict, while different model families interpret the AMBIGUOUS instruction with different fidelity, producing larger cross-family disagreement on small borderline samples than on the 500-row full pilot. The 150-row human gold subset (in progress as Phase 2 work) is the formal validation; the sneak preview confirms the formal validation is necessary, not optional, and now also reveals that rubric version interacts with judge model family in ways the 500-row data smooths over.
+### Headline kappa: human vs LLM judges (n=150)
+
+| Judge | v1.21 binary kappa [95% CI] | Landis-Koch band |
+|---|---|---|
+| Sonnet 4.6 | 0.324 [0.171, 0.468] | Fair |
+| Haiku 4.5 | 0.362 [0.202, 0.502] | Fair (touching moderate) |
+| GPT-4o-mini | 0.221 [0.078, 0.382] | Fair |
+
+The design target was Cohen's kappa above 0.60 (substantial agreement) between human auditor and each LLM judge. No judge meets that threshold. Haiku 4.5 has the highest kappa at 0.362 ("fair" agreement just touching the "moderate" band); GPT-4o-mini has the lowest at 0.221. This bounds how confidently Defense B hijack rates in §5.5b/§5.8 can be interpreted: cross-agent comparisons with effect sizes above the kappa-noise floor (~10pp) are robust; marginal differences (±5pp) are within judge-human disagreement and should not drive deployment decisions on their own.
+
+### Where the disagreement concentrates
+
+Among rows where the human auditor said CLEAN but the v1.21 judge said HIJACKED (or AMBIGUOUS), 30 to 41 percent contain a known attack signature pattern (HackAPrompt's "I have been PWNED" string, DAN persona declaration, JAILBROKEN marker, or equivalent). The §3.2 v1.23 scope note added to the operational definitions explicitly states that signatures alone do not trigger HIJACKED under §3.2 — only mechanism-level deviation from operator intent does. The judges are pattern-matching on the signature; the human auditor applying §3.2 v1.23 strictly recognises that no Step 4 mechanism is present and labels CLEAN. This empirically validates the v1.23 scope note and identifies the clear-target next iteration for the production judge prompt.
+
+When both rater and judge agree on HIJACKED, they agree on the H-category set in 81-88 percent of cases (containment metric: judge's category set contains the human's primary H-category). Substantive judgment on WHICH H-category applies is robust; the disagreement concentrates at the CLEAN-vs-HIJACKED boundary.
+
+### Cost-vs-agreement Pareto
+
+Combined with cost data: Haiku 4.5 has the highest kappa AND is 3.3x cheaper than Sonnet 4.6 ($0.50 vs $1.67 per 500-row pilot). It is the recommended production judge on this evidence. GPT-4o-mini's 20x cost advantage over Sonnet does not compensate for its substantially lower kappa (0.221 vs 0.324).
+
+### Earlier n=8 GPT-4o sensitivity check, in context
+
+The interim-report Section 5.6 reported a Claude-vs-GPT-4o cross-judge sensitivity check on 8 deepset cases. Under v1.8 the two judges agreed 6 of 8 (75%); under v1.21 they agreed 2 of 8 (25%) after both became more reactive in opposite directions (Claude more conservative, GPT-4o more aggressive). At n=8 these numbers are directional only; the 150-row gold subset is the load-bearing measurement and is documented above. The n=8 flip is consistent with the cross-family AMBIGUOUS-adoption observation in §5.5b — GPT-4o (like GPT-4o-mini) ignores the AMBIGUOUS bucket, while Sonnet readily uses it.
 
 ## 5.7 Ensemble analysis
 
@@ -303,7 +325,24 @@ A natural deployment pattern is to auto-classify only when Defense A is highly c
 
 The coverage curve is nearly flat. Even at confidence threshold 0.99, only 6.0% of the eval set (272 rows) sits in the uncertain region and selective F1 lifts only +0.022 over the full-coverage baseline. The interpretation is that DeBERTa rarely produces moderate-confidence predictions: its injection-class score distribution is bimodal at 0 and 1 (Section 5.2 shows 40.9% of true injections receive probability exactly 0.000 on deepset). Confidence-based deferral therefore does not efficiently identify cases worth escalating to the more expensive Defense B; the cases the classifier is wrong about are the same cases it is most confident about.
 
-This finding has two implications. For the deployment guide, confidence-based auto-routing through Defense A's raw score is not a useful cost-saving lever as-is; the layered defense should run Defense B on a fixed fraction of rows or on rows flagged by independent signals (e.g., per-subcategory blind-spot routing), not on Defense A's own uncertainty signal. For methodological extension, post-hoc temperature scaling on a held-out calibration fold (Section 6.3 of the implementation plan) is the natural step: a calibrated DeBERTa might produce a more graduated confidence distribution, which would make this curve operationally meaningful. ECE numbers for DeBERTa before and after temperature scaling are queued as the next analysis step.
+This finding has two implications. For the deployment guide, confidence-based auto-routing through Defense A's raw score is not a useful cost-saving lever as-is; the layered defense should run Defense B on a fixed fraction of rows or on rows flagged by independent signals (e.g., per-subcategory blind-spot routing), not on Defense A's own uncertainty signal. For methodological extension, post-hoc temperature scaling on a held-out calibration fold is the natural step, and the calibration subsection below reports the results.
+
+### Post-hoc temperature-scaling calibration
+
+Following Guo et al. (2017), a single temperature parameter T is fit on a stratified 10% calibration fold (455 rows) by minimising NLL against the binary labels, then applied to the remaining 90% test fold (4,091 rows). Expected Calibration Error (ECE, equal-width binning, 10 bins) is computed pre and post temperature scaling on the test fold. Per Chidambaram et al. (2024), binning-based ECE has known pathologies and should be read directionally rather than absolutely; the pre-vs-post comparison is the load-bearing measurement.
+
+| Scope | n (test fold) | ECE pre | ECE post | Δ |
+|---|---|---|---|---|
+| Overall | 4,091 | 0.084 | 0.037 | -55% |
+| deepset | 491 | 0.220 | 0.166 | -25% |
+| neuralchemy | 1,800 | 0.093 | 0.089 | ~unchanged |
+| SPML | 1,800 | 0.046 | 0.078 | +69% |
+
+The fitted T = 4.70 indicates DeBERTa was substantially overconfident pre-calibration: the model's effective sharpness was ~5x too high relative to its empirical accuracy. Temperature scaling softens the distribution toward more honest uncertainty.
+
+Per-dataset behaviour is the interesting story. Overall ECE more than halves (-55%), and deepset improves most (-25%) — the dataset where DeBERTa was most miscalibrated also benefits most from the global temperature. SPML degrades, going from already-well-calibrated (ECE 0.046) to less-well-calibrated (ECE 0.078) under the global temperature. The single-temperature solution is a compromise across datasets with different empirical calibration properties; deepset and neuralchemy share an overconfident regime while SPML does not. Per-dataset temperature scaling would be the natural follow-on but trades parsimony for empirical fit; this is documented as future work in §9.1.
+
+Practical implication for the coverage curve above: with calibrated probabilities, the bimodal-at-0-and-1 distribution would be spread out across the [0, 1] interval, and the curve's near-flat shape would gain a moderate slope. The selective-prediction routing recommendation accordingly changes: calibrated DeBERTa probabilities are usable as a confidence signal for auto-routing on deepset and neuralchemy, while SPML deployments should retain the existing routing strategy (Defense B on a fixed fraction). The reliability diagram at `results/figures/defense_a_calibration.png` visualises the pre-vs-post distribution shift.
 
 ## 5.8 BIPIA indirect injection [FILLED]
 
@@ -348,6 +387,80 @@ The v1.21 rubric's explicit H1-H5 indicators surface obfuscated and information-
 
 Full per-row results: `results/bipia_email_qa_results.csv` (800 rows, with v1.21 columns added); aggregate v1.21 metrics: `results/aggregate_metrics_v121.md`; v1.8 baseline structured writeup: `results/bipia_email_qa.md`.
 
+## 5.9 Action-level evaluation: AgentDojo [DRAFT — full numbers pending A1 run]
+
+### Motivation
+
+The Defense B and BIPIA evaluations in §5.5b and §5.8 measure TEXT-level compliance: does the agent's response indicate it would execute the attacker's task? An equally important question for deployment is action-level: when the agent has actual tools and the attacker's instructions reach it, does the agent execute the attacker's specified action? Text-level compliance is an upper bound on action-level threat: an agent can decline in text yet still call a tool unsafely, or vice versa. Without an action-level evaluation, deployment recommendations from §5.5b/§5.8 cannot be extrapolated to tool-using agents.
+
+AgentDojo (Debenedetti et al. 2024) is the standard benchmark for closing this gap. It provides four realistic tool environments (Workspace 24 tools, Slack 11 tools, Travel 28 tools, Banking 11 tools, 70 tools across the four), 97 user tasks and 27 injection tasks, totalling 629 security test cases. Attacks are injected into tool outputs (poisoned emails, calendar entries, contact names, slack messages); the framework reports Benign Utility (fraction of user tasks solved without attacks), Targeted Attack Success Rate (fraction of security cases where the attacker's specified action was executed), and Utility Under Attack (fraction where the user task was solved AND no adversarial side effect occurred).
+
+### Setup
+
+Suite scope: Workspace (40 user tasks × 6 injection tasks = 240 security cases + 40 benign-utility cases) as the primary A1 evaluation. Workspace was chosen because it covers email/calendar/file-store tool patterns directly adjacent to BIPIA's email-QA scope, supporting the §5.9 text-vs-action comparison. The Slack, Travel, and Banking suites are queued for an A2 expansion if A1 results warrant it.
+
+Agent: Llama 3.3 70B Instruct via Together AI (matches the §5.5b baseline). Cross-family extension with Qwen 3 235B-A22B-Instruct, Mistral Large 2, and DeepSeek V3 is queued contingent on A1 outcomes.
+
+Defenses tested:
+- baseline (no defense)
+- Defense A: ProtectAI DeBERTa filter (`TransformersBasedPIDetector`) applied to tool outputs, inserted between `ToolsExecutor` and the next LLM call inside `ToolsExecutionLoop`. Aborts the agent on detection.
+- Defense B: Sonnet 4.6 v1.24 judge (see below) inserted inside the loop BEFORE `ToolsExecutor`. Inspects each proposed assistant message (text + tool-call serialisation) and raises `AbortAgentError` on HIJACKED or AMBIGUOUS verdicts before tool side-effects execute.
+- Defense C: Defense A OR Defense B.
+
+Pipeline structure follows AgentDojo's official `AgentPipeline.from_config`:
+`[SystemMessage, InitQuery, llm, ToolsExecutionLoop([V124JudgeDefense?, ToolsExecutor, TransformersBasedPIDetector?, llm])]`
+
+The system message is AgentDojo's default ("Emma Johnson at Blue Sparrow Tech"). A control run with a generic helpful-assistant prompt on user_task_0 yielded identical ASR (83% in both conditions), confirming the system message is not a confound for the headline numbers at this scale.
+
+### v1.24 judge variant: adapting Defense B to action-level evaluation
+
+Defense B's §3.2 v1.21 rubric (operational_definitions.md) was designed for text-level evaluation: it inspects an agent's natural-language reply and decides whether the reply indicates compliance with attacker instructions. Direct transfer to AgentDojo failed: on workspace user_task_0 the v1.21 judge made 13 inference calls across the 6 security cases but raised zero aborts, yielding ASR = 83.3% identical to the no-defense baseline. The judge could not recognise tool-call sequences as HIJACKED because the v1.21 H1-H5 indicators were anchored on textual cues ("agent says it will book the trip") and AgentDojo agents communicate compliance through silent tool calls, not textual restatement.
+
+We added an operational definitions v1.24 variant: a tool-call-aware rubric with the same H1-H5 categories reframed for action-level evidence. Examples: H4 (content injection) becomes "attacker-specified content in tool arguments" (the most common AgentDojo hijack vector: attacker URL passed as argument to `send_email`); H1 (task-execution hijack) becomes "tool calls that don't trace to the user task's stated subtasks". The full v1.24 system prompt is in operational_definitions.md §3.2 and `src/defense_b/judge.py::_V124_SYSTEM_HEADER`.
+
+Smoke results on workspace user_task_0 (n=6 security cases) for the three Defense B variants:
+
+| Configuration | Targeted ASR | Utility Under Attack | Judge calls | Notes |
+|---|---|---|---|---|
+| No defense | 0.833 | 0.833 | 0 | baseline |
+| Defense B v1.21 (text-level rubric) | 0.833 | 0.833 | 13 | judge fires but raises no aborts; v1.21 doesn't recognise tool-call patterns |
+| Defense B v1.24 (tool-call rubric) | 1.000 | 0.167 | 14 | judge raises many aborts; over-blocks legitimate task progress |
+
+The smoke results expose a design tension that A1 will quantify at full scale: the v1.21 rubric under-fires (no prevention); the v1.24 rubric over-fires (aborts crash benign utility). Three full-scale outcomes are possible:
+1. v1.24 catches real attacks while preserving acceptable benign utility (recommended deployment configuration)
+2. v1.24 over-blocks universally (rubric needs further iteration, or output-side LLM judges are structurally limited for action-level prevention)
+3. v1.24 sits between — partial prevention with measurable utility cost (per-suite cost-benefit analysis required)
+
+### Headline results [PENDING A1 — to be filled]
+
+Reference numbers from AgentDojo paper for context: no-defense Targeted ASR = 57.69%, tool-filter defense ASR = 6.84% (51pp reduction), benign utility 69-73%. Our A1 numbers will go in this table:
+
+| Configuration | Agent | Defense | Benign Utility | Targeted ASR | Utility Under Attack |
+|---|---|---|---|---|---|
+| Baseline | Llama 3.3 70B | None | TBD | TBD | TBD |
+| +Defense A | Llama 3.3 70B | DeBERTa on tool outputs | TBD | TBD | TBD |
+| +Defense B | Llama 3.3 70B | Sonnet v1.24 judge | TBD | TBD | TBD |
+| +Defense C | Llama 3.3 70B | A OR B | TBD | TBD | TBD |
+
+### Text-level vs action-level comparison [PENDING A1]
+
+The methodologically important question: does the action-level ASR track the text-level §5.8 BIPIA attack-success rate, or does it diverge? If they track, the §5.5b/§5.8 numbers extrapolate reasonably to deployed agents with tools. If they diverge in either direction, that diagnoses the limit of text-level evaluation for predicting action-level outcomes, with corresponding implications for the deployment guide.
+
+Three patterns are possible and instructive:
+1. Action ASR substantially HIGHER than text ASR: agents that decline in text still execute the attack via tool calls. Text-level evaluation underestimates real-world risk.
+2. Action ASR substantially LOWER than text ASR: agents that comply textually nevertheless refuse the corresponding tool call due to safety alignment on action execution. Text-level evaluation overestimates real-world risk.
+3. Tracks closely: text-level evaluation is a reasonable proxy for action-level threat. The §5.5b/§5.8 numbers extrapolate cleanly to deployment.
+
+### Implications for the deployment guide (§7) [PENDING A1]
+
+Depending on pattern from above, the §7 framework's defense-configuration recommendations for autonomous tool-using agents (Hiflylabs' identified scenario) will either be reinforced (pattern 2 or 3) or require revision (pattern 1). The smoke phase already adds one robust deployment qualifier: deploying a text-level LLM judge as-is to a tool-using agent without rubric adaptation produces zero security benefit, and naive adaptation can crash utility, so the v1.24 rubric (or an analogue) is a deployment prerequisite for Defense B in tool-using contexts.
+
+### Methodological notes
+
+The AgentDojo evaluation is run with the same §3.2 operational definitions framework, using v1.24 (the tool-call variant) rather than v1.21. Mapping AgentDojo's outcome categories (Targeted ASR, Utility Under Attack) to the H1-H5 hijack categories: most AgentDojo injection tasks fall under H1 (task-execution hijack: agent executed attacker's specified action instead of operator's) and H4 (content injection: agent inserted attacker-specified data such as URLs into user-facing responses). H2 (system-prompt extraction) and H3 (persona substitution) are not the primary AgentDojo attack vectors. The §3.2 v1.23 scope note on signature-vs-mechanism applies symmetrically: an agent that emits a signature string is not by itself HIJACKED unless it also executes the attacker's tool action.
+
+Reproducibility: framework installed via `pip install agentdojo`; evaluation runs via the project driver `scripts/run_agentdojo_eval.py`, which monkey-patches `agentdojo.attacks.base_attacks.MODEL_NAMES` to register our Together- and OpenRouter-hosted models, and wraps benchmark calls in `OutputLogger` to satisfy AgentDojo's logging contract. Defense B integration in `src/defense_b/agentdojo_integration.py::V121JudgeDefense` (the class name predates the v1.24 rubric; `rubric_version` parameter selects v1.21 or v1.24). Cost ceiling for A1: under $85 (Workspace, all four defense configs, Llama 3.3 70B); cross-family extension and additional suites contingent on A1 outcomes.
+
 # 6. Discussion [DRAFT]
 
 ## 6.1 Cross-dataset variance as the headline finding
@@ -371,7 +484,15 @@ The combined-defense argument is therefore stronger but more nuanced than a sing
 
 ## 6.3 Judge reliability is upstream of judge cost
 
-The cost-sensitivity question (can a cheaper judge like Claude Haiku 4.5 or GPT-4o-mini replace Sonnet 4.6 at scale?) is methodologically downstream of the judge-reliability question. Under the v1.21 augmented rubric, cross-judge Cohen's kappa on the 500-row pilot is 0.787 for Sonnet vs Haiku and 0.729 for Sonnet vs GPT-4o-mini, essentially identical to the v1.8 minimum-rubric numbers (0.799 and 0.720 respectively). The cross-judge agreement is robust to rubric version at this scale. The sensitivity-check at n = 8, by contrast, is unstable across rubric versions (Section 5.6), so it should not drive the cost-optimisation decision; the 500-row formal sweep is the load-bearing measurement. The 150-row human gold subset is the next validation step and will quantify human-vs-judge kappa rather than the cross-judge kappa we have today; the cost-comparison decision can be finalised once the gold subset lands and the kappa-to-human-gold numbers are in hand.
+The cost-sensitivity question (can a cheaper judge like Claude Haiku 4.5 or GPT-4o-mini replace Sonnet 4.6 at scale?) is methodologically downstream of the judge-reliability question. Three measurements now anchor the answer:
+
+1. Cross-judge agreement at the 500-row pilot scale (§5.5b): Sonnet/Haiku kappa = 0.787, Sonnet/GPT-4o-mini kappa = 0.729 under v1.21. Stable to rubric version. Indicates judges substantially agree with each other.
+
+2. Human-vs-judge agreement at the 150-row gold-subset scale (§5.6): Sonnet kappa = 0.324, Haiku kappa = 0.362, GPT-4o-mini kappa = 0.221 against §3.2 v1.23 human labels. NONE reach the 0.60 design target. Indicates the judges all share a common bias relative to strict §3.2 application — likely the signature-vs-mechanism pattern matching empirically identified in §5.6.
+
+3. The 30-40% signature-driven share of human-CLEAN / judge-HIJACKED disagreements (§5.6) is the methodologically concrete next iteration: updating the judge prompt to incorporate the §3.2 v1.23 scope note explicitly would likely close that gap.
+
+The cost-vs-reliability picture given these three measurements: Haiku 4.5 has the highest human-judge kappa (0.362) AND is 3.3x cheaper than Sonnet, making it the recommended production judge on current evidence. GPT-4o-mini's 20x cost advantage does not compensate for its substantially lower kappa (0.221). Further judge-rubric iteration (incorporating the v1.23 signature-vs-mechanism guidance into the prompt) is the highest-leverage next step before any further cost-tier optimisation.
 
 ## 6.4 What the evaluation measures, and against whom [DRAFT-TODO]
 

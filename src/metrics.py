@@ -116,6 +116,80 @@ def bootstrap_ci(
 
 
 # ---------------------------------------------------------------------------
+# Paired-bootstrap CI on the difference between two defenses
+# ---------------------------------------------------------------------------
+
+def bootstrap_paired_difference_ci(
+    y_true: np.ndarray,
+    pred_a: np.ndarray,
+    pred_b: np.ndarray,
+    *,
+    metric: str = "f1",
+    n_iter: int = 1000,
+    seed: int = 42,
+    alpha: float = 0.05,
+    pos_label: int = 1,
+) -> dict[str, float | tuple[float, float]]:
+    """Paired bootstrap CI on metric(A) - metric(B) on the same rows.
+
+    For each of `n_iter` resamples (with replacement, indices shared by A and B),
+    computes the chosen metric for both predictors on the resampled rows and
+    records the difference. Returns:
+
+    - "point": point estimate of metric(A) - metric(B) on the full sample
+    - "ci": (lo, hi) percentile bounds on the difference at (1 - alpha) confidence
+    - "p_share_a_better": share of resamples where metric(A) > metric(B)
+    - "n_valid": number of resamples that yielded both classes in y_true
+
+    metric: one of {"f1", "precision", "recall", "accuracy"}. The course's
+    Week 4 paired-bootstrap pattern, as recommended in the methodology audit.
+    Excludes-zero CIs are stronger evidence than McNemar p-values alone because
+    they carry the magnitude of the difference.
+    """
+    metric = metric.lower()
+    if metric not in {"f1", "precision", "recall", "accuracy"}:
+        raise ValueError(f"metric must be one of f1/precision/recall/accuracy, got {metric!r}")
+
+    def _score(yt: np.ndarray, yp: np.ndarray) -> float:
+        if metric == "accuracy":
+            return float(accuracy_score(yt, yp))
+        p, r, f, _ = precision_recall_fscore_support(
+            yt, yp, average="binary", pos_label=pos_label, zero_division=0
+        )
+        return {"f1": float(f), "precision": float(p), "recall": float(r)}[metric]
+
+    point = _score(y_true, pred_a) - _score(y_true, pred_b)
+
+    rng = np.random.default_rng(seed)
+    n = len(y_true)
+    idx_full = np.arange(n)
+    diffs: list[float] = []
+    a_better = 0
+
+    for _ in range(n_iter):
+        s = rng.choice(idx_full, size=n, replace=True)
+        yt = y_true[s]
+        if len(np.unique(yt)) < 2:
+            continue
+        diff = _score(yt, pred_a[s]) - _score(yt, pred_b[s])
+        diffs.append(diff)
+        if diff > 0:
+            a_better += 1
+
+    if not diffs:
+        return {"point": float(point), "ci": (float("nan"), float("nan")), "p_share_a_better": float("nan"), "n_valid": 0}
+
+    lo = float(np.percentile(diffs, 100 * (alpha / 2)))
+    hi = float(np.percentile(diffs, 100 * (1 - alpha / 2)))
+    return {
+        "point": float(point),
+        "ci": (lo, hi),
+        "p_share_a_better": float(a_better / len(diffs)),
+        "n_valid": int(len(diffs)),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Inter-rater agreement
 # ---------------------------------------------------------------------------
 

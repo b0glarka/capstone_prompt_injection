@@ -1,9 +1,13 @@
----
-title: "Methodology Appendix: Statistical Choices and Inference"
-subtitle: "Companion document to the capstone final report"
-author: "Boglarka Petruska"
-date: "2026-05-11"
-status: "Draft, anchored on published references; for inclusion as an appendix in the final report"
+# Methodology Appendix: Statistical Choices and Inference
+
+Companion document to the capstone final report.
+
+Author: Boglarka Petruska
+
+Date: 2026-05-11
+
+Status: Draft, anchored on published references; for inclusion as an appendix in the final report.
+
 ---
 
 # Purpose
@@ -160,6 +164,14 @@ Reference: Artstein, R., & Poesio, M. (2008). Inter-coder agreement for computat
 ## 5.3 Sample size
 
 Kappa is sensitive to sample size and class balance. At n less than approximately 30, the kappa point estimate is noisy and its confidence interval is wide. The sneak-preview Claude-vs-GPT-4o sensitivity check at n = 8 reports an agreement rate but explicitly notes that kappa is not meaningful at that sample size. The formal validation at n = 150 will report kappa with a bootstrap CI.
+
+## 5.4 Application to the 200-row label audit (Task 1, complete)
+
+Kappa is also applied at the dataset-validation stage to measure agreement between the human auditor (Boga) applying the operational_definitions.md v1.22 §3.1 decision tree and the three source datasets' as-released gold labels. The full methodology and results are in `reports/label_audit_report.md`. Headline: overall kappa 0.930 [0.878, 0.970] (1,000-iteration bootstrap, seed 42); per-dataset kappa deepset 0.911, neuralchemy 0.881, SPML 1.000. All three values fall in the "almost perfect" Landis-Koch band. The disagreement-as-noise-rate proxy is 3.5% overall, consistent with Northcutt et al. (2021) on community-curated benchmark datasets. This validation provides empirical evidence that the §3.1 v1.22 instrument is consistent with the three datasets' implicit operationalisations of "prompt injection," with a small minority of edge cases concentrated in directions documented in the audit report (4 candidate dataset over-labels, 1 dataset under-label found by the audit, 1 content-policy definition boundary, 1 fictional-framing borderline).
+
+## 5.5 Application to the 150-row judge gold subset (Task 3, pending)
+
+Kappa will be computed between the human auditor (Boga) labeling each (prompt, agent response) pair against operational_definitions.md v1.22 §3.2 and the LLM judges' verdicts on the same pairs (Sonnet 4.6 primary, plus Haiku 4.5 and GPT-4o-mini for cross-judge measurement). Output: `reports/judge_validation_report.md` (to be written after Task 3 completes). The Task 1 audit result (kappa 0.930 on the input-side instrument) establishes a precedent that the v1.22 operational definitions are robust enough to drive high-agreement labeling; whether the LLM judges achieve similar agreement with the human auditor on the response-side rubric is the open question.
 
 # 6. Specific design choices
 

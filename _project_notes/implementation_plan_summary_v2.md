@@ -1,7 +1,56 @@
 - Purpose: implementation plan for the approved PID
 - Status: living draft, updated as the project progresses
 - Created: 2026-04-21
-- Updated: 2026-05-08 (progress addendum at top; v2 plan body unchanged)
+- Updated: 2026-05-11 (post-interim-submission addendum prepended; 2026-05-08 addendum retained for history; v2 plan body unchanged)
+
+---
+
+# Progress addendum (2026-05-11, end of interim-submission session)
+
+This update reports execution against the v2 plan as of the May 11 interim deadline. The earlier 2026-05-08 addendum is retained below for history. The plan body that follows both addenda is unchanged from the version Eduardo reviewed.
+
+## What is done since the 2026-05-08 addendum
+
+Sections 1 through 3 of the v2 plan are now substantially complete. The principal additions since 2026-05-08:
+
+- **Defense A consolidated on the full 4,546-row frozen evaluation set**. ProtectAI DeBERTa v3 v2: F1 = 0.911 [0.902, 0.919], ROC AUC = 0.966 [0.960, 0.970]. Meta Prompt Guard 2 86M: F1 = 0.666 [0.650, 0.683], ROC AUC = 0.933 [0.927, 0.940]. Paired McNemar (DeBERTa vs PG2): b = 931, c = 128, p << 0.001. The 36-point F1 spread between deepset (0.59) and SPML (0.95) holds at the consolidated full-eval-set level with non-overlapping 95% CIs, and is the headline empirical finding of the project.
+- **Defense A error-pattern analysis**: 30% of DeBERTa true positives contain canonical override-language markers vs only 4.6% of false negatives. The cross-dataset variance is a coverage problem driven by surface-level pattern matching.
+- **Cross-classifier ensemble analysis**: OR-gate combination of DeBERTa and Prompt Guard 2 yields F1 = 0.916, a modest +0.005 lift over DeBERTa alone (paired McNemar p = 0.0005). AND-gate is strictly worse. Mean-score ensemble achieves ROC AUC = 0.969. The lift from ensembling is real but small; combining classifiers does not solve the cross-dataset variance.
+- **Defense B 500-row formal pilot** completed via Together AI (Llama 3.3 70B Instruct Turbo) + Claude Sonnet 4.6 judge. Together AI was the inference-provider fallback after Groq's daily quota was hit mid-pilot. Hijack rate on injection-class rows: 0.488 (deepset), 0.500 (neuralchemy), 0.265 (SPML). The Together migration is a same-model-class substitution and does not alter the v2 plan's methodological position; flagged in the interim report as Section 9 scope change.
+- **Cheap-judge cost-comparison sweep** on the same 500-row pilot. Sonnet vs Haiku 4.5 kappa = 0.799 (almost-perfect agreement, 2.6x cheaper). Sonnet vs GPT-4o-mini kappa = 0.720 (substantial agreement, 24x cheaper). Both cheap judges are candidate production replacements; the 150-row human gold subset will produce the final validation before any production cost-optimization is recommended.
+- **Defense C combined pipeline** at 500-row pilot scale (the v2 conditional-stretch goal). Defense C = OR-combination of Defense A and Defense B. F1 = 0.912 [0.889, 0.932], strictly dominates Defense A alone (F1 = 0.849) and Defense B alone (F1 = 0.590) on paired McNemar tests at p < 1e-6 against each component. Recall lift from 0.761 to 0.865 with no precision degradation. The layered-defense thesis that motivated the v2 framing is now an empirically-anchored finding, not a hypothesis. Promoted from stretch goal to main result in the interim.
+- **BIPIA email-QA indirect-injection evaluation** (Section 5.5 of the v2 plan / Section 5.8 of the final report). 800 rows across the 15 BIPIA attack categories. Defense A query-only is structurally blind (100% attack success rate, by construction). Defense C achieves 48.3% catch rate (= 51.7% attack success), with a 38% false-alarm rate on the 50 clean control emails. Indirect injection drops Defense C's catch rate by approximately 38 percentage points compared to direct injection on the same defense stack; this is the methodologically-significant finding for practitioners considering whether direct-injection benchmark numbers transfer to indirect-injection deployments.
+
+Document and methodology work completed:
+
+- **Operational definitions document** iterated through versions 1.1 to 1.8. Three-role vocabulary (operator, user, attacker) added as Section 1.1; ambiguous-case patterns in Section 1.4 cited (Toyer et al. 2024, OWASP LLM01:2025, Shen et al. 2024 for the DAN-family jailbreak persona); H1-H5 hijack categories supplemented with a category-overlap tie-breaker rule in Section 2.2 (H3 vs H5 disambiguation, with analogous priorities for H1 vs H3 and H2 vs H1).
+- **Methodology appendix** at `reports/methodology_appendix.md` documenting bootstrap CIs (Efron 1979), McNemar's test (McNemar 1947), Holm-Bonferroni correction (Holm 1979), Cohen's kappa with Landis-Koch interpretive thresholds (Landis & Koch 1977), Artstein & Poesio (2008) on inter-coder agreement.
+- **Business decision framework** at `reports/business_decision_framework.md` with per-defense layer-3 matrix, scenario-based recommendations (Scenario A consumer chat, Scenario B business-internal agent, Scenario C autonomous-agent-with-broad-tool-access matching Hiflylabs context).
+- **Final report skeleton** at `reports/final_report.md` with Section 5 (Results) fully filled. Title corrected to PID title ("Business-Oriented Evaluation..."). Sponsor named (Zsófia Práger). Section 1.1 Motivation rewritten in PID-anchored language.
+- **Interim progress report** restructured to match the CEU MSBA Capstone Interim Progress Report template (13 numbered sections + Final Self-Check). Tables and one figure embedded in Section 5. Compiled to PDF via Pandoc + xelatex with `reports/pdf-header.tex` for zebra-striped tables.
+- **Per-row cache-write standard** memorialized in `src/README.md`. All seven API-hitting scripts now write per row immediately, making any mid-run crash recoverable. Adopted after a Groq quota-exhaust incident wasted ~$0.07 of pilot work during this session.
+
+## What is open
+
+Phase 0 remainder: 200-row label audit (sample drawn; user labeling work scheduled for next session, ~5-6 hours).
+
+Phase 2: 150-row human gold subset for judge validation (subset built at `results/judge_gold_subset.csv` with labeling instructions including the H1-H5 category-overlap tie-breaker; ~6-7 hours of user labeling). Cohen's kappa computation between human and each LLM judge after labeling completes.
+
+Stretch: Phase Cb full-scale Defense C run on all 4,546 rows (~5 hours, ~$8.50). Optional; pilot results are already statistically robust.
+
+Phase 4-6 remainder: final report sections 1-4 and 6-9 from DRAFT to FILLED, methodology appendix limitations section, 10-20 slide presentation deck, 3-page CEU public summary. All on schedule for the 2026-06-08 final deadline.
+
+## Costs to date
+
+Total spent: ~$2.39 across all providers. Productive: ~$2.32. Wasted: ~$0.07 (failed Groq pilot, mitigated by the per-row cache-write standard adopted in the same session). Realistic project total projection ~$10-12 under the Haiku-judge cost-optimization path validated by the cheap-judge sweep. Well below the original PID-era $500-$800 projection.
+
+## Methodological questions for outside review (status update)
+
+The three questions raised in the 2026-05-08 addendum to Professor Zoltan Toth remain open:
+
+1. Statistically defensible comparisons across imbalanced attack subcategories. Bootstrap CIs are computed; Holm-Bonferroni is applied on the pre-specified primary comparisons; subcategory-level findings are labeled exploratory. Awaiting Professor Toth's review.
+2. LLM-as-judge robustness and rubric design. The minimum-rubric judge agreement on the 500-row pilot is kappa 0.799 (Sonnet vs Haiku 4.5); the human gold subset is the formal validation. Rubric iteration deferred pending kappa from gold subset.
+3. Paired comparison machinery on the frozen eval set. McNemar applied with chi-squared continuity correction for full-eval-set comparisons (large b+c) and exact binomial for pilot-scale comparisons (small b+c).
 
 ---
 

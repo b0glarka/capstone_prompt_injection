@@ -263,6 +263,7 @@ dependencies = [
     { name = "huggingface-hub" },
     { name = "ipykernel" },
     { name = "jupyter" },
+    { name = "langdetect" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "pandas" },
@@ -296,6 +297,7 @@ requires-dist = [
     { name = "huggingface-hub", specifier = ">=0.24" },
     { name = "ipykernel", specifier = ">=6.0" },
     { name = "jupyter", specifier = ">=1.0" },
+    { name = "langdetect", specifier = ">=1.0" },
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "openai", marker = "extra == 'api'", specifier = ">=1.50" },
@@ -1346,6 +1348,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/52/7d/7157f9bba6b455cfb4632ed411e199fc8b8977642c2b12082e1bd9e6d173/kiwisolver-1.5.0-pp311-pypy311_pp73-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:daae526907e262de627d8f70058a0f64acc9e2641c164c99c8f594b34a799a16", size = 77603, upload-time = "2026-03-09T13:15:50.945Z" },
     { url = "https://files.pythonhosted.org/packages/0a/dd/8050c947d435c8d4bc94e3252f4d8bb8a76cfb424f043a8680be637a57f1/kiwisolver-1.5.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:59cd8683f575d96df5bb48f6add94afc055012c29e28124fcae2b63661b9efb1", size = 73558, upload-time = "2026-03-09T13:15:52.112Z" },
 ]
+
+[[package]]
+name = "langdetect"
+version = "1.0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/72/a3add0e4eec4eb9e2569554f7c70f4a3c27712f40e3284d483e88094cc0e/langdetect-1.0.9.tar.gz", hash = "sha256:cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0", size = 981474, upload-time = "2021-05-07T07:54:13.562Z" }
 
 [[package]]
 name = "lark"

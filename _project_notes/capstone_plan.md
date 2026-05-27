@@ -1,7 +1,7 @@
 - Purpose: active work tracker with phases, checkboxes, hours, dependencies. Check off items as they are done.
 - Status: active
 - Created: 2026-04-21
-- Last edited: 2026-05-08
+- Last edited: 2026-05-11
 - Related: [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot)
 
 ---
@@ -51,11 +51,11 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
 - [x] Report outline drafted at `reports/final_report_outline.md`
 - [x] Verify moved notebook runs end-to-end from new location
 - [x] Migrate from conda to uv (`pyproject.toml` + `uv.lock`); supersedes the planned `environment.yml` pin
-- [ ] Add short note in README about Colab-vs-local hybrid workflow
+- [x] Add short note in README about Colab-vs-local hybrid workflow (done 2026-05-11)
 
 ### Methodological foundation
 
-- [ ] **Operational definitions document** at `reports/operational_definitions.md` (~4 hrs)
+- [x] **Operational definitions document** at `reports/operational_definitions.md` (done 2026-05-08, iterated to v1.8 by 2026-05-11)
   - Anchor definition of "prompt injection" on OWASP LLM01 + Greshake et al. 2023
   - Anchor definition of "hijacked agent response" on BIPIA categories (task execution, info gathering, ad insertion, phishing) + Greshake taxonomy
   - Binary decision tree with 10-15 worked examples drawn from the three datasets
@@ -74,7 +74,7 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
 
 ### Evaluation set
 
-- [ ] **Build stratified eval set** (~4 hrs)
+- [x] **Build stratified eval set** (done 2026-05-08; `results/eval_set.parquet`, 4,546 rows)
   - Implement `src/eval_set.py` with these rules:
     - deepset: use all 546 rows (below the 2,000 target; do not oversample)
     - neuralchemy: sample 2,000 from 4,391, stratified by label and by attack subcategory on the injection side
@@ -94,7 +94,7 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
 ### Week 1 checkpoint
 
 - [x] Email Eduardo to confirm interim format expectations (resolved at 2026-04-24 office meeting: document, no formal template, standard submission)
-- [ ] Push all Phase 0 commits to main
+- [x] Push all Phase 0 commits to main (done across multiple commits 2026-05-08 through 2026-05-11)
 - [x] Update `_project_notes/capstone_state.md` with Phase 0 completion status (continuously updated 2026-04-24, 2026-05-08)
 
 ---
@@ -106,24 +106,24 @@ Target: ~29 active hrs. Goal: all defense pipelines working end-to-end on small 
 ### Shared infrastructure
 
 - [x] `src/cache.py`: JSONL append-log utility with existing-keys lookup (done 2026-05-08)
-- [ ] `src/utils.py`: env logging helper, seed setter, pathing helpers (~1 hr)
-- [ ] `src/metrics.py`: accuracy, precision, recall, F1, Cohen's kappa, McNemar's test, bootstrap CI (~4 hrs)
+- [x] `src/utils.py`: env logging helper, seed setter, pathing helpers (done 2026-05-11)
+- [x] `src/metrics.py`: accuracy, precision, recall, F1, Cohen's kappa, McNemar's test, bootstrap CI (done 2026-05-11)
 
 ### Defense A (input classifier)
 
 - [x] `src/defense_a/deberta.py`: ProtectAI DeBERTa v2 inference wrapper, batched, device auto-detect (done 2026-05-08)
-- [ ] `src/defense_a/prompt_guard.py`: Meta Llama Prompt Guard 2 inference wrapper (gated, license access pending)
+- [x] `src/defense_a/prompt_guard.py`: Meta Llama Prompt Guard 2 inference wrapper (done 2026-05-08, license access granted mid-session)
 - [x] `notebooks/05_defense_a_pilot.ipynb`: local pilot, runs on CPU on the deepset 546-row subset (done 2026-05-08, see `results/defense_a_pilot.md`)
-- [ ] `notebooks/colab_defense_a.ipynb`: Colab Pro version with GPU for the full eval-set run
-- [ ] Run Defense A on full eval set, both classifiers, save `results/defense_a_predictions.csv` (after eval set is built)
+- [x] `notebooks/colab_defense_a.ipynb`: Colab Pro version with GPU for the full eval-set run (done 2026-05-11)
+- [x] Run Defense A on full eval set, both classifiers, save consolidated predictions (done 2026-05-11; see `results/defense_a_full_eval_set.csv` and `results/defense_a_full_metrics.csv`)
 - [x] Run Defense A (DeBERTa) on all 4,391 neuralchemy rows for supplementary per-subcategory analysis (done 2026-05-08, see `notebooks/06_defense_a_neuralchemy.ipynb` and `results/defense_a_pilot.md`)
 - [x] Run Defense A (DeBERTa) on 2,000-row balanced SPML subsample (done 2026-05-08, see `notebooks/07_defense_a_spml.ipynb`)
 
 ### Prompt augmentation baseline
 
-- [ ] `src/augmentation/variants.py`: three templates (control, instruction-only, combined) (~1 hr)
+- [x] `src/augmentation/variants.py`: three templates (control, instruction-only, combined) (done 2026-05-11)
 - [x] `src/defense_b/agent.py`: Groq client wrapper for Llama 3.3 70B Versatile (done 2026-05-08; sneak-preview level, no retry logic yet)
-- [ ] `notebooks/06_augmentation_run.ipynb`: drives the 3 conditions end-to-end agent + judge on 100-row pilot sample (~2 hrs)
+- [x] `notebooks/06_augmentation_run.ipynb`: drives the 3 conditions end-to-end agent + judge on 100-row pilot sample (scaffolded 2026-05-11, not yet executed)
 - [ ] Scale augmentation runs to full ~4,546 rows (background time, ~3-5 hrs wait)
 
 ### Defense B (LLM-as-judge)
@@ -135,21 +135,36 @@ Target: ~29 active hrs. Goal: all defense pipelines working end-to-end on small 
   - 8 neuralchemy jailbreak misses: judge flagged 0/8 (Llama refused all 8 on alignment)
   - 8 neuralchemy encoding-class misses: judge flagged 1/8 (agent treated encoded payloads as cipher puzzles, didn't comply)
   - Artifacts: `results/defense_b_sneak_preview.md`, `results/defense_b_neuralchemy_jailbreak_preview.md`, `results/defense_b_neuralchemy_encoding_preview.md`
-- [ ] `notebooks/07_defense_b_run.ipynb`: agent + primary judge pipeline on 500-row pilot sample (~3 hrs)
+- [x] Defense B 500-row pilot (done 2026-05-11 via `scripts/run_defense_b_pilot.py` on Together AI; pilot writeup at `results/defense_b_pilot.md`)
 - [ ] Review judge outputs on pilot, refine rubric if needed (~2 hrs)
 
 ### Week 2 checkpoint
 
-- [ ] Push all Phase 1 commits
-- [ ] Confirm Defense A predictions CSV exists and makes sense (sanity check: known-injection prompts → high injection scores)
-- [ ] Confirm augmentation pipeline produces plausible outputs
-- [ ] Confirm Defense B pilot verdicts look sensible on a spot-check of ~10 cases
+- [x] Push all Phase 1 commits (done 2026-05-11 in commit `70bd849`)
+- [x] Confirm Defense A predictions CSV exists and makes sense (done 2026-05-11; consolidated to `results/defense_a_full_eval_set.csv`)
+- [ ] Confirm augmentation pipeline produces plausible outputs (notebook scaffolded; execution deferred)
+- [x] Confirm Defense B pilot verdicts look sensible on a spot-check (done 2026-05-11; 500-row pilot complete)
 
 ---
 
 ## Phase 2: Human Validation + Interim Deliverable (May 5 - May 11)
 
 Target: ~23 active hrs. Goal: judge validation, interim report, everything committed cleanly for Eduardo.
+
+### 200-row label audit (Task 1)
+
+- [x] **Generate stratified 200-row audit sample** (done 2026-05-08 via `scripts/make_label_audit_sample.py`; 67 deepset + 67 neuralchemy + 66 SPML, 50/50 SAFE/INJECTION balance, seed 42)
+- [x] **Rerank by classifier disagreement** (done 2026-05-21 via `scripts/rerank_label_audit_by_disagreement.py`; binary-disagreement boundary cases concentrated at top of file)
+- [x] **Add SPML system_prompt column** (done 2026-05-26 via `scripts/add_spml_system_prompt_to_audit.py`; required for §3.2 Step 0 operator-intent grounding)
+- [x] **Human auditor labels all 200 rows** (done 2026-05-27 by Boga; applied operational_definitions.md v1.22 §3.1 decision tree)
+- [x] **v1.22 §3.1 review pass** (done 2026-05-27 via `scripts/apply_ambiguous_flips_v122.py`; 32 ambiguous flips, final ambiguity rate 8.5%)
+- [x] **Notes cleanup, language detection, mojibake fixes** (done 2026-05-27 via `scripts/add_language_column_and_notes.py` and `scripts/audit_notes_and_language_cleanup.py`)
+- [x] **Definition-boundary consistency flips on ranks 39 and 62** (done 2026-05-27 via `scripts/audit_finalize_and_kappa.py`)
+- [x] **Cohen's kappa, agreement rate, ambiguity rate, cross-language stats** (done 2026-05-27; overall kappa 0.930 [0.878, 0.970], 7 disagreements of 200, ambiguity 8.5%)
+- [x] **Audit report writeup** (done 2026-05-27: `reports/label_audit_report.md`)
+- [x] **Final report integration** (done 2026-05-27: §5.1 noise-floor paragraph, §8.4 dataset label noise update, §5.4 / §6.1 / §8.8 / §9.1 cross-language findings)
+
+Canonical post-audit data file: `results/label_audit_sample_disagreement_sorted_post_audit.csv`. Earlier intermediate files (`label_audit_sample.csv`, `label_audit_sample_disagreement_sorted.csv`) are kept for reproducibility but superseded.
 
 ### Gold subset for judge validation
 
@@ -164,9 +179,9 @@ Target: ~23 active hrs. Goal: judge validation, interim report, everything commi
 
 ### Sensitivity check on Defense B
 
-- [ ] Run GPT-4o judge on 500-row subsample (~1 hr wait)
-- [ ] Compute Sonnet 4.6 vs GPT-4o kappa (~1 hr)
-- [ ] Add results to judge validation report
+- [x] Cheap-judge sweep on 500-row pilot (done 2026-05-11 via `scripts/run_judge_cost_sweep.py`; Haiku 4.5 and GPT-4o-mini as alternative judges)
+- [x] Compute kappa across judges (done 2026-05-11; Sonnet vs Haiku 4.5 = 0.799, Sonnet vs GPT-4o-mini = 0.720)
+- [x] Add results to judge cost-comparison report at `results/defense_b_judge_cost_comparison.md`
 
 ### Defense B full run
 
@@ -176,18 +191,14 @@ Target: ~23 active hrs. Goal: judge validation, interim report, everything commi
 
 ### Interim report
 
-- [ ] Write `reports/interim_progress_report.md`, 3-5 pages, matching CEU's four required sections (~6 hrs)
-  - Project status
-  - Interim outcomes (with tables from Phase 0 + 1 results)
-  - Work to be done (summary from this plan doc)
-  - Problems or issues (limitations identified so far, scope questions, any blockers)
-- [ ] Verify all repo contents pushed; README is clean; notebooks run end-to-end
-- [ ] Submit interim report per Eduardo's confirmed format
+- [x] Write `reports/interim_progress_report.md` (done 2026-05-11; restructured to match the CEU MSBA Capstone Interim Progress Report template, 13 numbered sections + Final Self-Check; PDF compiled at `reports/interim_progress_report.pdf` via Pandoc + xelatex)
+- [x] Verify all repo contents pushed; README is clean (done 2026-05-11; commit `70bd849` pushed to GitHub)
+- [ ] Submit interim report (about to be done 2026-05-11 evening)
 
 ### Week 3 checkpoint (May 11 interim deadline)
 
 - [ ] Interim report submitted
-- [ ] Update `capstone_state.md` with post-interim status
+- [x] Update `capstone_state.md` with post-interim status (done 2026-05-11)
 - [ ] Capture any Eduardo or coordinator feedback for Phase 3 adjustments
 
 ---

@@ -15,6 +15,59 @@
   langid = {english}
 }
 
+@misc{boucher2021Bad,
+  title = {Bad {{Characters}}: {{Imperceptible NLP Attacks}}},
+  shorttitle = {Bad {{Characters}}},
+  author = {Boucher, Nicholas and Shumailov, Ilia and Anderson, Ross and Papernot, Nicolas},
+  year = 2021,
+  month = dec,
+  number = {arXiv:2106.09898},
+  eprint = {2106.09898},
+  primaryclass = {cs.CL},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2106.09898},
+  url = {http://arxiv.org/abs/2106.09898},
+  urldate = {2026-05-26},
+  abstract = {Several years of research have shown that machine-learning systems are vulnerable to adversarial examples, both in theory and in practice. Until now, such attacks have primarily targeted visual models, exploiting the gap between human and machine perception. Although text-based models have also been attacked with adversarial examples, such attacks struggled to preserve semantic meaning and indistinguishability. In this paper, we explore a large class of adversarial examples that can be used to attack text-based models in a black-box setting without making any human-perceptible visual modification to inputs. We use encoding-specific perturbations that are imperceptible to the human eye to manipulate the outputs of a wide range of Natural Language Processing (NLP) systems from neural machine-translation pipelines to web search engines. We find that with a single imperceptible encoding injection -- representing one invisible character, homoglyph, reordering, or deletion -- an attacker can significantly reduce the performance of vulnerable models, and with three injections most models can be functionally broken. Our attacks work against currently-deployed commercial systems, including those produced by Microsoft and Google, in addition to open source models published by Facebook, IBM, and HuggingFace. This novel series of attacks presents a significant threat to many language processing systems: an attacker can affect systems in a targeted manner without any assumptions about the underlying model. We conclude that text-based NLP systems require careful input sanitization, just like conventional applications, and that given such systems are now being deployed rapidly at scale, the urgent attention of architects and operators is required.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-main,Computer Science - Computation and Language,Computer Science - Cryptography and Security,Computer Science - Machine Learning}
+}
+
+@misc{chidambaram2024How,
+  title = {How {{Flawed Is ECE}}? {{An Analysis}} via {{Logit Smoothing}}},
+  shorttitle = {How {{Flawed Is ECE}}?},
+  author = {Chidambaram, Muthu and Lee, Holden and McSwiggen, Colin and Rezchikov, Semon},
+  year = 2024,
+  month = jun,
+  number = {arXiv:2402.10046},
+  eprint = {2402.10046},
+  primaryclass = {cs.LG},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2402.10046},
+  url = {http://arxiv.org/abs/2402.10046},
+  urldate = {2026-05-20},
+  abstract = {Informally, a model is calibrated if its predictions are correct with a probability that matches the confidence of the prediction. By far the most common method in the literature for measuring calibration is the expected calibration error (ECE). Recent work, however, has pointed out drawbacks of ECE, such as the fact that it is discontinuous in the space of predictors. In this work, we ask: how fundamental are these issues, and what are their impacts on existing results? Towards this end, we completely characterize the discontinuities of ECE with respect to general probability measures on Polish spaces. We then use the nature of these discontinuities to motivate a novel continuous, easily estimated miscalibration metric, which we term Logit-Smoothed ECE (LS-ECE). By comparing the ECE and LS-ECE of pre-trained image classification models, we show in initial experiments that binned ECE closely tracks LS-ECE, indicating that the theoretical pathologies of ECE may be avoidable in practice.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-main,Computer Science - Machine Learning,Mathematics - Probability}
+}
+
+@misc{damour2020Underspecification,
+  title = {Underspecification {{Presents Challenges}} for {{Credibility}} in {{Modern Machine Learning}}},
+  author = {D'Amour, Alexander and Heller, Katherine and Moldovan, Dan and Adlam, Ben and Alipanahi, Babak and Beutel, Alex and Chen, Christina and Deaton, Jonathan and Eisenstein, Jacob and Hoffman, Matthew D. and Hormozdiari, Farhad and Houlsby, Neil and Hou, Shaobo and Jerfel, Ghassen and Karthikesalingam, Alan and Lucic, Mario and Ma, Yian and McLean, Cory and Mincu, Diana and Mitani, Akinori and Montanari, Andrea and Nado, Zachary and Natarajan, Vivek and Nielson, Christopher and Osborne, Thomas F. and Raman, Rajiv and Ramasamy, Kim and Sayres, Rory and Schrouff, Jessica and Seneviratne, Martin and Sequeira, Shannon and Suresh, Harini and Veitch, Victor and Vladymyrov, Max and Wang, Xuezhi and Webster, Kellie and Yadlowsky, Steve and Yun, Taedong and Zhai, Xiaohua and Sculley, D.},
+  year = 2022,
+  month = aug,
+  number = {arXiv:2011.03395},
+  eprint = {2011.03395},
+  primaryclass = {cs.LG},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2011.03395},
+  url = {http://arxiv.org/abs/2011.03395},
+  urldate = {2026-05-20},
+  abstract = {ML models often exhibit unexpectedly poor behavior when they are deployed in real-world domains. We identify underspecification as a key reason for these failures. An ML pipeline is underspecified when it can return many predictors with equivalently strong held-out performance in the training domain. Underspecification is common in modern ML pipelines, such as those based on deep learning. Predictors returned by underspecified pipelines are often treated as equivalent based on their training domain performance, but we show here that such predictors can behave very differently in deployment domains. This ambiguity can lead to instability and poor model behavior in practice, and is a distinct failure mode from previously identified issues arising from structural mismatch between training and deployment domains. We show that this problem appears in a wide variety of practical ML pipelines, using examples from computer vision, medical imaging, natural language processing, clinical risk prediction based on electronic health records, and medical genomics. Our results show the need to explicitly account for underspecification in modeling pipelines that are intended for real-world deployment in any domain.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-main,Computer Science - Machine Learning,Statistics - Machine Learning}
+}
+
 @misc{debenedetti2024AgentDojo,
   title = {{{AgentDojo}}: {{A Dynamic Environment}} to {{Evaluate Prompt Injection Attacks}} and {{Defenses}} for {{LLM Agents}}},
   shorttitle = {{{AgentDojo}}},
@@ -31,6 +84,24 @@
   abstract = {AI agents aim to solve complex tasks by combining text-based reasoning with external tool calls. Unfortunately, AI agents are vulnerable to prompt injection attacks where data returned by external tools hijacks the agent to execute malicious tasks. To measure the adversarial robustness of AI agents, we introduce AgentDojo, an evaluation framework for agents that execute tools over untrusted data. To capture the evolving nature of attacks and defenses, AgentDojo is not a static test suite, but rather an extensible environment for designing and evaluating new agent tasks, defenses, and adaptive attacks. We populate the environment with 97 realistic tasks (e.g., managing an email client, navigating an e-banking website, or making travel bookings), 629 security test cases, and various attack and defense paradigms from the literature. We find that AgentDojo poses a challenge for both attacks and defenses: state-of-the-art LLMs fail at many tasks (even in the absence of attacks), and existing prompt injection attacks break some security properties but not all. We hope that AgentDojo can foster research on new design principles for AI agents that solve common tasks in a reliable and robust manner.. We release the code for AgentDojo at https://github.com/ethz-spylab/agentdojo.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Cryptography and Security,Computer Science - Machine Learning}
+}
+
+@misc{dettmers2023QLoRA,
+  title = {{{QLoRA}}: {{Efficient Finetuning}} of {{Quantized LLMs}}},
+  shorttitle = {{{QLoRA}}},
+  author = {Dettmers, Tim and Pagnoni, Artidoro and Holtzman, Ari and Zettlemoyer, Luke},
+  year = 2023,
+  month = may,
+  number = {arXiv:2305.14314},
+  eprint = {2305.14314},
+  primaryclass = {cs.LG},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2305.14314},
+  url = {http://arxiv.org/abs/2305.14314},
+  urldate = {2026-05-20},
+  abstract = {We present QLoRA, an efficient finetuning approach that reduces memory usage enough to finetune a 65B parameter model on a single 48GB GPU while preserving full 16-bit finetuning task performance. QLoRA backpropagates gradients through a frozen, 4-bit quantized pretrained language model into Low Rank Adapters\textasciitilde (LoRA). Our best model family, which we name Guanaco, outperforms all previous openly released models on the Vicuna benchmark, reaching 99.3\% of the performance level of ChatGPT while only requiring 24 hours of finetuning on a single GPU. QLoRA introduces a number of innovations to save memory without sacrificing performance: (a) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights (b) double quantization to reduce the average memory footprint by quantizing the quantization constants, and (c) paged optimziers to manage memory spikes. We use QLoRA to finetune more than 1,000 models, providing a detailed analysis of instruction following and chatbot performance across 8 instruction datasets, multiple model types (LLaMA, T5), and model scales that would be infeasible to run with regular finetuning (e.g. 33B and 65B parameter models). Our results show that QLoRA finetuning on a small high-quality dataset leads to state-of-the-art results, even when using smaller models than the previous SoTA. We provide a detailed analysis of chatbot performance based on both human and GPT-4 evaluations showing that GPT-4 evaluations are a cheap and reasonable alternative to human evaluation. Furthermore, we find that current chatbot benchmarks are not trustworthy to accurately evaluate the performance levels of chatbots. A lemon-picked analysis demonstrates where Guanaco fails compared to ChatGPT. We release all of our models and code, including CUDA kernels for 4-bit training.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-future-work,Computer Science - Machine Learning}
 }
 
 @article{efron1979Bootstrap,
@@ -66,6 +137,38 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Computers and Society,Computer Science - Cryptography and Security}
 }
 
+@misc{guo2017Calibration,
+  title = {On {{Calibration}} of {{Modern Neural Networks}}},
+  author = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
+  year = 2017,
+  month = aug,
+  number = {arXiv:1706.04599},
+  eprint = {1706.04599},
+  primaryclass = {cs.LG},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1706.04599},
+  url = {http://arxiv.org/abs/1706.04599},
+  urldate = {2026-05-20},
+  abstract = {Confidence calibration -- the problem of predicting probability estimates representative of the true correctness likelihood -- is important for classification models in many applications. We discover that modern neural networks, unlike those from a decade ago, are poorly calibrated. Through extensive experiments, we observe that depth, width, weight decay, and Batch Normalization are important factors influencing calibration. We evaluate the performance of various post-processing calibration methods on state-of-the-art architectures with image and document classification datasets. Our analysis and experiments not only offer insights into neural network learning, but also provide a simple and straightforward recipe for practical settings: on most datasets, temperature scaling -- a single-parameter variant of Platt Scaling -- is surprisingly effective at calibrating predictions.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-main,Computer Science - Machine Learning}
+}
+
+@inproceedings{guo2021Overview,
+  title = {An {{Overview}} of {{Uncertainty Calibration}} for {{Text Classification}} and the {{Role}} of {{Distillation}}},
+  booktitle = {Proceedings of the 6th {{Workshop}} on {{Representation Learning}} for {{NLP}} ({{RepL4NLP-2021}})},
+  author = {Guo, Han and Pasunuru, Ramakanth and Bansal, Mohit},
+  year = 2021,
+  pages = {289--306},
+  publisher = {Association for Computational Linguistics},
+  address = {Online},
+  doi = {10.18653/v1/2021.repl4nlp-1.29},
+  url = {https://aclanthology.org/2021.repl4nlp-1.29},
+  urldate = {2026-05-20},
+  langid = {english},
+  keywords = {capstone-future-work}
+}
+
 @misc{hassan2026Efficient,
   title = {Efficient and {{Adaptable Detection}} of {{Malicious LLM Prompts}} via {{Bootstrap Aggregation}}},
   author = {Hassan, Shayan Ali and Ni, Tao and Qazi, Zafar Ayyub and Canini, Marco},
@@ -96,6 +199,24 @@
   url = {https://www.jstor.org/stable/4615733}
 }
 
+@misc{hu2021LoRA,
+  title = {{{LoRA}}: {{Low-Rank Adaptation}} of {{Large Language Models}}},
+  shorttitle = {{{LoRA}}},
+  author = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and {Allen-Zhu}, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  year = 2021,
+  month = oct,
+  number = {arXiv:2106.09685},
+  eprint = {2106.09685},
+  primaryclass = {cs.CL},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2106.09685},
+  url = {http://arxiv.org/abs/2106.09685},
+  urldate = {2026-05-20},
+  abstract = {An important paradigm of natural language processing consists of large-scale pre-training on general domain data and adaptation to particular tasks or domains. As we pre-train larger models, full fine-tuning, which retrains all model parameters, becomes less feasible. Using GPT-3 175B as an example -- deploying independent instances of fine-tuned models, each with 175B parameters, is prohibitively expensive. We propose Low-Rank Adaptation, or LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, greatly reducing the number of trainable parameters for downstream tasks. Compared to GPT-3 175B fine-tuned with Adam, LoRA can reduce the number of trainable parameters by 10,000 times and the GPU memory requirement by 3 times. LoRA performs on-par or better than fine-tuning in model quality on RoBERTa, DeBERTa, GPT-2, and GPT-3, despite having fewer trainable parameters, a higher training throughput, and, unlike adapters, no additional inference latency. We also provide an empirical investigation into rank-deficiency in language model adaptation, which sheds light on the efficacy of LoRA. We release a package that facilitates the integration of LoRA with PyTorch models and provide our implementations and model checkpoints for RoBERTa, DeBERTa, and GPT-2 at https://github.com/microsoft/LoRA.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-future-work,Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
 @article{landis1977Measurement,
   title = {The {{Measurement}} of {{Observer Agreement}} for {{Categorical Data}}},
   author = {Landis, J. Richard and Koch, Gary G.},
@@ -111,6 +232,23 @@
   doi = {10.2307/2529310},
   url = {https://www.jstor.org/stable/2529310?origin=crossref},
   urldate = {2026-05-11}
+}
+
+@misc{lin2018Focal,
+  title = {Focal {{Loss}} for {{Dense Object Detection}}},
+  author = {Lin, Tsung-Yi and Goyal, Priya and Girshick, Ross and He, Kaiming and Doll{\'a}r, Piotr},
+  year = 2018,
+  month = feb,
+  number = {arXiv:1708.02002},
+  eprint = {1708.02002},
+  primaryclass = {cs.CV},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1708.02002},
+  url = {http://arxiv.org/abs/1708.02002},
+  urldate = {2026-05-20},
+  abstract = {The highest accuracy object detectors to date are based on a two-stage approach popularized by R-CNN, where a classifier is applied to a sparse set of candidate object locations. In contrast, one-stage detectors that are applied over a regular, dense sampling of possible object locations have the potential to be faster and simpler, but have trailed the accuracy of two-stage detectors thus far. In this paper, we investigate why this is the case. We discover that the extreme foreground-background class imbalance encountered during training of dense detectors is the central cause. We propose to address this class imbalance by reshaping the standard cross entropy loss such that it down-weights the loss assigned to well-classified examples. Our novel Focal Loss focuses training on a sparse set of hard examples and prevents the vast number of easy negatives from overwhelming the detector during training. To evaluate the effectiveness of our loss, we design and train a simple dense detector we call RetinaNet. Our results show that when trained with the focal loss, RetinaNet is able to match the speed of previous one-stage detectors while surpassing the accuracy of all existing state-of-the-art two-stage detectors. Code is at: https://github.com/facebookresearch/Detectron.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-future-work,Computer Science - Computer Vision and Pattern Recognition}
 }
 
 @article{mcnemar1947Note,
@@ -131,6 +269,23 @@
   langid = {english}
 }
 
+@misc{nguyen2025Reliably,
+  title = {Reliably {{Detecting Model Failures}} in {{Deployment Without Labels}}},
+  author = {Nguyen, Viet and Shui, Changjian and Giri, Vijay and Arya, Siddharth and Verma, Amol and Razak, Fahad and Krishnan, Rahul G.},
+  year = 2025,
+  month = nov,
+  number = {arXiv:2506.05047},
+  eprint = {2506.05047},
+  primaryclass = {cs.LG},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2506.05047},
+  url = {http://arxiv.org/abs/2506.05047},
+  urldate = {2026-05-20},
+  abstract = {The distribution of data changes over time; models operating in dynamic environments need retraining. But knowing when to retrain, without access to labels, is an open challenge since some, but not all shifts degrade model performance. This paper formalizes and addresses the problem of post-deployment deterioration (PDD) monitoring. We propose D3M, a practical and efficient monitoring algorithm based on the disagreement of predictive models, achieving low false positive rates under non-deteriorating shifts and provides sample complexity bounds for high true positive rates under deteriorating shifts. Empirical results on both standard benchmark and a real-world large-scale internal medicine dataset demonstrate the effectiveness of the framework and highlight its viability as an alert mechanism for high-stakes machine learning pipelines.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-future-work,Computer Science - Machine Learning}
+}
+
 @misc{northcutt2021Pervasive,
   title = {Pervasive {{Label Errors}} in {{Test Sets Destabilize Machine Learning Benchmarks}}},
   author = {Northcutt, Curtis G. and Athalye, Anish and Mueller, Jonas},
@@ -146,6 +301,22 @@
   abstract = {We identify label errors in the test sets of 10 of the most commonly-used computer vision, natural language, and audio datasets, and subsequently study the potential for these label errors to affect benchmark results. Errors in test sets are numerous and widespread: we estimate an average of at least 3.3\% errors across the 10 datasets, where for example label errors comprise at least 6\% of the ImageNet validation set. Putative label errors are identified using confident learning algorithms and then human-validated via crowdsourcing (51\% of the algorithmically-flagged candidates are indeed erroneously labeled, on average across the datasets). Traditionally, machine learning practitioners choose which model to deploy based on test accuracy - our findings advise caution here, proposing that judging models over correctly labeled test sets may be more useful, especially for noisy real-world datasets. Surprisingly, we find that lower capacity models may be practically more useful than higher capacity models in real-world datasets with high proportions of erroneously labeled data. For example, on ImageNet with corrected labels: ResNet-18 outperforms ResNet-50 if the prevalence of originally mislabeled test examples increases by just 6\%. On CIFAR-10 with corrected labels: VGG-11 outperforms VGG-19 if the prevalence of originally mislabeled test examples increases by just 5\%. Test set errors across the 10 datasets can be viewed at https://labelerrors.com and all label errors can be reproduced by https://github.com/cleanlab/label-errors.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Statistics - Machine Learning}
+}
+
+@inproceedings{oakden-rayner2020Hidden,
+  title = {Hidden Stratification Causes Clinically Meaningful Failures in Machine Learning for Medical Imaging},
+  booktitle = {Proceedings of the {{ACM Conference}} on {{Health}}, {{Inference}}, and {{Learning}}},
+  author = {{Oakden-Rayner}, Luke and Dunnmon, Jared and Carneiro, Gustavo and Re, Christopher},
+  year = 2020,
+  month = apr,
+  pages = {151--159},
+  publisher = {ACM},
+  address = {Toronto Ontario Canada},
+  doi = {10.1145/3368555.3384468},
+  url = {https://dl.acm.org/doi/10.1145/3368555.3384468},
+  urldate = {2026-05-20},
+  isbn = {978-1-4503-7046-2},
+  langid = {english}
 }
 
 @misc{owasp2025LLM01,
@@ -189,6 +360,24 @@
   abstract = {Large Language Models (LLMs) have risen significantly in popularity and are increasingly being adopted across multiple applications. These LLMs are heavily aligned to resist engaging in illegal or unethical topics as a means to avoid contributing to responsible AI harms. However, a recent line of attacks, known as jailbreaks, seek to overcome this alignment. Intuitively, jailbreak attacks aim to narrow the gap between what the model can do and what it is willing to do. In this paper, we introduce a novel jailbreak attack called Crescendo. Unlike existing jailbreak methods, Crescendo is a simple multi-turn jailbreak that interacts with the model in a seemingly benign manner. It begins with a general prompt or question about the task at hand and then gradually escalates the dialogue by referencing the model's replies progressively leading to a successful jailbreak. We evaluate Crescendo on various public systems, including ChatGPT, Gemini Pro, Gemini-Ultra, LlaMA-2 70b and LlaMA-3 70b Chat, and Anthropic Chat. Our results demonstrate the strong efficacy of Crescendo, with it achieving high attack success rates across all evaluated models and tasks. Furthermore, we present Crescendomation, a tool that automates the Crescendo attack and demonstrate its efficacy against state-of-the-art models through our evaluations. Crescendomation surpasses other state-of-the-art jailbreaking techniques on the AdvBench subset dataset, achieving 29-61\% higher performance on GPT-4 and 49-71\% on Gemini-Pro. Finally, we also demonstrate Crescendo's ability to jailbreak multimodal models.},
   copyright = {Creative Commons Attribution 4.0 International},
   keywords = {Artificial Intelligence (cs.AI),Cryptography and Security (cs.CR),FOS: Computer and information sciences}
+}
+
+@misc{saleva2025Statistical,
+  title = {Beyond Statistical Significance: {{Quantifying}} Uncertainty and Statistical Variability in Multilingual and Multitask {{NLP}} Evaluation},
+  shorttitle = {Beyond Statistical Significance},
+  author = {S{\"a}lev{\"a}, Jonne and Ataman, Duygu and Lignos, Constantine},
+  year = 2025,
+  month = dec,
+  number = {arXiv:2509.22612},
+  eprint = {2509.22612},
+  primaryclass = {cs.CL},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2509.22612},
+  url = {http://arxiv.org/abs/2509.22612},
+  urldate = {2026-05-20},
+  abstract = {We introduce a set of resampling-based methods for quantifying uncertainty and statistical precision of evaluation metrics in multilingual and/or multitask NLP benchmarks. We show how experimental variation in performance scores arises from both model and data-related sources, and that accounting for both of them is necessary to avoid substantially underestimating the overall variability over hypothetical replications. Using multilingual question answering, machine translation, and named entity recognition as example tasks, we also demonstrate how resampling methods are useful for quantifying the replication uncertainty of various quantities used in leaderboards such as model rankings and pairwise differences between models.},
+  archiveprefix = {arXiv},
+  keywords = {capstone-main,Computer Science - Computation and Language}
 }
 
 @inproceedings{shen2024Anything,

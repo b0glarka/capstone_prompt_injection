@@ -1,0 +1,14 @@
+% LaTeX preamble for pandoc → PDF compilation.
+% Improves table readability and adds row spacing.
+
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+% Alternating row colors (zebra striping) starting from row 2.
+% Header row stays white.
+\rowcolors{2}{gray!12}{white}
+
+% Add vertical padding so rows breathe.
+\renewcommand{\arraystretch}{1.25}

@@ -13,32 +13,32 @@ On 251 injection-class rows in the pilot:
 |---|---|---|---|---|
 | deepset (injection rows) | 84 | 0.4881 | 0.4881 | 0.0714 |
 | neuralchemy (injection rows) | 84 | 0.5000 | 0.5833 | 0.0595 |
-| spml (injection rows) | 83 | 0.2651 | 0.3133 | 0.0361 |
-| **All injection rows** | **251** | **0.4183** | **0.4622** | **0.0558** |
+| spml (injection rows) | 83 | 0.2651 | 0.5301 | 0.0964 |
+| **All injection rows** | **251** | **0.4183** | **0.5339** | **0.0757** |
 
-Paired McNemar v1.8 vs v1.21 (on injection rows, HIJACKED = correct): b=8, c=19, p=0.05224
+Paired McNemar v1.8 vs v1.21 (on injection rows, HIJACKED = correct): b=11, c=40, p=5.704e-05
 
 ## Cheap-judge sweep: cross-judge kappa under v1.21 (n=500)
 
 | Pair | n | v1.8 agreement | v1.8 kappa | v1.21 agreement | v1.21 kappa |
 |---|---|---|---|---|---|
-| Sonnet 4.6 vs Haiku 4.5 | 500 | 0.930 | 0.788 | 0.922 | 0.787 |
-| Sonnet 4.6 vs GPT-4o-mini | 500 | 0.894 | 0.706 | 0.902 | 0.729 |
-| Haiku 4.5 vs GPT-4o-mini | 500 | 0.912 | 0.755 | 0.916 | 0.772 |
+| Sonnet 4.6 vs Haiku 4.5 | 500 | 0.930 | 0.788 | 0.900 | 0.752 |
+| Sonnet 4.6 vs GPT-4o-mini | 500 | 0.894 | 0.706 | 0.850 | 0.644 |
+| Haiku 4.5 vs GPT-4o-mini | 500 | 0.912 | 0.755 | 0.890 | 0.744 |
 
-Three-judge agreement: v1.8 = 0.868, v1.21 = 0.870
+Three-judge agreement: v1.8 = 0.868, v1.21 = 0.820
 
 ## Defense C combined (n=500, pilot)
 
 | Defense | F1 (v1.8) | F1 (v1.21) | Precision (v1.21) | Recall (v1.21) | Acc (v1.21) |
 |---|---|---|---|---|---|
 | Defense A (DeBERTa) | 0.849 | 0.849 (unchanged; A is independent of judge) | 0.960 | 0.761 | 0.864 |
-| Defense B (Sonnet judge) | 0.590 | 0.630 | 0.991 | 0.462 | 0.728 |
-| Defense C (A OR B) | 0.912 | 0.908 | 0.960 | 0.861 | 0.912 |
+| Defense B (Sonnet judge) | 0.590 | 0.696 | 1.000 | 0.534 | 0.766 |
+| Defense C (A OR B) | 0.912 | 0.909 | 0.964 | 0.861 | 0.914 |
 
-Defense C v1.21 bootstrap 95% CIs: F1 = 0.908 [0.878, 0.932], precision = 0.960 [0.930, 0.983], recall = 0.861 [0.818, 0.898]
+Defense C v1.21 bootstrap 95% CIs: F1 = 0.909 [0.879, 0.934], precision = 0.964 [0.935, 0.987], recall = 0.861 [0.818, 0.898]
 
-Paired McNemar Defense A vs Defense C (v1.21): b=1, c=25, p=8.047e-07
+Paired McNemar Defense A vs Defense C (v1.21): b=0, c=25, p=5.96e-08
 
 ## BIPIA email-QA under v1.21 (n=800, 750 attacks + 50 controls)
 

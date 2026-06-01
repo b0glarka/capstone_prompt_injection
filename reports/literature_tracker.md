@@ -106,6 +106,39 @@ Keep each entry under a minute to write. Curate and expand at write-up time.
 - Use: 1-2 sentences in related work contextualizing our single-classifier choice; 1 sentence in future work as "ensemble approaches are a natural extension."
 - Follow-up: no. Not worth expanding scope to evaluate directly (would require new wrappers, contamination check, comparison columns).
 
+### 2026-06-01 : Hines et al. (2024): Spotlighting defense for indirect prompt injection
+
+- Citation: Hines, K., Lopez, G., Hall, M., Zarfati, F., Zunger, Y., & Kiciman, E. (2024). Defending Against Indirect Prompt Injection Attacks With Spotlighting. arXiv:2403.14720.
+- Where it lands: §7.8 of the final report (Tool-level hardening for tool-using agents). Used as the canonical reference for prompt-template hardening: three encoding variants (datamarking, encoding, special-character delimiting) for separating trusted system instructions from untrusted retrieved content in the agent's prompt.
+- Relation to our work: complementary to §5.11 LoRA fine-tune (which adapts the input classifier) and §5.5b Defense B judge (output filter). Spotlighting is the prompt-engineering layer that we deprioritised when the prompt-augmentation arm was dropped; cited as the canonical reference for follow-up work in §9.1.
+- Scope tag: capstone-main (cited inline in §7.8).
+- Already in references.bib at key `hines2024Defending`.
+
+### 2026-06-01 : Nguyen et al. (2025): Disagreement-driven deployment monitoring (D3M)
+
+- Citation: Nguyen, V., Shui, C., Giri, V., Arya, S., Verma, A., Razak, F., & Krishnan, R. G. (2025). Reliably Detecting Model Failures in Deployment Without Labels. arXiv:2506.05047.
+- Where it lands: §7.9 of the final report (Runtime monitoring and anomaly detection) and §9.1 future work. The §5.5b multi-judge kappa measurements are framed as the foundation for a D3M-style deployment monitor.
+- Relation to our work: methodological extension of our cross-judge kappa work into a deployment-time monitoring artifact. We have the inputs (multi-judge measurements); D3M operationalises them as an ongoing alert mechanism without requiring labeled ground truth at deployment time.
+- Scope tag: capstone-main (cited in §7.9 deployment guide), capstone-future-work (full implementation deferred).
+- Already in references.bib at key `nguyen2025Reliably`.
+
+### 2026-06-01 : Meta Llama Guard 4 (model card)
+
+- Citation: Meta. (2024-2025). Llama-Guard-4-12B model card. HuggingFace: meta-llama/Llama-Guard-4-12B.
+- Where it lands: NOT cited in the final report. Investigated as a possible Defense A comparison point alongside ProtectAI DeBERTa-v3 v2 and Llama Prompt Guard 2. Eliminated because the model card explicitly states that Llama Guard 4 is a content-safety classifier (14 hazard categories S1-S14: violence, hate, CSAM, etc.) and is NOT trained for prompt injection detection; the card itself directs prompt-injection use cases to Llama Prompt Guard 2 which is already in our Defense A stack.
+- Relation to our work: documented as a NOT-comparison-target so future readers do not ask "why didn't you compare against Llama Guard 4?" Answer: it is the wrong tool, trained on a different threat taxonomy.
+- Scope tag: capstone-skip (background context, not cited).
+- Not in references.bib; not needed since not cited.
+
+### 2026-06-01 : Anthropic API pricing (Opus 4.7 ceiling test)
+
+- Citation: Anthropic. (2026). Claude API pricing. Retrieved 2026-06-01 from https://platform.claude.com/docs/en/about-claude/pricing.
+- Wayback archive: https://web.archive.org/web/20260601063217/https://platform.claude.com/docs/en/about-claude/pricing (snapshot triggered 2026-06-01 06:32:17 UTC, verified live with 200 OK).
+- Where it lands: §7.4 of the final report (Latency and cost characteristics). Source for Opus 4.7 list pricing ($5 input / $25 output per 1M tokens) used in the cost-ceiling test against Haiku.
+- Scope tag: capstone-main (cited inline in §7.4).
+- Suggested Zotero entry: webpage type, citation key `anthropic2026Pricing` matching the `firstauthorYearKeyword` pattern used for `artificialanalysis2026{Descriptor}`. Use the Wayback URL above as the canonical archived link.
+- Not yet in references.bib; pending Zotero addition (the URL is now archived so the Zotero step is the only remaining action).
+
 ---
 
 ## Text-to-SQL injection : appendix

@@ -4,7 +4,7 @@ Companion document to the capstone final report.
 
 Author: Boglarka Petruska
 
-Date: 2026-05-11
+Date: 2026-05-11 (sections 1-7); 2026-06-01 (Section 8 addendum: v1.25 rubric iteration, NB10 pressure-test workflow, symmetric augmentation)
 
 Status: Draft, anchored on published references; for inclusion as an appendix in the final report.
 
@@ -217,7 +217,19 @@ This study commits to:
 
 These commitments are made in the methodology section of the final report and are not contingent on the direction of the empirical results.
 
-# 8. References
+# 8. Addendum: post-2026-05-11 methodology additions (added 2026-06-01)
+
+Three methodological choices made after the original 2026-05-11 draft of this appendix are documented in detail in the final report rather than here. This addendum cross-references each so a methodology reviewer can locate them.
+
+**8.1 Judge rubric iteration (v1.21 to v1.25).** A scope-note iteration on the judge prompt baked the §3.2 v1.23 signature-vs-mechanism guidance directly into the LLM-as-judge prompt (full text at `src/defense_b/judge.py::_V125_SYSTEM_HEADER`). Effect measured via Cohen's kappa on the 150-row gold subset under the §7.6 fail-closed AMBIG=HIJACKED binarisation convention; robustness checked under four AMBIGUOUS-handling conventions (AMBIG=HIJACKED, AMBIG=CLEAN, 3-class, drop-AMBIGUOUS). Empirical results in `reports/judge_validation_report.md` v1.25 addendum and final report §6.3. The Haiku 4.5 lift is robust across all four conventions; the Sonnet 4.6 lift is convention-sensitive and disappears under stricter conventions. Methodological note: a 0.037 difference in the v1.21 Sonnet baseline number (0.477 in §5.6 vs 0.440 in §6.3) reflects a slightly different binarisation handling of AMBIGUOUS and missing verdicts in the two computations; both fall well within the §5.6 bootstrap CI for Sonnet v1.21.
+
+**8.2 NB10 pressure-test workflow.** Six adversarial probes applied to the §5.11 BIPIA LoRA Variant B adapter to test whether headline kappa reflects genuine content discrimination or methodology artifact: attack-question ablation, clean-question ablation, held-out base emails, length-shortcut check, novel question phrasing, and false-positive rate on real legitimate queries. Pass/fail criteria per probe documented inline in the NB10d notebook. The attack-question ablation (Test 1) is the load-bearing probe; if flag rate falls below 0.95 on attacks paired with question styles the model has not seen, the augmentation has a residual shortcut. Test 1 caught a question-style shortcut in NB10c that the headline F1 (0.992) and Cohen d (9.37) did not. This kind of post-hoc adversarial probing is a methodological contribution distinct from the F1/kappa/CI reporting documented in this appendix; the recipe for follow-up work is in §5.11 BIPIA arm of the final report.
+
+**8.3 Symmetric augmentation and base-document stratification.** Two methodological disciplines required for input-classifier fine-tuning on indirect-injection data. Symmetric augmentation: ensure the marginal distribution of legitimate user-question phrasings is approximately equal across the clean and attack training classes, so question style cannot be learned as a shortcut. Base-document stratification: stratify the train/val/test split at the document level rather than at the (document, question) pair level, so train and test share zero base documents and memorization is structurally impossible. Both are operationalised in `scripts/augment_bipia_symmetric.py` and documented in §5.11 of the final report. Without these disciplines the §5.11 NB10c iteration produced d = 9.37 that did not survive pressure testing; with them the NB10e iteration produced d = 7.73 on held-out base emails that survived all probes.
+
+The statistical reporting conventions documented in sections 1-7 above apply to the results these methodological additions produced.
+
+# 9. References
 
 Artstein, R., & Poesio, M. (2008). Inter-coder agreement for computational linguistics. *Computational Linguistics*, 34(4), 555-596. https://doi.org/10.1162/coli.07-034-R2
 

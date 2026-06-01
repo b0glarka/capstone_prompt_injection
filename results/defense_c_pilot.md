@@ -1,5 +1,7 @@
 # Defense C combined pipeline: pilot-scale analysis (n=500)
 
+> **NOTE (2026-05-28):** This file documents the v1.8 minimum-rubric pilot results, pre-SPML-fix. Current authoritative v1.21 post-SPML-fix Defense C metrics are in `results/aggregate_metrics_v121.md` and the final report §5.5c. Defense C v1.21 post-fix: F1 = 0.909 [0.879, 0.934], precision = 0.964 [0.935, 0.987], recall = 0.861 [0.818, 0.898]. McNemar Defense C vs Defense A: b=0, c=25, p=5.96e-08 (strict dominance). See `reports/methodology_appendix.md` §5.6 for the fix documentation.
+
 - Run date: 2026-05-11
 - Data: 500-row Defense B pilot (`results/defense_b_pilot.csv`) merged with full-eval-set Defense A predictions (`results/defense_a_full_eval_set.csv`)
 - No new API calls. Defense C is computed as the OR-combination of Defense A and Defense B verdicts on the same prompts.

@@ -1,0 +1,160 @@
+{
+  "experiment": "lora_v4b_symmetric_augmented",
+  "training_time_min": 4.940814789136251,
+  "bipia_test": {
+    "label": "symmetric BIPIA test (n=168)",
+    "n": 168,
+    "n_pos": 120,
+    "n_neg": 48,
+    "f1": 1.0,
+    "macro_f1": 1.0,
+    "balanced_accuracy": 1.0,
+    "mcc": 1.0,
+    "asr": 0.0,
+    "far": 0.0,
+    "cohen_d": 189.43108510091386,
+    "tp": 120,
+    "fp": 0,
+    "fn": 0,
+    "tn": 48
+  },
+  "eval_set_test": {
+    "label": "eval_set test (n=682)",
+    "n": 682,
+    "n_pos": 361,
+    "n_neg": 321,
+    "f1": 0.9737931034482759,
+    "macro_f1": 0.9720295720684259,
+    "balanced_accuracy": 0.9717857112037349,
+    "mcc": 0.9440970583334755,
+    "asr": 0.02216066481994461,
+    "far": 0.03426791277258567,
+    "cohen_d": 6.2728267292152,
+    "tp": 353,
+    "fp": 11,
+    "fn": 8,
+    "tn": 310
+  },
+  "eval_set_per_dataset": {
+    "deepset": {
+      "label": "eval_set/deepset",
+      "n": 82,
+      "n_pos": 30,
+      "n_neg": 52,
+      "f1": 0.9830508474576272,
+      "macro_f1": 0.9867635189669088,
+      "balanced_accuracy": 0.9833333333333334,
+      "mcc": 0.9738725137080186,
+      "asr": 0.033333333333333326,
+      "far": 0.0,
+      "cohen_d": 7.377570482596223,
+      "tp": 29,
+      "fp": 0,
+      "fn": 1,
+      "tn": 52
+    },
+    "neuralchemy": {
+      "label": "eval_set/neuralchemy",
+      "n": 300,
+      "n_pos": 181,
+      "n_neg": 119,
+      "f1": 0.9693593314763231,
+      "macro_f1": 0.9618580889746762,
+      "balanced_accuracy": 0.9638562607363388,
+      "mcc": 0.9239240456391907,
+      "asr": 0.03867403314917128,
+      "far": 0.03361344537815126,
+      "cohen_d": 5.672105549201121,
+      "tp": 174,
+      "fp": 4,
+      "fn": 7,
+      "tn": 115
+    },
+    "spml": {
+      "label": "eval_set/spml",
+      "n": 300,
+      "n_pos": 150,
+      "n_neg": 150,
+      "f1": 0.9771986970684039,
+      "macro_f1": 0.9766539560427343,
+      "balanced_accuracy": 0.9766666666666667,
+      "mcc": 0.9543731060113266,
+      "asr": 0.0,
+      "far": 0.04666666666666667,
+      "cohen_d": 6.764491803179153,
+      "tp": 150,
+      "fp": 7,
+      "fn": 0,
+      "tn": 143
+    }
+  },
+  "pressure_tests": {
+    "test1_attack_question_swap": {
+      "flag_rate": 1.0,
+      "verdict": "PASS"
+    },
+    "test2_clean_question_swap": {
+      "flag_rate": 0.0,
+      "verdict": "PASS"
+    },
+    "test3_holdout_triple_cross": {
+      "label": "held-out triple cross",
+      "n": 1000,
+      "n_pos": 750,
+      "n_neg": 250,
+      "f1": 0.9865771812080537,
+      "macro_f1": 0.9736807474667719,
+      "balanced_accuracy": 0.98,
+      "mcc": 0.9476966276867814,
+      "asr": 0.020000000000000018,
+      "far": 0.02,
+      "cohen_d": 7.729665678731718,
+      "tp": 735,
+      "fp": 5,
+      "fn": 15,
+      "tn": 245,
+      "verdict": "PASS"
+    },
+    "test6_holdout_orig_questions": {
+      "flag_rate": 0.02,
+      "verdict": "PASS"
+    }
+  },
+  "verdict_table": [
+    {
+      "test": "NB10c baseline (BIPIA-aug, in-distribution)",
+      "metric": "d=9.37 (with question-style shortcut)",
+      "verdict": "reference"
+    },
+    {
+      "test": "NB10e baseline (BIPIA-sym, in-distribution)",
+      "metric": "d=189.43 macF1=1.000",
+      "verdict": "reference"
+    },
+    {
+      "test": "Test 1: attack-question swap (was FAIL @ 0.487)",
+      "metric": "flag=1.000",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 2: clean-question swap (was PASS @ 0.044)",
+      "metric": "flag=0.000",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 3: held-out triple cross (was PASS d=9.90)",
+      "metric": "d=7.73 balAcc=0.980",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 6: held-out original-Q false-positive (was PASS @ 0.040)",
+      "metric": "flag=0.020",
+      "verdict": "PASS"
+    },
+    {
+      "test": "eval_set test direct injection (was 0.979)",
+      "metric": "F1=0.974 (vs \u00a75.11 0.981)",
+      "verdict": "NO INTERFERENCE"
+    }
+  ]
+}

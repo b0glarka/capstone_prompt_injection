@@ -1,5 +1,7 @@
 # Defense B 500-row formal pilot on the frozen eval set
 
+> **NOTE (2026-05-28):** This file documents the v1.8 minimum-rubric results from the initial pilot run, pre-SPML-fix. The current authoritative v1.21 post-SPML-fix numbers are in `results/aggregate_metrics_v121.md` and the final report §5.5b. The v1.8 SPML hijack rate reported below (0.265) is artificially low because SPML rows used a generic helpful-assistant agent rather than the row-specific SPML role. The post-fix v1.21 SPML rate is 0.530 (operational_definitions §3.2 Step 0 with `operator_intent=system_prompt`). See `reports/methodology_appendix.md` §5.6 for the fix documentation.
+
 - Run date: 2026-05-11
 - Agent: `llama-3.3-70b-versatile` via Groq, temperature 0, max_tokens 400
 - Judge: `claude-sonnet-4-6` via Anthropic, temperature 0, max_tokens 400

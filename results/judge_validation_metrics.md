@@ -10,9 +10,9 @@ All 150 of 150 rows labeled. Distribution:
 
 | Verdict | n | Share |
 |---|---|---|
-| CLEAN | 92 | 61.3% |
-| HIJACKED | 52 | 34.7% |
-| AMBIGUOUS | 6 | 4.0% |
+| CLEAN | 98 | 65.3% |
+| HIJACKED | 47 | 31.3% |
+| AMBIGUOUS | 5 | 3.3% |
 
 ## Binary kappa: human vs LLM judges
 
@@ -21,12 +21,12 @@ v1.8 judges produced binary verdicts only; v1.21 judges produced 3-level verdict
 
 | Judge | Rubric | n agreement | Cohen's kappa [95% CI] |
 |---|---|---|---|
-| Sonnet 4.6 | v1.8 minimum | 101/150 (67.3%) | 0.322 [0.164, 0.478] |
-| Sonnet 4.6 | v1.21 augmented | 97/145 (66.9%) | 0.324 [0.171, 0.468] |
-| Haiku 4.5 | v1.8 minimum | 101/150 (67.3%) | 0.313 [0.156, 0.471] |
-| Haiku 4.5 | v1.21 augmented | 103/150 (68.7%) | 0.362 [0.202, 0.502] |
-| GPT-4o-mini | v1.8 minimum | 95/150 (63.3%) | 0.262 [0.112, 0.424] |
-| GPT-4o-mini | v1.21 augmented | 93/150 (62.0%) | 0.221 [0.078, 0.382] |
+| Sonnet 4.6 | v1.8 minimum | 99/150 (66.0%) | 0.285 [0.129, 0.444] |
+| Sonnet 4.6 | v1.21 augmented | 106/143 (74.1%) | 0.477 [0.336, 0.608] |
+| Haiku 4.5 | v1.8 minimum | 99/150 (66.0%) | 0.272 [0.107, 0.421] |
+| Haiku 4.5 | v1.21 augmented | 111/150 (74.0%) | 0.471 [0.340, 0.600] |
+| GPT-4o-mini | v1.8 minimum | 93/150 (62.0%) | 0.234 [0.093, 0.395] |
+| GPT-4o-mini | v1.21 augmented | 107/150 (71.3%) | 0.422 [0.283, 0.561] |
 
 ## Three-level kappa (CLEAN / HIJACKED / AMBIGUOUS): human vs v1.21 judges
 
@@ -34,9 +34,9 @@ Three-way agreement on the v1.21 ordinal verdict; not collapsing AMBIGUOUS into 
 
 | Judge | n | Three-level kappa [95% CI] |
 |---|---|---|
-| Sonnet 4.6 | 145 | 0.325 [0.186, 0.456] |
-| Haiku 4.5 | 150 | 0.304 [0.167, 0.438] |
-| GPT-4o-mini | 150 | 0.222 [0.091, 0.371] |
+| Sonnet 4.6 | 143 | 0.436 [0.310, 0.554] |
+| Haiku 4.5 | 150 | 0.435 [0.312, 0.556] |
+| GPT-4o-mini | 150 | 0.390 [0.257, 0.524] |
 
 ## H-category agreement on rows where both labelers said HIJACKED
 
@@ -44,9 +44,9 @@ Per-category exact-match rate: of rows where human assigned an H-category and th
 
 | Judge | n (both HIJACKED) | Exact category-set match | Human-category-in-judge-set |
 |---|---|---|---|
-| Sonnet 4.6 | 32 | 20/32 (62.5%) | 28/32 (87.5%) |
-| Haiku 4.5 | 33 | 22/33 (66.7%) | 28/33 (84.8%) |
-| GPT-4o-mini | 32 | 18/32 (56.2%) | 26/32 (81.2%) |
+| Sonnet 4.6 | 33 | 20/33 (60.6%) | 33/33 (100.0%) |
+| Haiku 4.5 | 38 | 20/38 (52.6%) | 29/38 (76.3%) |
+| GPT-4o-mini | 37 | 22/37 (59.5%) | 29/37 (78.4%) |
 
 ## Signature-vs-mechanism analysis (v1.23 §3.2 scope note empirical anchor)
 
@@ -58,7 +58,7 @@ The §3.2 v1.23 scope note says signatures alone do NOT trigger HIJACKED — onl
 |---|---|---|---|
 | Sonnet 4.6 | 29 | 12 | 12/29 (41.4%) |
 | Haiku 4.5 | 29 | 11 | 11/29 (37.9%) |
-| GPT-4o-mini | 33 | 10 | 10/33 (30.3%) |
+| GPT-4o-mini | 32 | 10 | 10/32 (31.2%) |
 
 ## Binary kappa by language (human vs Sonnet v1.21)
 
@@ -66,6 +66,6 @@ Tests whether judge agreement varies by language. Small per-language n so wide C
 
 | Language | n | Sonnet v1.21 binary kappa [95% CI] |
 |---|---|---|
-| en | 113 | 0.242 [0.054, 0.415] |
+| en | 111 | 0.436 [0.270, 0.578] |
 | de | 19 | 0.784 [0.451, 1.000] |
 | mixed(en+de) | 5 | 0.545 [nan, nan] |

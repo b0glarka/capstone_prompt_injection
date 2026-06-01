@@ -1,7 +1,8 @@
 - Purpose: self-contained implementation summary for the capstone project, version 3. Designed to be readable end-to-end by anyone (including an outside LLM session) without requiring repo access.
-- Status: living draft; v2 superseded.
+- Status: 2026-05-12 snapshot. Used as stakeholder communication document at that point in time. For current state of the project (Phase 3 stretch work, NB10 BIPIA arm, v1.25 judge iteration, Opus 4.7 ceiling test, all completed after this snapshot), see `capstone_state.md`.
 - Created: 2026-05-12
 - Predecessor: `implementation_plan_summary_v2.md` (Eduardo-reviewed v2 plan + two progress addenda from 2026-05-08 and 2026-05-11).
+- Substantive empirical and methodological work completed after this snapshot is recorded in `capstone_state.md` and reflected in `reports/final_report.md`. This document remains useful as a stakeholder-readable history of the project mid-stream.
 
 ---
 

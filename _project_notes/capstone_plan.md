@@ -1,7 +1,7 @@
 - Purpose: active work tracker with phases, checkboxes, hours, dependencies. Check off items as they are done.
 - Status: active
 - Created: 2026-04-21
-- Last edited: 2026-05-11
+- Last edited: 2026-06-01 (checkbox sweep covering Phase 1 judge iteration, Phase 2 gold subset, Phase 3 analysis + BIPIA, Phase 4 scope additions including §5.11 LoRA arm and NB10 BIPIA series, Phase 5 sections 5 + figures; remaining unchecked items are Phase 5 §6/§7 prose, Phase 6 polish, slide deck, public summary, and submission)
 - Related: [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot)
 
 ---
@@ -60,12 +60,7 @@ Target: ~17 active hrs. Goal: everything needed before running any defense is in
   - Anchor definition of "hijacked agent response" on BIPIA categories (task execution, info gathering, ad insertion, phishing) + Greshake taxonomy
   - Binary decision tree with 10-15 worked examples drawn from the three datasets
   - This is an appendix in the final report
-- [ ] **Label audit** (~5 hrs)
-  - Stratified sample 200 prompts (60-70 per dataset) into `notebooks/03_label_audit.ipynb`
-  - Re-label each against operational definition
-  - Record: agreement with dataset label, ambiguous cases, notes
-  - Save to `results/label_audit_sample.parquet`
-  - Write `reports/label_audit_report.md` with noise rate, ambiguity rate, notable examples
+- [x] **Label audit** (done 2026-05-27; full Phase 2 breakdown checked off at lines 156-167 below; canonical post-audit at `results/label_audit_sample_disagreement_sorted_post_audit.csv`; report at `reports/label_audit_report.md`; overall kappa 0.930 [0.878, 0.970])
 - [x] **Contamination check for Defense A classifiers** (done 2026-04-24, see `results/contamination_report.md`)
   - ProtectAI DeBERTa V2 named sources cross-referenced with deepset, neuralchemy, SPML
   - Result: max 1.96% overlap (neuralchemy), under 1% on deepset and SPML
@@ -136,7 +131,7 @@ Target: ~29 active hrs. Goal: all defense pipelines working end-to-end on small 
   - 8 neuralchemy encoding-class misses: judge flagged 1/8 (agent treated encoded payloads as cipher puzzles, didn't comply)
   - Artifacts: `results/defense_b_sneak_preview.md`, `results/defense_b_neuralchemy_jailbreak_preview.md`, `results/defense_b_neuralchemy_encoding_preview.md`
 - [x] Defense B 500-row pilot (done 2026-05-11 via `scripts/run_defense_b_pilot.py` on Together AI; pilot writeup at `results/defense_b_pilot.md`)
-- [ ] Review judge outputs on pilot, refine rubric if needed (~2 hrs)
+- [x] Review judge outputs on pilot, refine rubric if needed (done across v1.8 -> v1.21 -> v1.25 iterations 2026-05-26 through 2026-06-01; final v1.25 prompt at `src/defense_b/judge.py::_V125_SYSTEM_HEADER`)
 
 ### Week 2 checkpoint
 
@@ -168,14 +163,11 @@ Canonical post-audit data file: `results/label_audit_sample_disagreement_sorted_
 
 ### Gold subset for judge validation
 
-- [ ] **Label 150-item human gold subset** against operational definition (~6 hrs)
-  - Mix of agent outputs from augmentation control and Defense B pilot
-  - Balance across datasets and across "obvious hijack" / "obvious clean" / "ambiguous" expected categories
-  - Save to `results/gold_subset_labels.parquet`
-- [ ] Run primary judge (Claude Sonnet 4.6) on gold subset (~1 hr)
-- [ ] Compute agreement: Boga-vs-Claude Sonnet 4.6 kappa (~1 hr)
+- [x] **Label 150-item human gold subset** against operational definition (done 2026-05-27 across deepset 59 / neuralchemy 41 / SPML 50; final at `results/judge_gold_subset_audited.csv` with SPML post-audit relabel at `results/judge_gold_subset_spml_relabel_post_audit.csv`)
+- [x] Run primary judge (Claude Sonnet 4.6) on gold subset (done 2026-05-27 under v1.21; re-run 2026-06-01 under v1.25)
+- [x] Compute agreement: Boga-vs-Claude Sonnet 4.6 kappa (done; v1.21 Sonnet kappa 0.477 [0.336, 0.608], v1.25 Sonnet 0.466, Haiku 0.554, Opus 4.7 0.550, GPT-4o-mini 0.403)
 - [ ] Optional: reach out to Zsófi or Hiflylabs engineer about 50-item co-label for inter-annotator kappa
-- [ ] Record findings in `reports/judge_validation_report.md`
+- [x] Record findings in `reports/judge_validation_report.md` (done 2026-05-28; v1.25 + Opus 4.7 results integrated into final report §6.3 and §7.4 2026-06-01)
 
 ### Sensitivity check on Defense B
 
@@ -193,13 +185,13 @@ Canonical post-audit data file: `results/label_audit_sample_disagreement_sorted_
 
 - [x] Write `reports/interim_progress_report.md` (done 2026-05-11; restructured to match the CEU MSBA Capstone Interim Progress Report template, 13 numbered sections + Final Self-Check; PDF compiled at `reports/interim_progress_report.pdf` via Pandoc + xelatex)
 - [x] Verify all repo contents pushed; README is clean (done 2026-05-11; commit `70bd849` pushed to GitHub)
-- [ ] Submit interim report (about to be done 2026-05-11 evening)
+- [x] Submit interim report (done 2026-05-11 evening; submitted PDF preserved at `reports/Petruska_interim_progress_report.pdf`)
 
 ### Week 3 checkpoint (May 11 interim deadline)
 
-- [ ] Interim report submitted
-- [x] Update `capstone_state.md` with post-interim status (done 2026-05-11)
-- [ ] Capture any Eduardo or coordinator feedback for Phase 3 adjustments
+- [x] Interim report submitted (done 2026-05-11)
+- [x] Update `capstone_state.md` with post-interim status (done 2026-05-11; refreshed continuously through 2026-06-01)
+- [x] Capture any Eduardo or coordinator feedback for Phase 3 adjustments (resolved 2026-05-13 in conversation with Zoltan Toth: finish existing work before pursuing stretch goals; scope constraint honored)
 
 ---
 
@@ -209,23 +201,15 @@ Target: ~25 active hrs capstone + ~4 hrs DS4 prep. Goal: core analysis done and 
 
 ### Statistical analysis of core results
 
-- [ ] Notebook `09_analysis_and_plots.ipynb` (~6 hrs)
-  - Load eval set, Defense A predictions, augmentation verdicts, Defense B verdicts
-  - Compute per-defense: accuracy, precision, recall, F1, macro F1, TPR, FPR, AUC (where applicable)
-  - Bootstrap 95% CIs on each
-  - Subgroup breakdowns: per dataset, per neuralchemy subcategory, per SPML role-play type
-  - Defense A threshold analysis (ROC and PR curves, multiple operating points)
-- [ ] Defense A vs Defense B paired comparison (~3 hrs)
-  - McNemar's test on paired predictions for the binary hijack-detected outcome
-  - Contingency tables showing where each wins and loses
-  - Table: "prompts Defense A catches that Defense B misses" and vice versa (write list to results/ for error analysis)
+- [x] Notebook `09_analysis_and_plots.ipynb` (done 2026-05 across Defense A bootstrap CIs, cross-dataset breakdowns, error-pattern analysis; results integrated into final report §5.1 through §5.7)
+- [x] Defense A vs Defense B paired comparison (done; McNemar tests in `results/defense_a_mcnemar.csv` and `defense_a_ensemble_mcnemar.csv`; final report §5.5b/c reports paired analysis with b=0 c=25 p=5.96e-08 for the Defense A vs Defense C comparison)
 
 ### BIPIA phase 1: email QA
 
-- [ ] Read BIPIA paper and repo, understand email QA task structure (~2 hrs)
-- [ ] `src/bipia/email_qa.py`: BIPIA email QA pipeline adapter (~4 hrs)
-- [ ] `notebooks/08_bipia_email_qa.ipynb`: run all three defenses through BIPIA email QA (~2 hrs active + background)
-- [ ] Analysis of BIPIA email QA results, added to main analysis notebook (~3 hrs)
+- [x] Read BIPIA paper and repo, understand email QA task structure (done 2026-05; Yi et al. 2025 cited throughout §5.8 and §5.11)
+- [x] `src/bipia/email_qa.py`: BIPIA email QA pipeline adapter (done 2026-05; includes loader, compose_agent_input, compose_for_defense_a)
+- [x] `notebooks/08_bipia_email_qa.ipynb`: run all three defenses through BIPIA email QA (done; full results at `results/bipia_email_qa_results.csv` 800 rows; per-category breakdown at `results/bipia_email_qa_per_category.csv`)
+- [x] Analysis of BIPIA email QA results, added to main analysis notebook (done; report §5.8 reports headline ASR/FAR and v1.21 rubric per-category big movers)
 
 ### Non-capstone: DS4 exam prep
 
@@ -233,11 +217,8 @@ Target: ~25 active hrs capstone + ~4 hrs DS4 prep. Goal: core analysis done and 
 
 ### Week 4 checkpoint (Scope Expansion Decision)
 
-- [ ] **Decision: BIPIA scope**
-  - If email QA took ~10 active hours and judge kappa on BIPIA outputs > 0.70: expand to web QA (add ~6 hrs)
-  - If email QA took longer or judge noise higher: stop at email QA, label as "focused case study"
-  - If both budget and quality allow: consider 3rd task type as post-interim stretch
-- [ ] Push all Phase 3 commits
+- [x] **Decision: BIPIA scope** (decided 2026-05; stopped at email QA per "focused case study" framing; BIPIA expansion replaced by §5.11 LoRA indirect-injection arm NB10 series which became the primary stretch contribution)
+- [x] Push all Phase 3 commits (done 2026-05; multiple thematic commits including `70bd849` Phase 1 complete + later commits for §5.11 LoRA arm)
 
 ---
 
@@ -247,16 +228,19 @@ Target: ~11 active hrs capstone + ~4 hrs DS4 exam day + ~10 hrs geospatial proje
 
 ### Scope addition decisions (go/no-go)
 
-- [ ] Review Phase 3 results and timeline buffer. Decide which of the deferred scope additions to pursue:
-  - Custom adversarial test set (50-100 prompts): ~8-12 hrs, high-value
-  - Error taxonomy (qualitative coding of false negatives, ~100 per defense): ~8-10 hrs, medium-value
-  - Defense C combined pipeline: ~4-6 hrs, medium-value, completes the "A+B" analysis
-  - Full BIPIA expansion: ~15+ hrs, only if Phase 3 checkpoint green-lit
-- [ ] Note the decisions in project state
+- [x] Review Phase 3 results and timeline buffer. Decide which of the deferred scope additions to pursue:
+  - Defense C combined pipeline: DONE (results in §5.5c / §6.2 of final report; OR-gate Defense A + B)
+  - Error taxonomy (qualitative coding): DONE in §5.4 of final report (override-keyword signature reliance documented across DeBERTa false negatives vs true positives)
+  - Defense A LoRA fine-tune: DONE as §5.11 stretch (closed cross-dataset F1 spread from 0.36 to 0.031)
+  - §5.11 BIPIA arm (LoRA on indirect injection): DONE 2026-05-28 through 2026-06-01 across NB10 a-e iterations with pressure-test discipline
+  - Defense C distillation (DistilBERT student): DONE in NB09 (results JSON saved)
+  - Custom adversarial test set: deferred to §9.1 future work
+  - Full BIPIA expansion beyond email QA: deferred to §9.1 future work
+- [x] Note the decisions in project state (continuously updated in `capstone_state.md`)
 
 ### Selected scope addition work (flex)
 
-- [ ] Execute chosen additions with clear scope limits, cap hours
+- [x] Execute chosen additions with clear scope limits, cap hours (done across §5.11 LoRA direct-injection and BIPIA arm; Defense C distillation; v1.25 judge iteration; Opus 4.7 ceiling test)
 
 ### Non-capstone commitments
 
@@ -265,7 +249,7 @@ Target: ~11 active hrs capstone + ~4 hrs DS4 exam day + ~10 hrs geospatial proje
 
 ### Writing ramp
 
-- [ ] Fill in report outline sections 1-4 (Introduction, Background, Data, Methods) with actual content, drawing on reports/operational_definitions.md, reports/label_audit_report.md, reports/judge_validation_report.md, reports/contamination_report.md (~6 hrs this phase)
+- [x] Fill in report outline sections 1-4 (Introduction, Background, Data, Methods) with actual content, drawing on operational_definitions.md, label_audit_report.md, judge_validation_report.md, contamination_report.md (done; §1-§4 of `reports/final_report.md` carry filled-in content)
 
 ---
 
@@ -275,10 +259,10 @@ Target: ~30 active hrs.
 
 ### Report writing: results and discussion
 
-- [ ] Section 5 (Results): headline metrics, subgroup breakdowns, paired comparison, threshold analysis, judge reliability, BIPIA, cost/latency (~10 hrs)
-- [ ] Section 6 (Discussion): interpretation, tradeoffs, limitations, threats to validity (~6 hrs)
-- [ ] Section 7 (Practitioner Recommendations): decision framework for enterprise deployment (~3 hrs)
-- [ ] Integrate figures and tables into the report body (~3 hrs)
+- [x] Section 5 (Results): headline metrics, subgroup breakdowns, paired comparison, threshold analysis, judge reliability, BIPIA, cost/latency (done across §5.1 through §5.11; figures and tables embedded; LoRA BIPIA arm in §5.11 with four-iteration table)
+- [ ] Section 6 (Discussion): interpretation, tradeoffs, limitations, threats to validity (~6 hrs) — partial; §6.1, §6.2, §6.3 substantially done; §6.4 [DRAFT-TODO]
+- [ ] Section 7 (Practitioner Recommendations): decision framework for enterprise deployment (~3 hrs) — partial; §7.1-§7.5 substantially done; §7.6-§7.10 hardening section drafted; full framework still tagged [DRAFT]
+- [x] Integrate figures and tables into the report body (done; `reports/figures/lora_series_comparison.png/pdf` plus inline tables throughout §5 and §7)
 
 ### Literature review finalization
 

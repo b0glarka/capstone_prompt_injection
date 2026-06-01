@@ -1,5 +1,7 @@
 # Business Decision Framework: Prompt Injection Defense Deployment
 
+> **Update note (2026-06-01).** The body of this framework was written 2026-05-11 and reflects the Defense B sneak-preview measurements. The formal judge-tier recommendation has since been sharpened by (a) the v1.25 rubric iteration that lifted Haiku 4.5 kappa to 0.554 vs Sonnet 4.6 at 0.466, and (b) the Opus 4.7 cost-ceiling test confirming Opus kappa 0.550 = statistically tied with Haiku at 5x the cost. The current production-judge recommendation is Haiku 4.5 with the v1.25 rubric (`src/defense_b/judge.py::_V125_SYSTEM_HEADER`); Sonnet retained for cost-tolerant scenarios needing distinct AMBIGUOUS handling; Opus retained for SPML-shaped operator-intent-anchored distributions where Opus's longer reasoning depth helps (kappa 0.683 on SPML vs Haiku 0.606); GPT-4o-mini as cross-family fallback. For the canonical updated reasoning see final report §6.3 and §7.4 and `reports/judge_validation_report.md` v1.25 addendum. The Layer 3 / Layer 4 deployment configurations below remain structurally correct; substitute the updated judge-tier names as needed.
+
 This document translates the statistical evaluation of input-side (Defense A) and output-side (Defense B) prompt-injection defenses into deployment recommendations. It is the practitioner-facing artifact of the capstone, anchored on the empirical results in `results/defense_a_full_metrics.csv` (n = 4546, injection prevalence 0.530) and the Defense B sneak-preview data in `results/defense_b_*_preview.md`.
 
 

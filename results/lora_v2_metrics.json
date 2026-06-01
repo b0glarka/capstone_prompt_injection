@@ -1,0 +1,503 @@
+{
+  "experiment": "lora_v2_bipia_retraining",
+  "base_model": "ProtectAI/deberta-v3-base-prompt-injection-v2",
+  "lora_config": {
+    "r": 16,
+    "alpha": 32,
+    "dropout": 0.1,
+    "target_modules": "all-linear"
+  },
+  "training": {
+    "epochs": 3,
+    "lr": 0.0002,
+    "batch_size": 16,
+    "seed": 42,
+    "class_weighted_loss": true,
+    "time_min_variant_a": 0.5458636403083801,
+    "time_min_variant_b": 4.823561092217763
+  },
+  "variant_a_bipia_only": {
+    "train_size": 559,
+    "val_size": 121,
+    "metrics": [
+      {
+        "label": "BIPIA test (n=120)",
+        "n": 120,
+        "n_pos": 112,
+        "n_neg": 8,
+        "precision": 0.9333333333333333,
+        "precision_ci": [
+          0.8739486959646966,
+          0.9658346931390936
+        ],
+        "recall": 1.0,
+        "recall_ci": [
+          0.9668386529330562,
+          1.0
+        ],
+        "f1": 0.9655172413793104,
+        "accuracy": 0.9333333333333333,
+        "asr": 0.0,
+        "far": 1.0,
+        "tp": 112,
+        "fp": 8,
+        "fn": 0,
+        "tn": 0
+      },
+      {
+        "label": "eval_set test (n=682)",
+        "n": 682,
+        "n_pos": 361,
+        "n_neg": 321,
+        "precision": 0.9100817438692098,
+        "precision_ci": [
+          0.8764104585266379,
+          0.93525714993657
+        ],
+        "recall": 0.925207756232687,
+        "recall_ci": [
+          0.8933693733885846,
+          0.9480920136816797
+        ],
+        "f1": 0.9175824175824175,
+        "accuracy": 0.9120234604105572,
+        "asr": 0.07479224376731297,
+        "far": 0.102803738317757,
+        "tp": 334,
+        "fp": 33,
+        "fn": 27,
+        "tn": 288
+      },
+      {
+        "label": "  eval_set/deepset",
+        "n": 82,
+        "n_pos": 30,
+        "n_neg": 52,
+        "precision": 1.0,
+        "precision_ci": [
+          0.8453609810751531,
+          1.0
+        ],
+        "recall": 0.7,
+        "recall_ci": [
+          0.5212421254128505,
+          0.833352517317562
+        ],
+        "f1": 0.8235294117647058,
+        "accuracy": 0.8902439024390244,
+        "asr": 0.30000000000000004,
+        "far": 0.0,
+        "tp": 21,
+        "fp": 0,
+        "fn": 9,
+        "tn": 52
+      },
+      {
+        "label": "  eval_set/neuralchemy",
+        "n": 300,
+        "n_pos": 181,
+        "n_neg": 119,
+        "precision": 0.9702380952380952,
+        "precision_ci": [
+          0.9322302809239952,
+          0.9872218762231527
+        ],
+        "recall": 0.9005524861878453,
+        "recall_ci": [
+          0.8482902781295298,
+          0.9361657682851308
+        ],
+        "f1": 0.9340974212034384,
+        "accuracy": 0.9233333333333333,
+        "asr": 0.09944751381215466,
+        "far": 0.04201680672268908,
+        "tp": 163,
+        "fp": 5,
+        "fn": 18,
+        "tn": 114
+      },
+      {
+        "label": "  eval_set/spml",
+        "n": 300,
+        "n_pos": 150,
+        "n_neg": 150,
+        "precision": 0.8379888268156425,
+        "precision_ci": [
+          0.7770102320049301,
+          0.884765279853462
+        ],
+        "recall": 1.0,
+        "recall_ci": [
+          0.9750297556319234,
+          1.0
+        ],
+        "f1": 0.9118541033434651,
+        "accuracy": 0.9033333333333333,
+        "asr": 0.0,
+        "far": 0.19333333333333333,
+        "tp": 150,
+        "fp": 29,
+        "fn": 0,
+        "tn": 121
+      }
+    ],
+    "bipia_per_category": [
+      {
+        "variant": "A",
+        "category": "Base Encoding",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8511949266706195
+      },
+      {
+        "variant": "A",
+        "category": "Business Intelligence",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8350882530212402
+      },
+      {
+        "variant": "A",
+        "category": "Conversational Agent",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8436708226799965
+      },
+      {
+        "variant": "A",
+        "category": "Emoji Substitution",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8453375771641731
+      },
+      {
+        "variant": "A",
+        "category": "Entertainment",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8587051406502724
+      },
+      {
+        "variant": "A",
+        "category": "Information Dissemination",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8510036553655352
+      },
+      {
+        "variant": "A",
+        "category": "Language Translation",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8385763019323349
+      },
+      {
+        "variant": "A",
+        "category": "Marketing & Advertising",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8480450361967087
+      },
+      {
+        "variant": "A",
+        "category": "Misinformation & Propaganda",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8550184624535697
+      },
+      {
+        "variant": "A",
+        "category": "Research Assistance",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8414416483470372
+      },
+      {
+        "variant": "A",
+        "category": "Reverse Text",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8457583412528038
+      },
+      {
+        "variant": "A",
+        "category": "Scams & Fraud",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8532869900975909
+      },
+      {
+        "variant": "A",
+        "category": "Sentiment Analysis",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.8185970112681389
+      },
+      {
+        "variant": "A",
+        "category": "Substitution Ciphers",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8471847346850804
+      },
+      {
+        "variant": "A",
+        "category": "Task Automation",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.8252284782273429
+      }
+    ]
+  },
+  "variant_b_combined": {
+    "train_size": 3741,
+    "val_size": 803,
+    "metrics": [
+      {
+        "label": "BIPIA test (n=120)",
+        "n": 120,
+        "n_pos": 112,
+        "n_neg": 8,
+        "precision": 0.9333333333333333,
+        "precision_ci": [
+          0.8739486959646966,
+          0.9658346931390936
+        ],
+        "recall": 1.0,
+        "recall_ci": [
+          0.9668386529330562,
+          1.0
+        ],
+        "f1": 0.9655172413793104,
+        "accuracy": 0.9333333333333333,
+        "asr": 0.0,
+        "far": 1.0,
+        "tp": 112,
+        "fp": 8,
+        "fn": 0,
+        "tn": 0
+      },
+      {
+        "label": "eval_set test (n=682)",
+        "n": 682,
+        "n_pos": 361,
+        "n_neg": 321,
+        "precision": 0.9806094182825484,
+        "precision_ci": [
+          0.9605219023211607,
+          0.9905761475595615
+        ],
+        "recall": 0.9806094182825484,
+        "recall_ci": [
+          0.9605219023211607,
+          0.9905761475595615
+        ],
+        "f1": 0.9806094182825484,
+        "accuracy": 0.9794721407624634,
+        "asr": 0.01939058171745156,
+        "far": 0.021806853582554516,
+        "tp": 354,
+        "fp": 7,
+        "fn": 7,
+        "tn": 314
+      },
+      {
+        "label": "  eval_set/deepset",
+        "n": 82,
+        "n_pos": 30,
+        "n_neg": 52,
+        "precision": 1.0,
+        "precision_ci": [
+          0.8793566952341544,
+          1.0
+        ],
+        "recall": 0.9333333333333333,
+        "recall_ci": [
+          0.7867654163738308,
+          0.9815229762087295
+        ],
+        "f1": 0.9655172413793104,
+        "accuracy": 0.975609756097561,
+        "asr": 0.06666666666666665,
+        "far": 0.0,
+        "tp": 28,
+        "fp": 0,
+        "fn": 2,
+        "tn": 52
+      },
+      {
+        "label": "  eval_set/neuralchemy",
+        "n": 300,
+        "n_pos": 181,
+        "n_neg": 119,
+        "precision": 0.9725274725274725,
+        "precision_ci": [
+          0.9373105524688004,
+          0.988209517656947
+        ],
+        "recall": 0.9779005524861878,
+        "recall_ci": [
+          0.9445640260961137,
+          0.9913731879020675
+        ],
+        "f1": 0.9752066115702479,
+        "accuracy": 0.97,
+        "asr": 0.02209944751381221,
+        "far": 0.04201680672268908,
+        "tp": 177,
+        "fp": 5,
+        "fn": 4,
+        "tn": 114
+      },
+      {
+        "label": "  eval_set/spml",
+        "n": 300,
+        "n_pos": 150,
+        "n_neg": 150,
+        "precision": 0.9867549668874173,
+        "precision_ci": [
+          0.9529979571186733,
+          0.9963601871379337
+        ],
+        "recall": 0.9933333333333333,
+        "recall_ci": [
+          0.9632071602251818,
+          0.9988221986649827
+        ],
+        "f1": 0.9900332225913622,
+        "accuracy": 0.99,
+        "asr": 0.00666666666666671,
+        "far": 0.013333333333333334,
+        "tp": 149,
+        "fp": 2,
+        "fn": 1,
+        "tn": 148
+      }
+    ],
+    "bipia_per_category": [
+      {
+        "variant": "B",
+        "category": "Base Encoding",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9486556478909084
+      },
+      {
+        "variant": "B",
+        "category": "Business Intelligence",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9419756531715393
+      },
+      {
+        "variant": "B",
+        "category": "Conversational Agent",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.9433341473340988
+      },
+      {
+        "variant": "B",
+        "category": "Emoji Substitution",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.941445104777813
+      },
+      {
+        "variant": "B",
+        "category": "Entertainment",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.9457713216543198
+      },
+      {
+        "variant": "B",
+        "category": "Information Dissemination",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9445880396025521
+      },
+      {
+        "variant": "B",
+        "category": "Language Translation",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.9443927183747292
+      },
+      {
+        "variant": "B",
+        "category": "Marketing & Advertising",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.9446511119604111
+      },
+      {
+        "variant": "B",
+        "category": "Misinformation & Propaganda",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9469906517437526
+      },
+      {
+        "variant": "B",
+        "category": "Research Assistance",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9433799726622445
+      },
+      {
+        "variant": "B",
+        "category": "Reverse Text",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.9552123993635178
+      },
+      {
+        "variant": "B",
+        "category": "Scams & Fraud",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9456614511353629
+      },
+      {
+        "variant": "B",
+        "category": "Sentiment Analysis",
+        "n": 8,
+        "recall": 1.0,
+        "mean_score": 0.9412564337253571
+      },
+      {
+        "variant": "B",
+        "category": "Substitution Ciphers",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9467527866363525
+      },
+      {
+        "variant": "B",
+        "category": "Task Automation",
+        "n": 7,
+        "recall": 1.0,
+        "mean_score": 0.9415617074285235
+      }
+    ]
+  },
+  "robustness_checks": {
+    "variant_a_score_separation": {
+      "clean_mean": 0.8339318633079529,
+      "clean_std": 0.022577660124937712,
+      "attack_mean": 0.8438004633145673,
+      "attack_std": 0.017924952692596967,
+      "separation": 0.00986860000661438,
+      "cohen_d": 0.4841230362083953
+    },
+    "variant_b_score_separation": {
+      "clean_mean": 0.9442782700061798,
+      "clean_std": 0.005107710730648654,
+      "attack_mean": 0.9450488149055413,
+      "attack_std": 0.006640250500716781,
+      "separation": 0.0007705448993614583,
+      "cohen_d": 0.13007720754845495
+    }
+  }
+}

@@ -64,6 +64,48 @@ def f_beta(precision: float, recall: float, beta: float = 1.0) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Wilson score interval for a binomial proportion
+# ---------------------------------------------------------------------------
+
+def wilson_ci(
+    successes: int,
+    n: int,
+    alpha: float = 0.05,
+) -> Tuple[float, float]:
+    """Wilson score 95% (default) confidence interval for a binomial proportion.
+
+    Recommended over the normal-approximation (Wald) interval for any n, and
+    over Clopper-Pearson when nominal coverage matters more than guaranteed
+    coverage (Brown, Cai and DasGupta 2001, "Interval Estimation for a
+    Binomial Proportion", Statistical Science 16(2): 101-133).
+
+    Properties:
+    - Documented good coverage down to n approx 5-10
+    - Asymmetric: at p_hat = 0 the interval is [0, hi] not [-hw, hw]; at
+      p_hat = 1 it is [lo, 1] not [1-hw, 1+hw]
+    - No resampling, no random seed
+
+    Args:
+        successes: number of positive outcomes (e.g., true positives).
+        n: total trials (e.g., positives in the test set for a recall calc).
+        alpha: 1 - confidence level. Default 0.05 for 95% CI.
+
+    Returns:
+        (lo, hi) tuple of the lower and upper bounds in [0, 1].
+
+    Notes:
+        At n = 0 returns (0.0, 1.0) (the only honest interval for no data).
+        Uses scipy.stats.binomtest(...).proportion_ci(method="wilson") which
+        applies the textbook Wilson formula (no continuity correction).
+    """
+    if n == 0:
+        return (0.0, 1.0)
+    result = binomtest(int(successes), int(n))
+    lo, hi = result.proportion_ci(confidence_level=1 - alpha, method="wilson")
+    return (float(lo), float(hi))
+
+
+# ---------------------------------------------------------------------------
 # Bootstrap CIs
 # ---------------------------------------------------------------------------
 

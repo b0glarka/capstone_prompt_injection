@@ -1,5 +1,17 @@
 """Prompt augmentation templates for the Defense B baseline study.
 
+STATUS (2026-06-01): NOT EXECUTED IN THIS STUDY. The prompt-augmentation arm
+was deprioritised in favour of the §5.11 LoRA fine-tune, which addresses the
+same in-distribution adaptation question at a stronger evidence level.
+Neither the 100-row pilot at `notebooks/06_augmentation_run.ipynb` nor the
+full eval-set run was executed. The templates below are preserved as a
+starting point for the future-work item documented in §9.1 of the final
+report and in Decision 7 of `_project_notes/capstone_methodology_decisions.md`
+(see "Post-2026-05-12 evolution"). Hines et al. (2024) "Spotlighting" is the
+canonical reference for follow-up work.
+
+---
+
 Per `_project_notes/capstone_methodology_decisions.md` decision #7, three
 prompt-augmentation conditions are evaluated against the same agent and
 judge pipeline:

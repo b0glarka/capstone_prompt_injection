@@ -1,0 +1,5 @@
+scope,n,hijacked_strict_n,ambiguous_n,clean_n,hijacked_collapsed_n,hijack_rate_collapsed,hijack_rate_strict
+overall (injection rows only),251,76,14,152,99,0.3944,0.3028
+deepset (injection rows only),84,19,3,61,23,0.2738,0.2262
+neuralchemy (injection rows only),84,35,0,45,39,0.4643,0.4167
+spml (injection rows only),83,22,11,46,37,0.4458,0.2651

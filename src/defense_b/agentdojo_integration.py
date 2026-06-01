@@ -193,19 +193,29 @@ class TogetherLLM(OpenAILLM):
 class OpenRouterLLM(OpenAILLM):
     """LLM pipeline element via OpenRouter's OpenAI-compatible endpoint.
 
-    Used to plug Mistral Large 2 and DeepSeek V3 into AgentDojo without
-    forking the framework. OpenRouter speaks the OpenAI protocol verbatim.
+    Used to plug Mistral Large 2, DeepSeek V3, and Llama 3.3 70B into AgentDojo
+    without forking the framework. OpenRouter speaks the OpenAI protocol verbatim.
 
     Args:
         model: OpenRouter model identifier (e.g. "mistralai/mistral-large-2411",
-            "deepseek/deepseek-chat-v3-0324").
+            "deepseek/deepseek-chat-v3-0324", "meta-llama/llama-3.3-70b-instruct").
         temperature: sampling temperature. Default 0.0.
+        provider_pin: optional. Either a single provider name (e.g. "DeepInfra")
+            or a list of provider names, in order of preference. When set,
+            OpenRouter is instructed via its `provider` body parameter to route
+            requests to that specific underlying provider and NOT fall back to
+            others. This is needed for tool-using agents because OpenRouter's
+            default routing can land on providers that return malformed JSON in
+            tool_call arguments, which crashes AgentDojo's strict JSON parser.
+            Known-good providers for Llama 3.3 70B tool calling: DeepInfra,
+            Hyperbolic, Lambda.
     """
 
     def __init__(
         self,
         model: str,
         temperature: float | None = 0.0,
+        provider_pin: str | list[str] | None = None,
     ) -> None:
         client = OpenAI(
             api_key=os.environ["OPENROUTER_API_KEY"],
@@ -217,3 +227,25 @@ class OpenRouterLLM(OpenAILLM):
             reasoning_effort=None,
             temperature=temperature,
         )
+        if provider_pin is not None:
+            self._patch_for_provider_pin(provider_pin)
+
+    def _patch_for_provider_pin(self, provider_pin: str | list[str]) -> None:
+        """Inject OpenRouter's `provider` body parameter into every chat.completions.create call.
+
+        OpenRouter's `provider` schema: {"order": [...], "allow_fallbacks": bool}.
+        Setting allow_fallbacks=False forces routing to the specified provider(s)
+        in order and fails fast if none can serve, rather than silently routing
+        to a noisy provider.
+        """
+        order = [provider_pin] if isinstance(provider_pin, str) else list(provider_pin)
+        provider_cfg = {"order": order, "allow_fallbacks": False}
+        original_create = self.client.chat.completions.create
+
+        def patched_create(**kwargs):
+            extra_body = dict(kwargs.get("extra_body") or {})
+            extra_body["provider"] = provider_cfg
+            kwargs["extra_body"] = extra_body
+            return original_create(**kwargs)
+
+        self.client.chat.completions.create = patched_create

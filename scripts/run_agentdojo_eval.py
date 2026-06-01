@@ -45,6 +45,44 @@ from agentdojo.agent_pipeline import (
 )
 from agentdojo.agent_pipeline.agent_pipeline import load_system_message
 from agentdojo.agent_pipeline.pi_detector import TransformersBasedPIDetector
+
+
+def _recover_partial_results(logdir: Path) -> dict:
+    """Walk AgentDojo's per-task JSON log directory and rebuild the SuiteResults dict.
+
+    AgentDojo writes one JSON file per (user_task, injection_task) pair as each task
+    completes. If benchmark_suite_with_injections crashes mid-run, those JSONs are
+    still on disk. This function reads them and reconstructs the same dict structure
+    benchmark_suite would return on success: {"utility_results": {...}, "security_results": {...}}.
+
+    Returns: dict with utility_results and security_results keyed by (user_task, injection_task).
+    """
+    import json
+    util_results = {}
+    sec_results = {}
+    if not logdir.exists():
+        return {"utility_results": util_results, "security_results": sec_results}
+    # AgentDojo nested structure: logdir/<model>/<suite>/<user_task>/<injection_task>/<injection_task>.json
+    # Walk recursively to find all .json files
+    for json_path in logdir.rglob("*.json"):
+        try:
+            data = json.loads(json_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        # Skip files that aren't per-task results
+        if "utility" not in data:
+            continue
+        # Parent dir name is the injection_task ID; grandparent is user_task ID
+        injection_task = json_path.parent.name
+        user_task = json_path.parent.parent.name
+        if injection_task == "none":
+            # benign-utility task (no injection)
+            util_results[(user_task, None)] = bool(data.get("utility", False))
+        else:
+            key = (user_task, injection_task)
+            util_results[key] = bool(data.get("utility", False))
+            sec_results[key] = bool(data.get("security", False))
+    return {"utility_results": util_results, "security_results": sec_results}
 from agentdojo.attacks import base_attacks as _ad_base_attacks
 from agentdojo.attacks.attack_registry import load_attack
 from agentdojo.benchmark import benchmark_suite_with_injections, benchmark_suite_without_injections
@@ -56,6 +94,7 @@ from agentdojo.task_suite.load_suites import get_suites
 # for our Together- and OpenRouter-hosted models. Mapping to "AI assistant"
 # matches how AgentDojo treats Llama 3 — generic, no model-specific phrasing.
 _ad_base_attacks.MODEL_NAMES.update({
+    "meta-llama/llama-3.3-70b-instruct": "AI assistant",
     "meta-llama/Llama-3.3-70B-Instruct-Turbo": "AI assistant",
     "Qwen/Qwen3-235B-A22B-Instruct-2507-tput": "AI assistant",
     "mistralai/mistral-large-2411": "AI assistant",
@@ -71,15 +110,28 @@ from src.defense_b.judge import ClaudeJudge
 
 
 # Agent registry: name -> (constructor function returning a configured BasePipelineElement)
+# llama-3.3-70b is served via OpenRouter's default routing (typically a BF16 or
+# higher-precision provider) rather than Together AI's Turbo (FP8 quantized) tier.
+# Plan B switch from Turbo, motivated by the Llama-tool-hallucination diagnosis
+# on the A1 run: Turbo's FP8 quantization may degrade function-calling fidelity.
+# OpenRouter is used here because Together AI's Reference (BF16) tier for this
+# model is dedicated-endpoint only (not serverless). The llama-3.3-70b-turbo entry
+# preserves access to the original A1 configuration for reproducibility.
 AGENT_REGISTRY = {
-    "llama-3.3-70b": lambda: TogetherLLM("meta-llama/Llama-3.3-70B-Instruct-Turbo"),
+    # Plan B: OpenRouter with provider pinned to DeepInfra (known-good BF16 provider
+    # that returns clean JSON in tool_call arguments). Default OpenRouter routing
+    # sometimes lands on providers that produce malformed JSON, which crashes
+    # AgentDojo's strict json.loads parser. See methodology note in §5.9.
+    "llama-3.3-70b": lambda: OpenRouterLLM("meta-llama/llama-3.3-70b-instruct:nitro"),
+    "llama-3.3-70b-turbo": lambda: TogetherLLM("meta-llama/Llama-3.3-70B-Instruct-Turbo"),
     "qwen3-235b-a22b": lambda: TogetherLLM("Qwen/Qwen3-235B-A22B-Instruct-2507-tput"),
     "mistral-large-2": lambda: OpenRouterLLM("mistralai/mistral-large-2411"),
     "deepseek-v3": lambda: OpenRouterLLM("deepseek/deepseek-chat-v3-0324"),
 }
 
 AGENT_MODEL_IDS = {
-    "llama-3.3-70b": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "llama-3.3-70b": "meta-llama/llama-3.3-70b-instruct",
+    "llama-3.3-70b-turbo": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
     "qwen3-235b-a22b": "Qwen/Qwen3-235B-A22B-Instruct-2507-tput",
     "mistral-large-2": "mistralai/mistral-large-2411",
     "deepseek-v3": "deepseek/deepseek-chat-v3-0324",
@@ -220,18 +272,28 @@ def main() -> int:
         attack_logdir.mkdir(parents=True, exist_ok=True)
 
         # AgentDojo's benchmark functions assume an OutputLogger context is active.
-        with OutputLogger(str(attack_logdir)):
-            attack = load_attack(args.attack, suite, pipeline)
-            results = benchmark_suite_with_injections(
-                agent_pipeline=pipeline,
-                suite=suite,
-                attack=attack,
-                logdir=attack_logdir,
-                force_rerun=args.force_rerun,
-                user_tasks=args.user_tasks,
-                injection_tasks=args.injection_tasks,
-                verbose=True,
-            )
+        # Wrap in try/except: if the benchmark crashes mid-run (e.g., upstream API
+        # returns malformed JSON in a tool call), recover whatever per-task results
+        # have already been written to disk so the bash chain can continue and we
+        # don't lose hours of work.
+        try:
+            with OutputLogger(str(attack_logdir)):
+                attack = load_attack(args.attack, suite, pipeline)
+                results = benchmark_suite_with_injections(
+                    agent_pipeline=pipeline,
+                    suite=suite,
+                    attack=attack,
+                    logdir=attack_logdir,
+                    force_rerun=args.force_rerun,
+                    user_tasks=args.user_tasks,
+                    injection_tasks=args.injection_tasks,
+                    verbose=True,
+                )
+        except Exception as e:
+            print(f"\n!!! BENCHMARK_WITH_INJECTIONS CRASHED on {suite_name}/{args.defense}: {type(e).__name__}: {e}")
+            print(f"!!! Recovering partial results from {attack_logdir} ...")
+            results = _recover_partial_results(attack_logdir)
+            print(f"!!! Recovered {len(results['security_results'])} cases from per-task JSONs.")
         # SuiteResults is a TypedDict: keys are utility_results and security_results
         # (each a dict of (user_task, injection_task) tuples -> bool).
         n_total = len(results["security_results"])
@@ -244,15 +306,20 @@ def main() -> int:
         if not args.no_benign_utility:
             bu_logdir = args.logdir / f"{args.agent}--{args.defense}--benign"
             bu_logdir.mkdir(parents=True, exist_ok=True)
-            with OutputLogger(str(bu_logdir)):
-                bu_results = benchmark_suite_without_injections(
-                    agent_pipeline=pipeline,
-                    suite=suite,
-                    logdir=bu_logdir,
-                    force_rerun=args.force_rerun,
-                    user_tasks=args.user_tasks,
-                    verbose=True,
-                )
+            try:
+                with OutputLogger(str(bu_logdir)):
+                    bu_results = benchmark_suite_without_injections(
+                        agent_pipeline=pipeline,
+                        suite=suite,
+                        logdir=bu_logdir,
+                        force_rerun=args.force_rerun,
+                        user_tasks=args.user_tasks,
+                    )
+            except Exception as e:
+                print(f"\n!!! BENCHMARK_WITHOUT_INJECTIONS (benign utility) CRASHED on {suite_name}/{args.defense}: {type(e).__name__}: {e}")
+                print(f"!!! Recovering partial benign results from {bu_logdir} ...")
+                bu_results = _recover_partial_results(bu_logdir)
+                print(f"!!! Recovered {len(bu_results['utility_results'])} benign cases.")
             bu_n = len(bu_results["utility_results"])
             bu_pass = sum(1 for v in bu_results["utility_results"].values() if v)
 

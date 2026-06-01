@@ -35,11 +35,29 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# API clients, installed when Defense B work begins
+# API clients used by Defense B agent and judge classes.
+# - anthropic: ClaudeJudge (Sonnet 4.6 and Opus 4.7) and HaikuJudge (Haiku 4.5)
+#   in src/defense_b/judge.py, used for v1.21 and v1.25 rubrics.
+# - openai: GPT4oJudge (GPT-4o sensitivity, GPT-4o-mini cost-sweep).
+#   Also used to talk to Together AI and OpenRouter, both of which expose
+#   OpenAI-compatible endpoints.
+# - groq: GroqAgent in src/defense_b/agent.py. Historical (Phase 1
+#   sneak-preview only); production work after the Groq quota was exhausted
+#   moved to Together AI. Kept here for reproducibility of the sneak-preview
+#   results.
 api = [
     "anthropic>=0.40",
     "openai>=1.50",
     "groq>=0.10",
+]
+
+# AgentDojo action-level evaluation (Section 5.9 of the final report). The
+# evaluation was de-scoped after the Together AI FP8-tier function-call
+# hallucination issue, but the code is preserved for reproducibility. Install
+# this extra to run the AgentDojo workflow at src/defense_b/agentdojo_integration.py
+# and scripts/run_agentdojo_eval.py.
+agentdojo = [
+    "agentdojo>=0.1",
 ]
 
 [tool.uv]

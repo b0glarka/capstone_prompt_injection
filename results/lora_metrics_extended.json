@@ -1,0 +1,444 @@
+{
+  "experiment": "defense_a_lora_robustness_v1",
+  "splits": {
+    "train": 3182,
+    "val": 682,
+    "test": 682
+  },
+  "configs": {
+    "baseline_protectai_offtheshelf": {
+      "metrics": {
+        "overall": {
+          "label": "overall",
+          "n": 682,
+          "n_pos": 361,
+          "precision": 0.9484848484848485,
+          "precision_ci": [
+            0.9190575294437168,
+            0.9675908845837969
+          ],
+          "recall": 0.8670360110803325,
+          "recall_ci": [
+            0.8281174916129725,
+            0.898225399506311
+          ],
+          "f1": 0.9059334298118669,
+          "accuracy": 0.9046920821114369
+        },
+        "deepset": {
+          "label": "deepset",
+          "n": 82,
+          "n_pos": 30,
+          "precision": 1.0,
+          "precision_ci": [
+            0.7846891972623642,
+            1.0
+          ],
+          "recall": 0.4666666666666667,
+          "recall_ci": [
+            0.30232388907699753,
+            0.638577003801267
+          ],
+          "f1": 0.6363636363636364,
+          "accuracy": 0.8048780487804879
+        },
+        "neuralchemy": {
+          "label": "neuralchemy",
+          "n": 300,
+          "n_pos": 181,
+          "precision": 0.9803921568627451,
+          "precision_ci": [
+            0.9439426735787184,
+            0.9933095115597457
+          ],
+          "recall": 0.8287292817679558,
+          "recall_ci": [
+            0.7671574255801206,
+            0.8766375366498422
+          ],
+          "f1": 0.8982035928143712,
+          "accuracy": 0.8866666666666667
+        },
+        "spml": {
+          "label": "spml",
+          "n": 300,
+          "n_pos": 150,
+          "precision": 0.9141104294478528,
+          "precision_ci": [
+            0.8610024097229935,
+            0.9481489903800565
+          ],
+          "recall": 0.9933333333333333,
+          "recall_ci": [
+            0.9632071602251818,
+            0.9988221986649827
+          ],
+          "f1": 0.952076677316294,
+          "accuracy": 0.95
+        }
+      }
+    },
+    "lora_deberta_base_fp16": {
+      "base_model": "microsoft/deberta-v3-base",
+      "metrics": {
+        "overall": {
+          "label": "overall",
+          "n": 682,
+          "n_pos": 361,
+          "precision": 0.9826589595375722,
+          "precision_ci": [
+            0.9626893525028232,
+            0.992028825056534
+          ],
+          "recall": 0.9418282548476454,
+          "recall_ci": [
+            0.9127117529054289,
+            0.9616406330079728
+          ],
+          "f1": 0.9618104667609618,
+          "accuracy": 0.9604105571847508
+        },
+        "deepset": {
+          "label": "deepset",
+          "n": 82,
+          "n_pos": 30,
+          "precision": 0.9642857142857143,
+          "precision_ci": [
+            0.8228780225664668,
+            0.9936674801509623
+          ],
+          "recall": 0.9,
+          "recall_ci": [
+            0.7437891742081592,
+            0.9654001112526657
+          ],
+          "f1": 0.9310344827586207,
+          "accuracy": 0.9512195121951219
+        },
+        "neuralchemy": {
+          "label": "neuralchemy",
+          "n": 300,
+          "n_pos": 181,
+          "precision": 0.9772727272727273,
+          "precision_ci": [
+            0.943028980985934,
+            0.9911271424221821
+          ],
+          "recall": 0.9502762430939227,
+          "recall_ci": [
+            0.9082141594687666,
+            0.9736226375353
+          ],
+          "f1": 0.9635854341736695,
+          "accuracy": 0.9566666666666667
+        },
+        "spml": {
+          "label": "spml",
+          "n": 300,
+          "n_pos": 150,
+          "precision": 0.9929577464788732,
+          "precision_ci": [
+            0.9611907282841454,
+            0.9987557857734521
+          ],
+          "recall": 0.94,
+          "recall_ci": [
+            0.8899102291652979,
+            0.9681159557907947
+          ],
+          "f1": 0.9657534246575342,
+          "accuracy": 0.9666666666666667
+        }
+      }
+    },
+    "lora_deberta_large_fp16": {
+      "base_model": "microsoft/deberta-v3-large",
+      "run_label": "large",
+      "total_params": 435063810,
+      "trainable_params": 7112706,
+      "elapsed_min": 3.910304816563924,
+      "config": {
+        "max_length": 512,
+        "per_device_batch_size": 16,
+        "gradient_accumulation_steps": 1,
+        "effective_batch_size": 16
+      },
+      "metrics": {
+        "overall": {
+          "label": "overall",
+          "n": 682,
+          "n_pos": 361,
+          "precision": 0.9660056657223796,
+          "precision_ci": [
+            0.941529309047562,
+            0.9804487623550551
+          ],
+          "recall": 0.9445983379501385,
+          "recall_ci": [
+            0.9159812147881972,
+            0.9638530042657274
+          ],
+          "f1": 0.9551820728291317,
+          "accuracy": 0.9530791788856305
+        },
+        "deepset": {
+          "label": "deepset",
+          "n": 82,
+          "n_pos": 30,
+          "precision": 0.8275862068965517,
+          "precision_ci": [
+            0.6545156010980476,
+            0.9240214274710877
+          ],
+          "recall": 0.8,
+          "recall_ci": [
+            0.6269430358685175,
+            0.9049489282271013
+          ],
+          "f1": 0.8135593220338984,
+          "accuracy": 0.8658536585365854
+        },
+        "neuralchemy": {
+          "label": "neuralchemy",
+          "n": 300,
+          "n_pos": 181,
+          "precision": 0.9662921348314607,
+          "precision_ci": [
+            0.9284215697242859,
+            0.9844615597697715
+          ],
+          "recall": 0.9502762430939227,
+          "recall_ci": [
+            0.9082141594687666,
+            0.9736226375353
+          ],
+          "f1": 0.958217270194986,
+          "accuracy": 0.95
+        },
+        "spml": {
+          "label": "spml",
+          "n": 300,
+          "n_pos": 150,
+          "precision": 0.9931506849315068,
+          "precision_ci": [
+            0.9622258343645363,
+            0.9987899027574291
+          ],
+          "recall": 0.9666666666666667,
+          "recall_ci": [
+            0.9243482038212211,
+            0.9856795681019074
+          ],
+          "f1": 0.9797297297297297,
+          "accuracy": 0.98
+        }
+      }
+    },
+    "lora_protectai_starting_point_fp16": {
+      "base_model": "ProtectAI/deberta-v3-base-prompt-injection-v2",
+      "run_label": "protectai_start",
+      "total_params": 184423682,
+      "trainable_params": 2680322,
+      "elapsed_min": 1.777018936475118,
+      "config": {
+        "max_length": 512,
+        "per_device_batch_size": 16,
+        "gradient_accumulation_steps": 1,
+        "effective_batch_size": 16
+      },
+      "metrics": {
+        "overall": {
+          "label": "overall",
+          "n": 682,
+          "n_pos": 361,
+          "precision": 0.9859943977591037,
+          "precision_ci": [
+            0.967637961708487,
+            0.9940032009618699
+          ],
+          "recall": 0.9750692520775623,
+          "recall_ci": [
+            0.9533048797295692,
+            0.9868295038701073
+          ],
+          "f1": 0.9805013927576601,
+          "accuracy": 0.9794721407624634
+        },
+        "deepset": {
+          "label": "deepset",
+          "n": 82,
+          "n_pos": 30,
+          "precision": 1.0,
+          "precision_ci": [
+            0.8793566952341544,
+            1.0
+          ],
+          "recall": 0.9333333333333333,
+          "recall_ci": [
+            0.7867654163738308,
+            0.9815229762087295
+          ],
+          "f1": 0.9655172413793104,
+          "accuracy": 0.975609756097561
+        },
+        "neuralchemy": {
+          "label": "neuralchemy",
+          "n": 300,
+          "n_pos": 181,
+          "precision": 0.9831460674157303,
+          "precision_ci": [
+            0.9516270399588851,
+            0.9942518653000176
+          ],
+          "recall": 0.9668508287292817,
+          "recall_ci": [
+            0.9295764609936417,
+            0.9847205862068937
+          ],
+          "f1": 0.9749303621169917,
+          "accuracy": 0.97
+        },
+        "spml": {
+          "label": "spml",
+          "n": 300,
+          "n_pos": 150,
+          "precision": 0.9867549668874173,
+          "precision_ci": [
+            0.9529979571186733,
+            0.9963601871379337
+          ],
+          "recall": 0.9933333333333333,
+          "recall_ci": [
+            0.9632071602251818,
+            0.9988221986649827
+          ],
+          "f1": 0.9900332225913622,
+          "accuracy": 0.99
+        }
+      }
+    },
+    "lora_deberta_base_int8": {
+      "base_model": "microsoft/deberta-v3-base",
+      "run_label": "int8_quantized",
+      "inference_sec_on_test": 4.656566619873047,
+      "rows_per_sec": 146.45983954989427,
+      "metrics": {
+        "overall": {
+          "label": "overall",
+          "n": 682,
+          "n_pos": 361,
+          "precision": 0.9728682170542635,
+          "precision_ci": [
+            0.9450651183384111,
+            0.9867964787476649
+          ],
+          "recall": 0.6952908587257618,
+          "recall_ci": [
+            0.6459594378057056,
+            0.7405097986011584
+          ],
+          "f1": 0.8109854604200323,
+          "accuracy": 0.8284457478005866
+        },
+        "deepset": {
+          "label": "deepset",
+          "n": 82,
+          "n_pos": 30,
+          "precision": 0.9259259259259259,
+          "precision_ci": [
+            0.7663040731697687,
+            0.9794453459390114
+          ],
+          "recall": 0.8333333333333334,
+          "recall_ci": [
+            0.6643564949358396,
+            0.9266345762815145
+          ],
+          "f1": 0.8771929824561403,
+          "accuracy": 0.9146341463414634
+        },
+        "neuralchemy": {
+          "label": "neuralchemy",
+          "n": 300,
+          "n_pos": 181,
+          "precision": 0.9590163934426229,
+          "precision_ci": [
+            0.9076394737210987,
+            0.9823692805447255
+          ],
+          "recall": 0.6464088397790055,
+          "recall_ci": [
+            0.5743777866562509,
+            0.7123544234125561
+          ],
+          "f1": 0.7722772277227723,
+          "accuracy": 0.77
+        },
+        "spml": {
+          "label": "spml",
+          "n": 300,
+          "n_pos": 150,
+          "precision": 1.0,
+          "precision_ci": [
+            0.9659570262486749,
+            1.0
+          ],
+          "recall": 0.7266666666666667,
+          "recall_ci": [
+            0.6503549212540405,
+            0.7916585679657648
+          ],
+          "f1": 0.8416988416988417,
+          "accuracy": 0.8633333333333333
+        }
+      }
+    }
+  },
+  "comparison_table": [
+    {
+      "config": "baseline (ProtectAI off-the-shelf)",
+      "overall_f1": 0.9059334298118669,
+      "deepset_f1": 0.6363636363636364,
+      "neuralchemy_f1": 0.8982035928143712,
+      "spml_f1": 0.952076677316294,
+      "overall_recall": 0.8670360110803325,
+      "overall_precision": 0.9484848484848485
+    },
+    {
+      "config": "LoRA on DeBERTa-v3-base (FP16)",
+      "overall_f1": 0.9618104667609618,
+      "deepset_f1": 0.9310344827586207,
+      "neuralchemy_f1": 0.9635854341736695,
+      "spml_f1": 0.9657534246575342,
+      "overall_recall": 0.9418282548476454,
+      "overall_precision": 0.9826589595375722
+    },
+    {
+      "config": "LoRA on DeBERTa-v3-large (FP16)",
+      "overall_f1": 0.9551820728291317,
+      "deepset_f1": 0.8135593220338984,
+      "neuralchemy_f1": 0.958217270194986,
+      "spml_f1": 0.9797297297297297,
+      "overall_recall": 0.9445983379501385,
+      "overall_precision": 0.9660056657223796
+    },
+    {
+      "config": "LoRA on ProtectAI-as-base (FP16)",
+      "overall_f1": 0.9805013927576601,
+      "deepset_f1": 0.9655172413793104,
+      "neuralchemy_f1": 0.9749303621169917,
+      "spml_f1": 0.9900332225913622,
+      "overall_recall": 0.9750692520775623,
+      "overall_precision": 0.9859943977591037
+    },
+    {
+      "config": "LoRA on DeBERTa-v3-base (INT8)",
+      "overall_f1": 0.8109854604200323,
+      "deepset_f1": 0.8771929824561403,
+      "neuralchemy_f1": 0.7722772277227723,
+      "spml_f1": 0.8416988416988417,
+      "overall_recall": 0.6952908587257618,
+      "overall_precision": 0.9728682170542635
+    }
+  ]
+}

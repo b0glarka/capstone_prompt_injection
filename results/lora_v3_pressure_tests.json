@@ -1,0 +1,113 @@
+{
+  "experiment": "lora_v3b_pressure_tests",
+  "adapter": "/content/drive/MyDrive/capstone_lora/adapters/lora_v3b_combined_aug",
+  "baseline": {
+    "label": "BIPIA-aug test (baseline)",
+    "n": 158,
+    "n_pos": 113,
+    "n_neg": 45,
+    "f1": 0.9955947136563876,
+    "macro_f1": 0.9921793793001039,
+    "balanced_accuracy": 0.9888888888888889,
+    "mcc": 0.9844799539488326,
+    "asr": 0.0,
+    "far": 0.022222222222222223,
+    "cohen_d": 9.48109952435394,
+    "mean_score_clean": 0.024379201802528568,
+    "mean_score_attack": 0.9984371361479295,
+    "tp": 113,
+    "fp": 1,
+    "fn": 0,
+    "tn": 44
+  },
+  "test1_attack_question_swap": {
+    "n": 113,
+    "original_flag_rate": 1.0,
+    "perturbed_flag_rate": 0.48672566371681414,
+    "original_mean_score": 0.9984371361479295,
+    "perturbed_mean_score": 0.45975082393826305
+  },
+  "test2_clean_question_swap": {
+    "n": 45,
+    "original_flag_rate": 0.022222222222222223,
+    "perturbed_flag_rate": 0.044444444444444446,
+    "original_mean_score": 0.024379201802528568,
+    "perturbed_mean_score": 0.04834697999887996
+  },
+  "test3_holdout_base_emails": {
+    "label": "held-out base emails",
+    "n": 1000,
+    "n_pos": 750,
+    "n_neg": 250,
+    "f1": 0.98989898989899,
+    "macro_f1": 0.9803863881533785,
+    "balanced_accuracy": 0.99,
+    "mcc": 0.9615239476408233,
+    "asr": 0.020000000000000018,
+    "far": 0.0,
+    "cohen_d": 9.898782423715845,
+    "mean_score_clean": 0.002511667466722429,
+    "mean_score_attack": 0.9781851135240868,
+    "tp": 735,
+    "fp": 0,
+    "fn": 15,
+    "tn": 250
+  },
+  "test5a_novel_question_test_cleans": {
+    "n": 45,
+    "flag_rate": 0.0,
+    "mean_score": 0.0024074461518062487
+  },
+  "test5b_novel_question_holdout": {
+    "n": 50,
+    "flag_rate": 0.02,
+    "mean_score": 0.022255698833614588
+  },
+  "test6_holdout_orig_questions": {
+    "n": 50,
+    "flag_rate": 0.04,
+    "mean_score": 0.03937136160209775
+  },
+  "verdict_table": [
+    {
+      "test": "Baseline (BIPIA-aug test)",
+      "metric": "d=9.48, balAcc=0.989, FAR=0.022",
+      "verdict": "reference"
+    },
+    {
+      "test": "Test 1: attack-question swap",
+      "metric": "flag=0.487 (was 1.000)",
+      "verdict": "FAIL"
+    },
+    {
+      "test": "Test 2: clean-question swap to BIPIA style",
+      "metric": "flag=0.044 (was 0.022)",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 3: held-out base emails",
+      "metric": "d=9.90, balAcc=0.990, FAR=0.000, ASR=0.020",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 4: email-body train/test overlap (local)",
+      "metric": "100% clean body overlap (already known)",
+      "verdict": "INFO"
+    },
+    {
+      "test": "Test 5a: BIPIA test clean rows + novel question",
+      "metric": "flag=0.000",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 5b: held-out emails + novel question",
+      "metric": "flag=0.020",
+      "verdict": "PASS"
+    },
+    {
+      "test": "Test 6: held-out emails + original BIPIA questions",
+      "metric": "flag=0.040",
+      "verdict": "PASS"
+    }
+  ]
+}

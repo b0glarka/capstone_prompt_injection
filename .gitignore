@@ -217,3 +217,9 @@ _local/
 
 # Personal Claude Code settings (per-user, not shareable)
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# MS Word lock and autosave files (generated when reports/ is opened in Word)
+~$*
+~WRL*.tmp
+*.tmp

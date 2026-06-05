@@ -1,14 +1,116 @@
-% LaTeX preamble for pandoc → PDF compilation.
-% Improves table readability and adds row spacing.
+% LaTeX preamble for pandoc -> PDF compilation (CEU MSBA capstone)
+% Implements CEU thesis formatting requirements per university guidance.
+% Use with xelatex (required for system fonts like Calibri).
 
+% --------------------------------------------------------------
+% Table formatting
+% --------------------------------------------------------------
 \usepackage[table]{xcolor}
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{longtable}
-
-% Alternating row colors (zebra striping) starting from row 2.
-% Header row stays white.
 \rowcolors{2}{gray!12}{white}
-
-% Add vertical padding so rows breathe.
 \renewcommand{\arraystretch}{1.25}
+
+% --------------------------------------------------------------
+% Spacing (CEU requires double-space in body, single in frontmatter,
+% bibliography, footnotes, captions)
+% Default: double-space body. Wrap frontmatter content in markdown using
+% raw LaTeX \begin{singlespace}...\end{singlespace} blocks.
+% --------------------------------------------------------------
+\usepackage{setspace}
+\doublespacing
+
+% --------------------------------------------------------------
+% Widow / orphan / headers-near-tables control
+% --------------------------------------------------------------
+\widowpenalty=10000
+\clubpenalty=10000
+\usepackage{needspace}
+% Manually insert \needspace{6\baselineskip} before a table in markdown
+% (via raw LaTeX) to keep the heading above with the table.
+
+% --------------------------------------------------------------
+% Captions (CEU: single-spaced). Table captions positioned BELOW the table.
+% --------------------------------------------------------------
+\usepackage[font=small,labelfont=bf,labelsep=colon,singlelinecheck=false]{caption}
+\captionsetup{font={small,singlespacing}}
+\captionsetup[table]{position=below}
+\captionsetup[longtable]{position=below}
+
+% --------------------------------------------------------------
+% Combine List of Figures and List of Tables into a single section
+% titled "List of Figures and Tables", with "Figures" and "Tables"
+% subheadings inside.
+% --------------------------------------------------------------
+\renewcommand{\listfigurename}{List of Figures and Tables}
+\let\oldlistoftables\listoftables
+\renewcommand{\listoftables}{%
+  \begingroup
+  \renewcommand{\chapter}[2]{}% swallow the chapter heading
+  \oldlistoftables
+  \endgroup
+}
+\let\oldlistoffigures\listoffigures
+\renewcommand{\listoffigures}{%
+  \oldlistoffigures
+  \vspace{1.5em}
+  {\large\bfseries Tables}\par\vspace{0.5em}
+  \listoftables
+}
+% Prepend "Figures" subheading to the figure list section.
+% This requires injecting into the auxiliary .lof file via a hook.
+\AtBeginDocument{%
+  \addtocontents{lof}{\protect\vspace{0.5em}\protect\par {\large\bfseries Figures}\protect\par\protect\vspace{0.5em}}%
+}
+
+% --------------------------------------------------------------
+% Footnotes (CEU: 10pt, single-spaced)
+% --------------------------------------------------------------
+\usepackage[hang,bottom,marginal,multiple,flushmargin]{footmisc}
+\setlength{\footnotesep}{0.7em}
+\renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont}
+
+% --------------------------------------------------------------
+% Paragraphs: indented (CEU allows indent OR empty line; indent chosen)
+% --------------------------------------------------------------
+\setlength{\parindent}{1.27cm}
+
+% --------------------------------------------------------------
+% Chapter heading spacing: remove the report-class default top gap
+% so chapter titles start near the top margin (still honoring the 2.5cm
+% page margin).
+% --------------------------------------------------------------
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]
+  {\normalfont\Huge\bfseries}{\thechapter.}{12pt}{}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+% --------------------------------------------------------------
+% Hyperlinks + PDF metadata + bookmarks
+% --------------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=blue,
+  urlcolor=blue,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdftitle={Business-Oriented Evaluation of Prompt Injection Defenses for Enterprise AI Agent Deployments},
+  pdfauthor={Boglarka Petruska},
+  pdfsubject={CEU MSBA Capstone 2026},
+  pdfkeywords={prompt injection, LLM, LoRA, judge reliability, deployment, layered defense}
+}
+
+% --------------------------------------------------------------
+% List of Figures and List of Tables: rendered after TOC
+% (Pandoc YAML: lof: true, lot: true)
+% --------------------------------------------------------------
+% No additional preamble needed; controlled via Pandoc.
+
+% --------------------------------------------------------------
+% Bibliography (References list): single-spaced
+% Applied via \setstretch{1} around the bibliography section
+% --------------------------------------------------------------
+\AtBeginEnvironment{thebibliography}{\setstretch{1}}

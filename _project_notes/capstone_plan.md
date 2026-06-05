@@ -1,7 +1,7 @@
 - Purpose: active work tracker with phases, checkboxes, hours, dependencies. Check off items as they are done.
 - Status: active
 - Created: 2026-04-21
-- Last edited: 2026-06-01 (checkbox sweep covering Phase 1 judge iteration, Phase 2 gold subset, Phase 3 analysis + BIPIA, Phase 4 scope additions including §5.11 LoRA arm and NB10 BIPIA series, Phase 5 sections 5 + figures; remaining unchecked items are Phase 5 §6/§7 prose, Phase 6 polish, slide deck, public summary, and submission)
+- Last edited: 2026-06-05 (checkbox sweep covering Phase 5 §6 / §7 prose done via trim pass + appendices, Phase 6 trim-and-compile complete for sponsor deliverable; remaining unchecked items are sponsor-call follow-up, final CEU submission packaging, slide deck, public summary)
 - Related: [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) (why each choice), [capstone_state.md](./capstone_state.md) (current snapshot)
 
 ---
@@ -260,19 +260,19 @@ Target: ~30 active hrs.
 ### Report writing: results and discussion
 
 - [x] Section 5 (Results): headline metrics, subgroup breakdowns, paired comparison, threshold analysis, judge reliability, BIPIA, cost/latency (done across §5.1 through §5.11; figures and tables embedded; LoRA BIPIA arm in §5.11 with four-iteration table)
-- [ ] Section 6 (Discussion): interpretation, tradeoffs, limitations, threats to validity (~6 hrs) — partial; §6.1, §6.2, §6.3 substantially done; §6.4 [DRAFT-TODO]
-- [ ] Section 7 (Practitioner Recommendations): decision framework for enterprise deployment (~3 hrs) — partial; §7.1-§7.5 substantially done; §7.6-§7.10 hardening section drafted; full framework still tagged [DRAFT]
+- [x] Section 6 (Discussion): interpretation, tradeoffs, limitations, threats to validity — completed in trim-pass draft `reports/petruska_draft_June_5.md`; long-form `final_report.md` retains the deeper version.
+- [x] Section 7 (Practitioner Recommendations): decision framework for enterprise deployment — summarised in trim-pass draft §7; full Layer 1-4 detail in Appendix E (Business Decision Framework).
 - [x] Integrate figures and tables into the report body (done; `reports/figures/lora_series_comparison.png/pdf` plus inline tables throughout §5 and §7)
 
 ### Literature review finalization
 
-- [ ] Zotero library tagged by threat vector, export reference list (~2 hrs)
-- [ ] Write Appendix F: structured literature review across adjacent threat vectors (Hiflylabs requested) (~4 hrs)
+- [x] Zotero library exported via Better BibTeX to `reports/references.bib`; tagged threat-vector taxonomy lives in `reports/literature_tracker.md`.
+- [ ] Appendix F (structured literature review across adjacent threat vectors) deprioritised; deferred to post-submission if time permits.
 
 ### Repo hygiene
 
 - [ ] Zip cache directory, upload to Google Drive, add link to README as supplementary material (~1 hr)
-- [ ] Verify all notebooks run end-to-end on a clean `conda env create -f environment.yml` (~1 hr)
+- [x] Migrated to uv (`pyproject.toml` + `uv.lock`); README documents `uv sync --extra api` setup. Stale conda environment.yml step retired.
 
 ---
 
@@ -282,11 +282,12 @@ Target: ~32 active hrs.
 
 ### Report completion
 
-- [ ] Sections 0 (Executive Summary) and 8-9 (Future Work, Conclusion) written (~4 hrs)
-- [ ] Top-to-bottom edit pass for clarity, consistency, flow (~6 hrs)
-- [ ] Second pass: verify every claim is backed by a table or figure reference (~3 hrs)
-- [ ] Third pass: tighten prose, trim redundancy, check formatting (~3 hrs)
-- [ ] Export final report to PDF, verify page count 20-25
+- [x] Sections 8-9 (Limitations, Future Work + Conclusion) filled in long-form `reports/final_report.md`.
+- [x] Trim pass: produced sponsor-facing `reports/petruska_draft_June_5.md` (~45 pp report + ~50 pp appendices A-E) via Pandoc + xelatex.
+- [x] CEU formatting applied: A4, 2.5cm margins, Calibri body 12pt, double-space body / single-space frontmatter, active TOC, List of Figures and Tables with subheadings, chapter-on-new-page, Roman to Arabic page numbering, embedded font subsets.
+- [ ] Decide CEU submission shape: trim deliverable vs long-form expansion.
+- [ ] Section 0 (Executive Summary): may be added if CEU submission is the long-form shape.
+- [ ] Final compile pass on the chosen CEU submission shape.
 
 ### Slide deck
 
@@ -297,6 +298,12 @@ Target: ~32 active hrs.
 ### Public summary
 
 - [ ] Write 3-page public CEU summary, layperson-accessible (~4 hrs)
+
+### Sponsor handoff
+
+- [x] Cleaned `reports/` of obsolete drafts (9 files deleted 2026-06-05): old Word/PDF compiles of `Petruska_final_report*`, status-note variants, Word lock/temp files.
+- [ ] 2026-06-05 11 AM sponsor video call with Zsófia Práger; cover email + PDF + GitHub link sent same day.
+- [ ] Capture sponsor feedback in `capstone_state.md` immediately after the call.
 
 ### Submission
 

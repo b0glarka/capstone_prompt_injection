@@ -50,7 +50,12 @@ The Tier 2 notebooks themselves are kept in the repo because their markdown cell
 
 ## Status
 
-Phase 0-3 complete. All empirical work frozen. Final report at `reports/final_report.md` is substantially drafted: §1-§5 complete with figures and tables; §6 Discussion and §7 Business Framework tagged [DRAFT] pending final-week prose polish; §8 Limitations and §9 Future Work + Conclusion are filled. Interim report PDF submitted 2026-05-11 (`reports/Petruska_interim_progress_report.pdf`). Final submission due 2026-06-08.
+All empirical work complete. Two report artifacts in `reports/`:
+
+- `reports/petruska_draft_June_5.md` + `.pdf`: trimmed sponsor-facing deliverable, ~45 pp report body + ~50 pp appendices A-E, compiled via Pandoc + xelatex with CEU formatting (A4, Calibri, 2.5cm margins, double-spaced body, active TOC, List of Figures and Tables). This is the current submission-ready PDF.
+- `reports/final_report.md`: long-form master source (~100 pp without appendices). Preserved as the deeper version; the trim above is derived from it. CEU-facing submission shape (trim vs long-form) is decided in the final week.
+
+Interim report PDF submitted 2026-05-11 (`reports/Petruska_interim_progress_report.pdf`). Final submission due 2026-06-08.
 
 Key stretch findings since the interim report: §5.11 LoRA fine-tune on direct injection closes the cross-dataset F1 spread from 0.36 to 0.031 (5-config robustness matrix); §5.11 BIPIA arm (NB10 series) produces a deployment-ready Defense A for indirect injection via symmetric augmentation + base-document-stratified splitting; §6.3 / §7.4 judge rubric iteration to v1.25 plus Opus 4.7 cost-ceiling test establishes Haiku 4.5 + v1.25 as the strongly-recommended production judge (kappa 0.554, statistically tied with Opus 4.7 at 5x less cost).
 

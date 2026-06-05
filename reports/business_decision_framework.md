@@ -88,7 +88,7 @@ Three representative enterprise scenarios with the defense configuration that mi
 
 - Threat profile: data exfiltration and policy violations are possible; tool calls are bounded to safe operations.
 - Cost ratio: roughly 100x. Missed attacks have real consequences but containment is partial.
-- Recommended: **DeBERTa ensemble (OR-gate with PG2) plus Defense B on flagged or borderline cases**. OR-gate gives a small recall lift on the hardest dataset (deepset). Defense B as second-stage handler of subtle injections that the classifier under-flags. Use Haiku 4.5 as the judge to keep cost per prompt under $0.001 (pending the cost-comparison sweep that confirms Haiku tracks Sonnet at scale).
+- Recommended: **DeBERTa ensemble (OR-gate with PG2) plus Defense B on flagged or borderline cases**. OR-gate gives a small recall lift on the hardest dataset (deepset). Defense B as second-stage handler of subtle injections that the classifier under-flags. Use Haiku 4.5 with the v1.25 rubric as the judge: kappa 0.554 on the 150-row human gold subset (highest observed across any judge / rubric combination in this study), 2.2-5.6x cheaper than Sonnet 4.6, and statistically tied with Opus 4.7 at 5x less cost (see final report §6.3 and Appendix D for the v1.25 + Opus 4.7 ceiling test).
 
 **Scenario C: Autonomous agent with broad tool access (Hiflylabs PID context)**
 

@@ -116,10 +116,20 @@
   {\normalfont\fontsize{18}{22}\selectfont\bfseries\centering}{}{0pt}{}
 \titlespacing*{name=\chapter,numberless}{0pt}{0pt}{12pt}
 
-% Number tables and figures per chapter (Table 5.1, Table 7.1, etc.)
-% rather than globally (Table 1, 2, ...10). Must come AFTER titlesec
-% which redefines \chapter and breaks the standard report.cls
-% child-counter reset behavior if loaded before.
+% Per-chapter table and figure numbering: \counterwithin{table}{chapter}
+% is loaded AFTER titlesec since titlesec's \chapter redefinition breaks
+% the standard report.cls child-counter reset behaviour when loaded before.
+%
+% KNOWN ISSUE (intentionally accepted): tables and figures still render as
+% "Table 0.X" and "Figure 0.X" rather than per-chapter (Table 5.1, Table 7.1,
+% etc.). The \thechapter counter evaluates to 0 at caption-rendering time
+% even though the chapter heading itself is correctly numbered, and multiple
+% reset-pattern fixes (\@addtoreset, chngcntr, ordering before vs after
+% titlesec) did not resolve it. Inline cross-references in the body prose
+% use the "0.X" form to match the rendered captions, so cross-references
+% resolve consistently. Fixing requires a deeper LaTeX-template change
+% (likely replacing titlesec or restructuring \chapter handling) that was
+% not in scope for the submission deadline.
 \usepackage{chngcntr}
 \counterwithin{table}{chapter}
 \counterwithin{figure}{chapter}

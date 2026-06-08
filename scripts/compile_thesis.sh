@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Canonical compile command for the final tech report.
-# Run from the repo root: bash scripts/compile_final_tech_report_june_6.sh
+# Canonical compile command for the MS thesis PDF.
+# Run from the repo root: bash scripts/compile_thesis.sh
 #
 # Produces: reports/Petruska_2026_MS_Thesis.pdf
 #

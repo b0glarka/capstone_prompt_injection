@@ -50,11 +50,11 @@ The Tier 2 notebooks themselves are kept in the repo because their markdown cell
 
 ## Status
 
-Submitted 2026-06-08. Final thesis at `reports/Petruska_2026_MS_Thesis.pdf` (132 pages, compiled via Pandoc + xelatex with CEU formatting: A4, Calibri, 2.5cm margins, double-spaced body, active TOC, List of Figures and Tables). Source at `reports/Petruska_2026_MS_Thesis.md`. Recompile with `bash scripts/compile_thesis.sh`.
+Submitted 2026-06-08. Final thesis at `reports/Petruska_2026_MS_Thesis.pdf` (135 pages, compiled via Pandoc + xelatex with CEU formatting: A4, Calibri, 2.5cm margins, double-spaced body, active TOC, List of Figures and Tables). Source at `reports/Petruska_2026_MS_Thesis.md`. Recompile with `bash scripts/compile_thesis.sh`.
 
 Interim progress report submitted 2026-05-11 (archived at `reports/archive/Petruska_interim_progress_report.pdf`).
 
-Key empirical findings: the LoRA fine-tune on direct injection (Section 5.6) closes the cross-dataset F1 spread from 0.316 to 0.035 (89% gap reduction); the four-iteration BIPIA arm produces a deployment-ready Defense A for indirect injection via symmetric augmentation plus base-document-stratified splitting plus a six-probe adversarial pressure-test workflow; the v1.25 rubric iteration plus Opus 4.7 cost-ceiling test establishes Haiku 4.5 plus v1.25 as the production-recommended judge among the four tested (kappa 0.554, statistically tied with Opus 4.7 at one-fifth the cost). The principal contribution is a Business Decision Framework (Section 7) that maps three deployment scenarios onto defense configurations and agent backbone choices that minimise expected cost under the deployer's own cost-of-error assumptions.
+Key empirical findings: the LoRA fine-tune on direct injection (Section 5.6) closes the cross-dataset F1 spread from 0.316 to 0.035 (89% gap reduction); the four-iteration BIPIA arm produces a deployment-candidate Defense A for indirect injection via symmetric augmentation plus base-document-stratified splitting plus a six-probe adversarial pressure-test workflow; the v1.25 rubric iteration plus Opus 4.7 cost-ceiling test identifies Haiku 4.5 plus v1.25 as the production-recommended judge among the four tested (kappa 0.554, empirically indistinguishable from Opus 4.7 on the 150-row subset at one-fifth the cost). The principal contribution is a Business Decision Framework (Section 7) that maps three deployment scenarios onto defense configurations and agent backbone choices that minimise expected cost under the deployer's own cost-of-error assumptions.
 
 See `_project_notes/INDEX.md` for navigation. Latest state at `_project_notes/capstone_state.md`, detailed plan at `_project_notes/capstone_plan.md`.
 

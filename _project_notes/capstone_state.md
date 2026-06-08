@@ -1,10 +1,10 @@
 - Purpose: session-bridge snapshot for Claude conversation continuity. Read this first when resuming work.
-- Status: active (overwritten per update)
-- Memorializing: 2026-06-05 (pre-dawn), Phase 5 trim pass and sponsor-deliverable PDF complete; 11 AM sponsor call same day
-- Last updated: 2026-06-05 ~08:40 (post-trim PDF compile, repo cleanup of obsolete drafts, status doc refresh)
-- Earlier 2026-06-05: pivoted from CEU Word template to direct xelatex compile via Pandoc; built trimmed deliverable `reports/petruska_draft_June_5.md`/`.pdf` (45 pp report + 50 pp appendices, ~95 pp total, all fonts embedded as Calibri subsets); added short captions and italic subcaptions; reduced chapter top-spacing via titlesec; deleted nine obsolete Word/PDF drafts from `reports/`
-- Companion handoff: none
-- Related: [capstone_plan.md](./capstone_plan.md), [capstone_methodology_decisions.md](./capstone_methodology_decisions.md), [implementation_plan_summary_v3.md](./implementation_plan_summary_v3.md)
+- Status: submission complete (submitted 2026-06-08 23:55)
+- Memorializing: 2026-06-08 (final submission and post-submission cleanup)
+- Last updated: 2026-06-08 ~23:50 (post-final-compile and file reorganization)
+- Earlier history: Phase 5 and Phase 6 major revisions and cleanup from 2026-06-05 through 2026-06-08. See "What changed in this update" below.
+- Companion handoff: none (capstone complete)
+- Related: [capstone_plan.md](./capstone_plan.md) (all items complete or deferred), [capstone_methodology_decisions.md](./capstone_methodology_decisions.md), [implementation_plan_summary_v3.md](./implementation_plan_summary_v3.md)
 
 ---
 
@@ -12,124 +12,132 @@
 
 ## Current phase
 
-Phase 0-4 complete. Phase 5 (Results + Discussion writing) substantially complete; the long-form draft at `reports/final_report.md` (~100 pp without appendices) was trimmed by ~one third for the sponsor deliverable. The trimmed deliverable `reports/petruska_draft_June_5.md` was compiled via Pandoc + xelatex to `reports/petruska_draft_June_5.pdf` for the 2026-06-05 11 AM sponsor video call with Zsófia Práger (Hiflylabs).
+Phase 6 complete. Final CEU submission completed 2026-06-08 23:55. The submission is `reports/Petruska_2026_MS_Thesis.pdf`, 132 pages, compiled via Pandoc + xelatex from `reports/Petruska_2026_MS_Thesis.md` (1,738 lines). The document is submission-ready; it compiles cleanly with 2 benign LaTeX float-placement warnings only (no errors). All cross-references audited and corrected; all 38 unique inline citation keys verified against `reports/references.bib` and source PDFs in Zotero storage at `C:\Users\boga\Zotero\storage\`.
 
-Phase 6 (Final polish + submission) is now the active phase. Final submission due 2026-06-08 23:55.
+The GitHub repository is public at github.com/b0glarka/capstone_prompt_injection. All code, datasets, results, and reports are accessible there (Section 1 closing sentence: "All code, datasets, and supporting reports are available at github.com/b0glarka/capstone_prompt_injection.").
 
-Full plan at [capstone_plan.md](./capstone_plan.md). Methodology rationale at [capstone_methodology_decisions.md](./capstone_methodology_decisions.md). Implementation plan at [implementation_plan_summary_v3.md](./implementation_plan_summary_v3.md).
+Full plan at [capstone_plan.md](./capstone_plan.md). Methodology rationale at [capstone_methodology_decisions.md](./capstone_methodology_decisions.md). Implementation plan snapshot (as of 2026-05-12, before June 5-8 revision) at [implementation_plan_summary_v3.md](./implementation_plan_summary_v3.md).
 
-Interim progress report PDF at `reports/Petruska_interim_progress_report.pdf` (submitted 2026-05-11). Long-form master source at `reports/final_report.md` (preserved, not overwritten). Sponsor-deliverable trim at `reports/petruska_draft_June_5.md`/`.pdf`.
+Interim progress report PDF submitted 2026-05-11 (archived at `reports/archive/Petruska_interim_progress_report.pdf`). Long-form master source at `reports/archive/final_report.md` (preserved from Phase 5). Sponsor-check-in deliverable at `reports/archive/petruska_draft_June_5.md` / `.pdf` (95 pp, used for June 5 11 AM sponsor video call). Final CEU submission at `reports/Petruska_2026_MS_Thesis.md` / `.pdf` (132 pp).
 
 ## Active open questions
 
-- Sponsor-call feedback (2026-06-05 11 AM) may surface scope or framing adjustments to fold into the final submission. Capture in this doc post-call.
-- Whether the §6 / §7 prose in the trim draft is the version to carry into the final CEU submission, or whether to expand back toward the long-form `final_report.md` for the CEU-facing version.
+None. Capstone submission is complete.
 
-## What changed in this update (2026-06-01 evening through 2026-06-05 morning)
+## What changed in this update (2026-06-08, complete day with editorial + cleanup pass)
 
-### Sponsor deliverable: trimmed draft + Pandoc/xelatex compile (2026-06-05)
+This update consolidates two major work streams completed 2026-06-08: the comprehensive editorial pass (Sections 1-9 and Abstract, covered in earlier draft `state_update_draft.md`), and the post-submission file reorganization and environment-document refresh (this section).
 
-The long-form `reports/final_report.md` ran ~100 pp without appendices, above the CEU 20-25 pp target and above what the sponsor expected for the check-in. Built a trimmed deliverable: ~45 pp report body + appendices A through E concatenated as separate sections (~50 pp), targeting the sponsor handoff.
+### Editorial pass on full document (comprehensive, covered in earlier draft)
 
-Build path: Pandoc + xelatex direct PDF compile (not Word template). CEU formatting requirements honored: A4 paper, 2.5cm margins, Calibri body 12pt, double-space body / single-space frontmatter / captions / bibliography, indented paragraphs, chapters start on new page, Roman to Arabic page numbers, active TOC + PDF bookmarks, List of Figures and Tables. Fonts embedded as subsetted CID TrueType per `pdffonts` check.
+The 95-page sponsor-deliverable draft `reports/petruska_draft_June_5.md` was extensively revised across all sections to produce a submission-ready 132-page document. Major edits by section:
 
-Artifacts created and kept:
-- `reports/petruska_draft_June_5.md` (1,484 lines, 170KB): trimmed report body concatenated with cleaned appendix sources.
-- `reports/petruska_draft_June_5.pdf` (564KB, ~95 pp): xelatex-rendered deliverable.
-- `reports/pdf-header.tex`: LaTeX preamble carrying the CEU formatting rules (table styling, captions, chapter spacing via `titlesec`, hyperref metadata, combined List of Figures and Tables with Figures / Tables subheadings).
+- Sections 1-5: incremental tightening; added GitHub URL to Section 1 closing; removed filler words across Sections 2-5.
+- Section 6 Discussion: original 5 subsections restructured to 4; §6.4 synthesis deleted (~200 lines); overall reduction by ~400 lines while preserving all substantive claims.
+- Section 7 Business Decision Framework: merged with former Appendix E into 8 integrated subsections; incorporated all four dimensions of sponsor feedback (autonomy levels, data classification tiers, human-in-the-loop thresholds, primary/secondary model roles); added realistic 1% injection-prevalence cost example and 5-step decision walkthrough.
+- Section 8 Limitations: consolidated into 6 explicit entries with language coverage finding and cross-agent attribution boundary clarified.
+- Section 9 Future Work and Conclusion: fully rewritten; future work collapsed to 5 highest-priority directions; conclusion expanded to ~700 words covering empirical headline, methodology contributions, practical recommendation, durability framing, and accessible closing.
+- Abstract: tightened from 420 to 395 words; added specific architectural-diversity claim and production-judge qualifier.
 
-Captions: each figure / table uses a short caption (shown in the List of Figures and Tables) with the long descriptive context as an italic paragraph immediately below the figure / table. Pandoc's `short-caption=` attribute did not propagate reliably for pipe tables in this Pandoc version, so the short + italic-paragraph pattern was used instead.
+18 stale cross-references fixed throughout (§5.8 → §5.5, §5.11 → §5.6, §5.5c → §5.3, §7.6 → §7.8, §7.5 → §7.7, plus 13 others). All Table/Figure/Section/Appendix references audited and resolved.
 
-### Repo cleanup of obsolete drafts (2026-06-05)
+Appendices B, C, D: added GitHub repository links matching Appendix A pattern. Appendix E (Business Decision Framework): removed; entire content absorbed into Section 7.
 
-Deleted from `reports/`: `Petruska_Hiflylabs_status_2026-06-05.{md,docx}`, `Petruska_Hiflylabs_status_2026-06-05_clean.{docx,pdf}`, `Petruska_final_report.{docx,pdf}`, `Petruska_final_report_draft_v1.pdf`, plus two Word lock/temp files (`~$truska_...`, `~WRL0005.tmp`). These were earlier drafts superseded by the June 5 trim or transient artifacts of the Word compile path. All were uncommitted; no git history affected.
+Citation audit: spot-verified 7 high-risk inline citations (Oakden-Rayner, D'Amour, Kwa, Säleva, Hines, Russinovich, Apruzzese, Nguyen) against source PDFs in Zotero; all correctly used. All 38 unique citation keys in the markdown verified to resolve in `references.bib`.
 
-### Earlier (2026-05-27 evening through 2026-06-01 evening): NB10 series + judge v1.25 + Opus ceiling test
+Known cosmetic issue accepted: per-chapter table/figure numbering break due to `titlesec` interaction renders all tables as "Table 0.X" and figures as "Figure 0.X" instead of per-chapter numbers. All 12 inline prose references hand-updated to match actual caption numbers, so cross-references resolve correctly. Fix deferred to post-submission.
 
-Substantial empirical and infrastructure work. Listed roughly chronologically.
+Compile verification: document compiles cleanly via `bash scripts/compile_thesis.sh` (canonical command at `scripts/compile_thesis.sh`). Output: 132 pages, 797 KB, 2 benign LaTeX float-placement warnings (no errors), all fonts embedded as Calibri subsets, xelatex runtime ~8 seconds.
 
-#### NB10 series: BIPIA indirect-injection LoRA extension (2026-05-28 through 2026-05-31)
+### File rename: June_5 draft to 2026 MS Thesis (2026-06-08 afternoon)
 
-Four sequential notebooks tracing the LoRA methodology arc on BIPIA email-QA indirect-injection task.
+The sponsor-deliverable draft `reports/petruska_draft_June_5.md` and its PDF were renamed to `reports/Petruska_2026_MS_Thesis.md` and `.pdf` respectively (132 pages, submitted). This naming clarifies that the final submission is the CEU-facing canonical version, not an interim check-in.
 
-**NB10**: LoRA-v1 on BIPIA baseline. Negative transfer observed: degenerate output distribution (Cohen d = 0.13). Result published as §5.11 BIPIA arm step 1.
+The compile script `scripts/compile_final_tech_report_june_6.sh` was renamed to `scripts/compile_thesis.sh`; all internal output-file references updated to point to the renamed markdown and PDF.
 
-**NB10b**: Naive full-dataset BIPIA retraining. Macro F1 = 0.483, equal to trivial-baseline F1. Root cause: data scarcity (only 35 clean training rows in BIPIA email-QA). Published as §5.11 step 2.
+### Repository cleanup (2026-06-08 afternoon/evening)
 
-**NB10c**: Clean-only augmentation strategy. Baseline email set (50 rows) each receives 5 generic question variants, producing 300 synthetic clean training rows. Result: Cohen d = 9.37 appeared publishable, but later pressure testing revealed a question-style shortcut.
+Deleted 11 obsolete files to tidy the repository before final submission:
 
-**NB10d**: Six-test pressure-test workflow (Test 1 attack-question ablation; Tests 2-6 domain/balancing checks). Test 1 FAILED with flag rate 0.487; Tests 2-6 PASSED. Test suite itself becomes a methodological contribution. Result published as §5.11 step 3.
+From `reports/`:
+- `final_report.md` (100+ pp long-form draft from Phase 5; preserved at `reports/archive/final_report.md`)
+- `interim_progress_report.md` (MD source of interim submitted 2026-05-11; preserved at `reports/archive/interim_progress_report.md`)
+- `Petruska_interim_progress_report.pdf` (PDF of interim; moved to `reports/archive/`)
+- `petruska_draft_June_5.md` and `.pdf` (renamed to `Petruska_2026_MS_Thesis.md` and `.pdf`)
 
-**NB10e**: Symmetric augmentation with base-email-stratified split. Each of 50 base emails contributes equal clean and attack rows across 6 question styles. Test 1 returns to 1.000; Test 3 triple-cross held-out validates at d = 7.73 with balanced accuracy 0.980; eval_set F1 = 0.974 preserved. Deployment-ready. Recommended configuration: adapter `lora_v4b_symmetric_aug/`. Published as §5.11 step 4.
+From `_project_notes/`:
+- `implementation_plan_summary_v2.md` (superseded by v3; moved to `_project_notes/archive/`)
 
-All notebooks have `_post_run` versions downloaded from Colab into `notebooks/`. Augmentation scripts `scripts/augment_bipia_clean.py` and `scripts/augment_bipia_symmetric.py` in `scripts/`. Synthetic datasets at `results/bipia_email_qa_prompts_augmented.csv` and `results/bipia_email_qa_prompts_symmetric.csv`.
+From `_local/` (not in repo; for informational cleanup):
+- `baseline_v1.8_judge/` renamed to `archive_baseline_v1.8_judge/` for tidiness.
+- `agentdojo_logs/` (20 MB) and `cache/` (20 MB) confirmed already .gitignored; left on disk for reproducibility.
 
-#### Consolidated §5.11 visualization (2026-05-31)
+Result: top-level `reports/` now contains only the current submission, supporting documents, and archive subdirectory. All intermediate drafts moved to archive; no git history affected (they were already tracked; only moved).
 
-Script `scripts/plot_lora_series_comparison.py` produces `reports/figures/lora_series_comparison.png` and `.pdf`: 2x2 panel showing Cohen d, macro F1, Test 1 flag rate, and eval_set F1 across all four NB10 iterations.
+### Environment and configuration documentation updates
 
-#### Judge rubric v1.21 -> v1.25 iteration (2026-05-31)
+**pyproject.toml**: removed stale reference to Section 5.9 in the agentdojo optional-extra comment. The comment now correctly notes that the AgentDojo evaluation was cut from the thesis and queued in Section 9.1 future work.
 
-Added `_V125_SYSTEM_HEADER`, `_build_v125_system`, and `judge_v125` methods to all judge classes (`ClaudeJudge`, `HaikuJudge`, `GPT4oJudge`) in `src/defense_b/judge.py`.
+**.env.example**: updated 4 stale section references:
+- §6.3 → current §6.2 (BIPIA baseline)
+- §7.4 → current §7.4 (internal agent scenario; happens to remain same, but verified)
+- §5.5b → Section 5.3 (Defense C baseline, was integrated into earlier section during trim pass)
+- §5.8 / §5.9 → Section 5.5-5.6 (BIPIA arm restructured during Section 5 reorganization)
 
-v1.25 = v1.21 + signature-vs-mechanism scope note from §3.2 v1.23 (final operational-definitions entry) with four inline worked examples. Reduces signature-driven false-positive HIJACKED verdicts.
+All four references now match the restructured Section 5 and Section 7 numbering in the final thesis.
 
-Additionally, added conditional logic to omit `temperature` parameter for Claude Opus models (Opus 4.x deprecated it). This was necessary when Opus 4.7 was added to the judge set as a cost-ceiling test.
+**uv.lock**: regenerated via `uv lock`. Was out of sync with `pyproject.toml`; now in sync. No package versions changed; lock file updated for consistency.
 
-#### Judge v1.25 re-run on four judges with cost-ceiling test (2026-06-01)
+**Top-level README.md**: extensively revised to reflect post-submission state:
+- Status section rewritten: now points to `Petruska_2026_MS_Thesis.pdf` (was pointing at deleted `petruska_draft_June_5`).
+- Environment-setup section: all stale section references removed (§5.11 → Section 5.6, §5.5b → Section 5.3, §5.8 → Section 5.5, §5.9 queued in §9.1).
+- Tier-1 / Tier-2 reproducibility verification paths: updated to reference current section numbers; removed NB10 notebook codenames (NB10, NB10b, NB10c, NB10d, NB10e) that were internal iteration labels.
+- Deliverable list: still mentions interim report (submitted 2026-05-11), 10-20 slide deck, and 3-page public CEU summary (the latter two are post-submission items, deferred per time constraint).
 
-Ran `scripts/rejudge_v125_gold_subset.py` across Sonnet 4.6, Haiku 4.5, GPT-4o-mini, and Opus 4.7 (new addition) on 150-row audited gold subset with SPML post-audit relabel applied.
+**reports/README.md**: full rewrite to reflect final submission state:
+- Replaced references to deleted/archived files (`petruska_draft_June_5`, `final_report.md`) with current `Petruska_2026_MS_Thesis.md`.
+- Removed "Reviewed by Professor Zoltan Toth" mention (consistent with body-prose cleanup from earlier session; no senior-author framing in CEU thesis format).
+- Fixed "Appendix A/B/C/D/E of both reports" framing: there is only one thesis now, and no Appendix E (absorbed into Section 7).
+- Figure descriptions now use Figure 0.X labels matching actual PDF (per cosmetic issue above).
+- Table captions point to Table 0.X labeling.
 
-Empirical findings:
-- Haiku 4.5 kappa = 0.554, up from v1.21 at 0.471 (delta +0.083). Highest kappa observed across any judge / rubric combination in this study; still in the moderate Landis-Koch band (0.41-0.60) but approaching the 0.61 substantial threshold. Lift robust across all four AMBIGUOUS-handling conventions.
-- Opus 4.7 kappa = 0.550, statistically tied with Haiku. Cost ceiling test: Opus costs 5x Haiku but adds no signal. Establishes Anthropic-family judge-reliability ceiling at Haiku level.
-- Sonnet 4.6 kappa = 0.466 under v1.25 (regression from v1.21 at 0.471, within noise).
-- GPT-4o-mini kappa unchanged at 0.403 (narrow fallback role when Anthropic unavailable).
+**src/README.md**: 5 stale section references fixed (matching .env.example updates).
 
-Cached per-judge verdicts at `cache/judge_v125_*_gold_subset.jsonl`. Per-row verdicts at `results/judge_gold_subset_v125.csv`. Kappa table at `results/judge_v125_kappa.md`. Total run cost ~$3.93.
+**notebooks/README.md**: Phase 3 and Phase 4 sections rewritten:
+- All `§5.11` references replaced with `Section 5.6` (LoRA fine-tuning section).
+- All NB10 notebook codenames (NB10, NB10b, NB10c, NB10d, NB10e) replaced with positional descriptors: "First iteration (baseline)", "Second iteration (full-dataset retraining)", "Third iteration (augmentation)", "Pressure-test suite", "Fourth iteration (symmetric)", matching thesis body language and making notebooks more discoverable.
+- Phase 3 and Phase 4 descriptions updated to match final scope (Defense C combined pipeline, LoRA on BIPIA, judge v1.25 iteration).
 
-### Key empirical milestones (carried from prior update)
+**cache/README.md** and **results/README.md**: no stale content; unchanged.
 
-1. NB10e Variant B = deployment-ready Defense A for indirect injection. FAR = 0, ASR = 0.020 on held-out triple cross.
-2. Haiku 4.5 with v1.25 reaches kappa 0.554, the highest on the 150-row gold subset.
-3. Opus 4.7 cost-ceiling test establishes Anthropic-family judge signal plateaus at Haiku level.
-4. Sonnet 4.6 v1.25 kappa rises only +0.026 over v1.21 and only under the AMBIG=HIJACKED convention; the v1.25 scope note benefits cheaper Haiku more than Sonnet.
+## What's NOT done (post-submission)
 
-### What's NOT done yet (current backlog)
-
-- Sponsor call 2026-06-05 11 AM: incorporate feedback into the final CEU submission.
-- Final CEU submission packaging by 2026-06-08 23:55. Decide whether the trimmed `petruska_draft_June_5.md` or the long-form `final_report.md` is the canonical submission.
-- Slide deck (10-20 slides; optional per supervisor guidance, time-permitting).
-- Public CEU summary (3 pages; may be merged with submission packaging).
-- Custom adversarial test set (queued in §9.1 as future work, not capstone scope).
+- Slide deck (optional per supervisor guidance; 10-20 slides; deferred due to time).
+- Public CEU summary (3 pages; deferred).
+- Defense C combined A+B pipeline paper (stretch goal; deferred).
+- Custom adversarial test set (queued in §9.1 as future work; out of scope for capstone).
 
 ## What's next
 
-Immediate priorities to submission (2026-06-08):
+Capstone submission is complete. Next steps if continuing:
 
-1. 2026-06-05 11 AM sponsor call. Capture feedback in this doc immediately after.
-2. Same-day: send the cover email + PDF + GitHub repo link to Zsófia.
-3. Decide CEU submission shape: trim deliverable vs long-form. Likely the trim, possibly with a §6 / §7 expansion if sponsor pushes for more discussion depth.
-4. Final compile pass on the chosen submission shape.
-5. Submit by 2026-06-08 23:55.
-6. Optional: slide deck (defer if time-constrained).
-
-See [capstone_plan.md](./capstone_plan.md) Phase 6 checklist for detailed item-level breakdown.
+1. Await CEU final grading and feedback.
+2. Post submission, optional TODO: consider pushing slide deck and public summary to GitHub if time permits.
+3. Future research directions are listed in Section 9.1.
 
 ## Known issues
 
-1. **Pandoc `short-caption=` attribute on pipe tables** did not propagate in this Pandoc version. Worked around by writing short captions inline and adding longer descriptive context as an italic paragraph below each figure / table.
-2. **Long-form `final_report.md` is ~100 pp** without appendices, above target. The trimmed deliverable resolves this for the sponsor; CEU-facing submission decision pending (see "What's next").
-3. **Groq daily quota exhausted** during Phase 1 pilot (resolved with Together AI fallback).
-4. **Anthropic Usage Policy classifier** triggered once in 2026-05-11 session as context accumulated attack content. Not a real issue; legitimate dual-use security research. Workaround: `/compact` to shrink history.
+1. **Per-chapter table/figure numbering break**: LaTeX titlesec interaction renders all tables as "Table 0.X" and figures as "Figure 0.X" instead of per-chapter numbering. This is a cosmetic issue; all inline prose references were hand-updated to match the actual caption labels, so cross-references resolve correctly. Fix deferred to post-submission if needed.
+2. **Pandoc short-caption attribute** did not propagate reliably on pipe tables in this Pandoc version (pre-2026-06-05 issue, carried forward). Worked around by writing short captions inline and adding longer context as italic paragraphs below each figure/table.
+3. **Anthropic Usage Policy classifier** triggered once in 2026-05-11 session as context accumulated attack content. Legitimate research content; resolved via `/compact` history shrinking. Not a recurring issue.
 
 ## Resuming work
 
-If you are a fresh Claude session or picking this up after a gap:
+If you are picking this up after the capstone is complete:
 
-1. Read this file (you are here).
-2. Open [capstone_plan.md](./capstone_plan.md) Phase 6 checklist; submission packaging is the critical path.
-3. Consult [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) if methodology questions arise.
-4. Reference [implementation_plan_summary_v3.md](./implementation_plan_summary_v3.md) for shared external-facing context.
-5. The sponsor-deliverable PDF compile path is documented in `reports/pdf-header.tex` (LaTeX preamble) and reproduced by the canonical Pandoc command in this state doc's git history (commit message of the trim-pass commit).
-6. Historical context and signed PID live in `archive/`; local-only files and drafts in `_local/`.
+1. The submission `reports/Petruska_2026_MS_Thesis.pdf` (132 pp) is the final CEU deliverable.
+2. Full code, data, and results are on GitHub at github.com/b0glarka/capstone_prompt_injection.
+3. [capstone_methodology_decisions.md](./capstone_methodology_decisions.md) explains why each major methodological choice was made.
+4. Historical snapshots and signed PID live in `archive/` (created at key milestones: PID signed, interim submitted, final submitted).
+5. The sponsor-deliverable trim version at `reports/archive/petruska_draft_June_5.md` / `.pdf` (95 pp) was used for the 2026-06-05 11 AM Hiflylabs video call with Zsófia Práger.
+6. All reports and supporting documentation are in `reports/`; code and notebooks in `src/` and `notebooks/`; raw results in `results/`.

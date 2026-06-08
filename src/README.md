@@ -38,19 +38,19 @@ Reusable Python modules for the capstone pipeline. Code that is called from mult
 - `defense_b/agent.py`: agent client wrappers.
   - `GroqAgent`: Groq Llama 3.3 70B Versatile. Historical (Phase 1 sneak-preview only); quota exhausted mid-project.
   - `TogetherAgent`: Together AI Llama 3.3 70B Instruct Turbo. Primary production agent from the 500-row pilot onward.
-  - `OpenRouterAgent`: OpenRouter cross-family agents (Mistral Large 2, DeepSeek V3, Qwen) for §5.5b and §5.8 cross-family extension.
+  - `OpenRouterAgent`: OpenRouter cross-family agents (Mistral Large 2, DeepSeek V3, Qwen) for the Section 5.7 cross-agent robustness checks.
 - `defense_b/judge.py`: judge classes with structured JSON-verdict parsing.
   - `ClaudeJudge`: Claude Sonnet 4.6 (default) and Opus 4.7 (pass `model="claude-opus-4-7"`). Opus path omits the `temperature` parameter (deprecated in Opus 4.x).
-  - `HaikuJudge`: Claude Haiku 4.5. Production-recommended judge under v1.25 per final report §6.3 / §7.4.
+  - `HaikuJudge`: Claude Haiku 4.5. Production-recommended judge under v1.25 per thesis Section 5.4 (judge validation) and Section 7.4 (Hiflylabs internal-agent scenario).
   - `GPT4oJudge`: GPT-4o sensitivity and GPT-4o-mini cost-comparison judge.
   - Each judge supports v1.21 rubric (`judge`) and v1.25 rubric (`judge_v125`, with the signature-vs-mechanism scope note baked into `_V125_SYSTEM_HEADER`).
 - `defense_b/rejudge_v121.py`: re-judge utility that re-scores cached agent outputs under a different rubric version without re-running the agent.
-- `defense_b/agentdojo_integration.py`: AgentDojo action-level evaluation harness for §5.9. The evaluation was de-scoped after the Together AI FP8-tier function-call hallucination issue; code preserved for reproducibility.
+- `defense_b/agentdojo_integration.py`: AgentDojo action-level evaluation harness. Cut from the final thesis (queued as future work in Section 9.1) after a Together AI FP8-tier function-call hallucination issue; code preserved for reproducibility.
 
 ### Prompt augmentation
 
-- `augmentation/variants.py`: three augmentation templates (control, instruction-only, combined). Pilot notebook `notebooks/06_augmentation_run.ipynb` is scaffolded but not executed; the prompt-augmentation arm was deprioritised in favour of the §5.11 LoRA arm.
+- `augmentation/variants.py`: three augmentation templates (control, instruction-only, combined). Pilot notebook `notebooks/06_augmentation_run.ipynb` is scaffolded but not executed; the prompt-augmentation arm was deprioritised in favour of the Section 5.6 LoRA fine-tune arm.
 
 ### BIPIA
 
-- `bipia/email_qa.py`: BIPIA email-QA pipeline adapter. Loader (`load_bipia_email_qa`), agent-input composer (`compose_agent_input` for the agent stack), and Defense A composer (`compose_for_defense_a` for the classifier stack). Drives `notebooks/08_bipia_email_qa.ipynb` and the NB10 series augmentation scripts.
+- `bipia/email_qa.py`: BIPIA email-QA pipeline adapter. Loader (`load_bipia_email_qa`), agent-input composer (`compose_agent_input` for the agent stack), and Defense A composer (`compose_for_defense_a` for the classifier stack). Drives `notebooks/08_bipia_email_qa.ipynb` and the Section 5.6 BIPIA-arm LoRA fine-tune notebooks.

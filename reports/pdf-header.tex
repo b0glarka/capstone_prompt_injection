@@ -3,6 +3,26 @@
 % Use with xelatex (required for system fonts like Calibri).
 
 % --------------------------------------------------------------
+% Single-page landscape orientation (used to give wide figures more room).
+% On landscape pages, the page number is suppressed because pdflscape's
+% default behaviour rotates the footer along with the content, placing
+% the number on the visual left margin (where it reads vertically), which
+% is worse than no number at all. The page is still counted in the total
+% page sequence.
+% --------------------------------------------------------------
+\usepackage{pdflscape}
+\AtBeginEnvironment{landscape}{\thispagestyle{empty}}
+
+% --------------------------------------------------------------
+% Text rendering: microtype improves justification and reduces awkward
+% hyphenations via character protrusion + font expansion.
+% Explicit no-hyphenation rule for words that have hyphenated awkwardly
+% (classifier and its forms have broken across lines as "clas-sifier").
+% --------------------------------------------------------------
+\usepackage{microtype}
+\hyphenation{classifier classifiers}
+
+% --------------------------------------------------------------
 % Table formatting
 % --------------------------------------------------------------
 \usepackage[table]{xcolor}
@@ -11,6 +31,7 @@
 \usepackage{longtable}
 \rowcolors{2}{gray!12}{white}
 \renewcommand{\arraystretch}{1.25}
+
 
 % --------------------------------------------------------------
 % Spacing (CEU requires double-space in body, single in frontmatter,
@@ -33,7 +54,7 @@
 % --------------------------------------------------------------
 % Captions (CEU: single-spaced). Table captions positioned BELOW the table.
 % --------------------------------------------------------------
-\usepackage[font=small,labelfont=bf,labelsep=colon,singlelinecheck=false]{caption}
+\usepackage[font=small,labelfont=bf,labelsep=colon,justification=centering,singlelinecheck=false]{caption}
 \captionsetup{font={small,singlespacing}}
 \captionsetup[table]{position=below}
 \captionsetup[longtable]{position=below}
@@ -54,14 +75,15 @@
 \let\oldlistoffigures\listoffigures
 \renewcommand{\listoffigures}{%
   \oldlistoffigures
-  \vspace{1.5em}
-  {\large\bfseries Tables}\par\vspace{0.5em}
+  \vspace{0.8em}
+  \noindent{\large\bfseries Tables}\par\nobreak\vspace{0.3em}
   \listoftables
 }
 % Prepend "Figures" subheading to the figure list section.
-% This requires injecting into the auxiliary .lof file via a hook.
+% Injection into the auxiliary .lof file via a hook; \nobreak prevents
+% LaTeX from inserting extra blank lines around the subheading.
 \AtBeginDocument{%
-  \addtocontents{lof}{\protect\vspace{0.5em}\protect\par {\large\bfseries Figures}\protect\par\protect\vspace{0.5em}}%
+  \addtocontents{lof}{\protect\noindent {\large\bfseries Figures}\protect\par\protect\nobreak\protect\vspace{0.3em}}%
 }
 
 % --------------------------------------------------------------
@@ -72,9 +94,12 @@
 \renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont}
 
 % --------------------------------------------------------------
-% Paragraphs: indented (CEU allows indent OR empty line; indent chosen)
+% Paragraphs: indented (CEU allows indent OR empty line; indent chosen).
+% indentfirst forces the first paragraph after every heading to also
+% be indented (LaTeX default skips it).
 % --------------------------------------------------------------
 \setlength{\parindent}{1.27cm}
+\usepackage{indentfirst}
 
 % --------------------------------------------------------------
 % Chapter heading spacing: remove the report-class default top gap
@@ -85,22 +110,38 @@
 \titleformat{\chapter}[hang]
   {\normalfont\Huge\bfseries}{\thechapter.}{12pt}{}
 \titlespacing*{\chapter}{0pt}{0pt}{20pt}
+% Centered 18pt bold for unnumbered (front-matter) chapters, 12pt after-spacing
+% (CEU spec is 24pt; reduced to 12pt to limit wasted vertical space on short pages).
+\titleformat{name=\chapter,numberless}[hang]
+  {\normalfont\fontsize{18}{22}\selectfont\bfseries\centering}{}{0pt}{}
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{12pt}
+
+% Number tables and figures per chapter (Table 5.1, Table 7.1, etc.)
+% rather than globally (Table 1, 2, ...10). Must come AFTER titlesec
+% which redefines \chapter and breaks the standard report.cls
+% child-counter reset behavior if loaded before.
+\usepackage{chngcntr}
+\counterwithin{table}{chapter}
+\counterwithin{figure}{chapter}
+
+% --------------------------------------------------------------
+% Suppress Pandoc's default \maketitle so the custom CEU titlepage
+% block in the markdown is the only one rendered.
+% --------------------------------------------------------------
+\renewcommand{\maketitle}{}
 
 % --------------------------------------------------------------
 % Hyperlinks + PDF metadata + bookmarks
 % --------------------------------------------------------------
-\usepackage{hyperref}
-\hypersetup{
-  colorlinks=true,
-  linkcolor=black,
-  citecolor=blue,
-  urlcolor=blue,
-  bookmarksnumbered=true,
-  bookmarksopen=true,
-  pdftitle={Business-Oriented Evaluation of Prompt Injection Defenses for Enterprise AI Agent Deployments},
-  pdfauthor={Boglarka Petruska},
-  pdfsubject={CEU MSBA Capstone 2026},
-  pdfkeywords={prompt injection, LLM, LoRA, judge reliability, deployment, layered defense}
+% PDF metadata (link colors are passed via Pandoc -V flags so the template
+% omits its default hidelinks option).
+\AtBeginDocument{%
+  \hypersetup{%
+    pdfsubject={CEU MSBA Capstone 2026},
+    pdfkeywords={enterprise AI agents, prompt injection, LLM-as-judge, layered defense, LoRA fine-tuning},
+    bookmarksnumbered=true,
+    bookmarksopen=true
+  }%
 }
 
 % --------------------------------------------------------------

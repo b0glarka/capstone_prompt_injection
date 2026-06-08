@@ -87,92 +87,46 @@ def main() -> None:
     nb10e_triple_d = nb10e["pressure_tests"]["test3_holdout_triple_cross"]["cohen_d"]
     nb10e_triple_macro = nb10e["pressure_tests"]["test3_holdout_triple_cross"]["macro_f1"]
 
-    iterations = ["NB10\nLoRA-v1\ntransfer", "NB10b\nnaive\nretraining",
-                  "NB10c\nclean\naugmentation", "NB10e\nsymmetric\naugmentation"]
+    iterations = ["Iteration 1\ndirect-LoRA\ntransfer", "Iteration 2\nnaive\nretraining",
+                  "Iteration 3\nclean-question\naugmentation", "Iteration 4\nsymmetric\naugmentation"]
     colours = ["#cc4444", "#cc8844", "#ddbb44", "#3a9c5a"]  # fail, fail, partial, pass
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
     fig.suptitle("LoRA fine-tune on BIPIA indirect injection: four-iteration arc",
-                 fontsize=14, fontweight="bold")
+                 fontsize=15, fontweight="bold")
 
     # Subplot 1: Cohen d (log scale, threshold at 1.5)
-    ax = axes[0, 0]
-    cohen_d_values = [nb10_cohen_d, nb10b_cohen_d, nb10c_cohen_d, nb10e["robustness_checks"].get(
-        "variant_b_score_separation", {}).get("cohen_d", 189.43) if False else 189.43]
-    # NB10e in-distribution d isn't stored in the JSON's robustness_checks; use the bipia_test value
-    cohen_d_values[3] = nb10e_bipia.get("cohen_d", 189.43)
+    ax = axes[0]
+    cohen_d_values = [nb10_cohen_d, nb10b_cohen_d, nb10c_cohen_d, nb10e_bipia.get("cohen_d", 189.43)]
     bars = ax.bar(iterations, cohen_d_values, color=colours, edgecolor="black", linewidth=0.5)
     ax.set_yscale("log")
     ax.axhline(1.5, color="grey", linestyle="--", linewidth=1, label="d=1.5 (healthy separation)")
-    ax.set_ylabel("Cohen d (log scale)")
-    ax.set_title("(a) Score distribution separation on BIPIA test")
-    ax.legend(loc="upper left", fontsize=8)
+    ax.set_ylabel("Cohen d (log scale)", fontsize=13)
+    ax.set_title("(a) Score distribution separation on BIPIA test", fontsize=13)
+    ax.legend(loc="upper left", fontsize=12)
+    ax.tick_params(axis="both", labelsize=11)
     for bar, val in zip(bars, cohen_d_values):
         ax.text(bar.get_x() + bar.get_width()/2, val * 1.15, f"{val:.2f}",
-                ha="center", va="bottom", fontsize=9)
+                ha="center", va="bottom", fontsize=12)
 
-    # Subplot 2: Macro F1 (linear 0-1)
-    ax = axes[0, 1]
-    nb10b_macro = nb10b_bipia.get("macro_f1") or _macro_f1_from_confusion(
-        nb10b_bipia["tp"], nb10b_bipia["fp"], nb10b_bipia["fn"], nb10b_bipia["tn"])
-    macro_values = [nb10_macro_f1,
-                    nb10b_macro,
-                    nb10c_bipia["macro_f1"],
-                    nb10e_bipia["macro_f1"]]
-    # Use 0 placeholder for NaN (NB10) with annotation
-    plot_values = [0 if np.isnan(v) else v for v in macro_values]
-    bars = ax.bar(iterations, plot_values, color=colours, edgecolor="black", linewidth=0.5)
-    ax.axhline(0.5, color="grey", linestyle="--", linewidth=1, label="random baseline (0.5)")
-    ax.axhline(0.9, color="green", linestyle=":", linewidth=1, label="strong signal (0.9)")
-    ax.set_ylabel("Macro F1 on BIPIA test")
-    ax.set_ylim(0, 1.05)
-    ax.set_title("(b) Imbalance-robust headline metric")
-    ax.legend(loc="lower right", fontsize=8)
-    for bar, val, raw in zip(bars, plot_values, macro_values):
-        label = "n/a\n(degenerate)" if np.isnan(raw) else f"{raw:.3f}"
-        ax.text(bar.get_x() + bar.get_width()/2, val + 0.02, label,
-                ha="center", va="bottom", fontsize=9)
-
-    # Subplot 3: Test 1 flag rate on attacks with generic questions
-    ax = axes[1, 0]
+    # Subplot 2: Test 1 flag rate on attacks with generic questions
+    ax = axes[1]
     test1_values = [nb10_test1, float("nan"), nb10c_test1, nb10e_test1]
     plot_values = [0 if np.isnan(v) else v for v in test1_values]
     bars = ax.bar(iterations, plot_values, color=colours, edgecolor="black", linewidth=0.5)
     ax.axhline(0.95, color="green", linestyle=":", linewidth=1, label="deployment threshold (0.95)")
     ax.axhline(0.5, color="grey", linestyle="--", linewidth=1, label="coin flip (0.5)")
-    ax.set_ylabel("Flag rate on attacks + generic question")
+    ax.set_ylabel("Flag rate on attacks paired with generic question", fontsize=13)
     ax.set_ylim(0, 1.1)
-    ax.set_title("(c) Pressure test: question-style independence")
-    ax.legend(loc="lower right", fontsize=8)
+    ax.set_title("(b) Pressure test: question-style independence", fontsize=13)
+    ax.legend(loc="lower right", fontsize=12)
+    ax.tick_params(axis="both", labelsize=11)
     for bar, val, raw in zip(bars, plot_values, test1_values):
         label = "not\nmeasured" if np.isnan(raw) else f"{raw:.3f}"
         ax.text(bar.get_x() + bar.get_width()/2, val + 0.03, label,
-                ha="center", va="bottom", fontsize=9)
+                ha="center", va="bottom", fontsize=12)
 
-    # Subplot 4: eval_set F1 on direct injection (preservation check)
-    ax = axes[1, 1]
-    evalset_values = [nb10_evalset_f1,
-                      nb10b_evalset["f1"],
-                      nb10c_evalset["f1"],
-                      nb10e_evalset["f1"]]
-    bars = ax.bar(iterations, evalset_values, color=colours, edgecolor="black", linewidth=0.5)
-    ax.axhline(0.981, color="blue", linestyle=":", linewidth=1, label="§5.11 LoRA-v1 reference (0.981)")
-    ax.set_ylabel("F1 on eval_set test")
-    ax.set_ylim(0.9, 1.0)
-    ax.set_title("(d) Direct-injection performance preserved")
-    ax.legend(loc="lower right", fontsize=8)
-    for bar, val in zip(bars, evalset_values):
-        ax.text(bar.get_x() + bar.get_width()/2, val + 0.003, f"{val:.3f}",
-                ha="center", va="bottom", fontsize=9)
-
-    # Caption / footer note
-    fig.text(0.5, 0.005,
-             "NB10e values are in-distribution test split (base-email-stratified). "
-             f"NB10e triple-cross held-out generalisation: d={nb10e_triple_d:.2f}, macro F1={nb10e_triple_macro:.3f}. "
-             "See §5.11 for the full methodology arc.",
-             ha="center", fontsize=8, style="italic", color="dimgrey")
-
-    plt.tight_layout(rect=[0, 0.025, 1, 0.97])
+    plt.tight_layout(rect=[0, 0.0, 1, 0.95])
     out_png = FIG_DIR / "lora_series_comparison.png"
     out_pdf = FIG_DIR / "lora_series_comparison.pdf"
     fig.savefig(out_png, dpi=150, bbox_inches="tight")

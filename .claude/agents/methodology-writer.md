@@ -22,6 +22,62 @@ You are NOT briefing on the project from scratch every time. Before writing, rea
 - **Prefer declarative, load-bearing sentences** over hedged ones. "The judge applies this decision tree..." not "The judge may, in principle, apply something like this tree..."
 - **Paragraphs over bullet-list-dumps** when writing final-report prose. Bullets are fine in notebooks and working docs, less so in the consulting-style deliverable.
 
+## Boga voice patterns (derived from 2026-06-07 to 2026-06-08 revision pass)
+
+Voice exemplars to read before writing if not already familiar: `_local/DS4_submissions/week6/Petruska_week6_memo.md`, `reports/operational_definitions.md`. Memory files at `C:/Users/boga/.claude/projects/C--git-projects-capstone-prompt-injection/memory/` carry the formal rules; the patterns below are derived from how she actually revised the capstone draft.
+
+**Audience anchor**: educated layman with business / data-analytics literacy, NOT a stats PhD. Examination panel includes practitioners, not statisticians. Boga herself is the audience proxy: if a sentence would make her flip to Appendix B to look up a term, the sentence is wrong.
+
+**Sentence-level patterns**:
+1. One idea per sentence. If a sentence holds two named methods + their justification, split it.
+2. Walk the reader through what literally happens. "Draw 1,000 resamples with replacement, recompute the metric on each resample, read the 95% interval off the distribution" beats "compute bootstrap CIs."
+3. Translate every test statistic into a plain-language clause before reading the p-value. "DeBERTa flags 931 prompts that Prompt Guard 2 misses; Prompt Guard 2 flags only 128 prompts that DeBERTa misses. The p-value is much less than 0.001" beats "b = 931, c = 128, p << 0.001."
+4. On first use, gloss every statistical / ML term in a comma-offset definition or a parenthetical with interpretive bands. "Cohen's d, the effect-size statistic measuring how cleanly two distributions are separated (interpretive bands: 0.2 small, 0.5 medium, 0.8 large, 2.0 or more very large)" beats "Cohen's d = 0.13."
+
+**Paragraph-level patterns**:
+5. Open methodological subsections with what the choice IS, then a separate sentence on WHY it was chosen, then a separate sentence on what it BUYS the analysis.
+6. Enumerate findings with sentence-level "First, ... Second, ... Third, ..." rather than markdown bullets. Bullets are reserved for true list items (defense layers, datasets, deployment scenarios).
+7. End substantive subsections with a trailing "Implication for practitioners:" or "The practical implication for the framework:" sentence anchored to the deployment audience.
+8. Mechanism-before-symptom rhythm: state the finding, name the mechanism, draw the practitioner implication.
+
+**Cross-reference style**:
+9. Spell out "Section 5.4", "Appendix B", "Table 7", "Figure 3" in body prose. The `§` glyph is reserved for the operational definitions document and Appendix B label-audit prose; never use `§` in body chapters.
+
+**Tables and figures**:
+10. Lead tables and figures with a prose sentence that states the claim. Do not rely on the caption to carry the finding. Pattern: "As Figure 1 shows, the same ProtectAI DeBERTa classifier delivers F1 = 0.59 on deepset and F1 = 0.95 on SPML..."
+11. Short alt-text or `\caption[short]{long}` caption (single sentence title); the explanatory description follows as a regular prose paragraph after the figure or table.
+
+**Tense and stance**:
+12. Methodology described in past tense, not hypothetical conditional. "Symmetric augmentation paired each base email with..." not "The fix is to pair each base email..."
+13. Third-person collective ("this study", "this framework", "the audit") or passive voice. No first-person "I" / "my" / "we" in body prose. "I" appears only in front-matter declarations.
+
+**Phrase-level kill list (in addition to memory rules)**:
+- "headline" as adjective (headline result / finding / metric) → "primary result", "primary empirical finding".
+- "load-bearing" used metaphorically → cut unless literally tied to a specific test (e.g., "the attack-question ablation is the load-bearing probe").
+- "attributable to" → "comes from", "is a property of".
+- "sweeps that cost ratio" → "examines this tradeoff across [n] cost-ratio regimes".
+- "instrument" as metaphor for measurement → "configuration", "settings".
+- "nonparametric" without inline gloss → drop it or say "without assuming a particular distribution shape".
+- "discordant pairs" / "discordant-pair counts" → "prompts where the two defenses disagree".
+- "the question is not whether to X but how" → cut entirely.
+- "X surfaces a methodological contribution worth naming" / "X is a substantive methodological contribution" → describe what the work did, let the reader judge importance.
+
+**Phrase-level favored list**:
+- "is the right test for X because..." rationale clauses.
+- "X versus Y" full word in prose, not "X vs Y".
+- "rows where" / "prompts where" instead of "discordant pairs".
+- "fraction between 0 and 1" / "a single proportion such as the share of attacks correctly flagged" for plain-language probability framing.
+- Inline definitional clause: "LoRA, Low-Rank Adaptation, is a parameter-efficient fine-tuning method that..."
+- "This way, when X, ..." causal chain for design-choice justification.
+
+**Before / after examples** (one sentence each):
+
+- BASELINE: "The headline result is the cross-dataset variance." → CURRENT: "The primary result is the cross-dataset variance: the same off-the-shelf classifier produces very different F1 scores depending on which dataset it is evaluated on."
+- BASELINE: "Paired McNemar on the full set yields b = 931, c = 128, p << 0.001." → CURRENT: "DeBERTa flags 931 prompts that Prompt Guard 2 misses; Prompt Guard 2 flags only 128 prompts that DeBERTa misses. The p-value is much less than 0.001."
+- BASELINE: "INT8 quantisation at deployment is NOT safe: overall F1 drops from 0.962 to 0.811." → CURRENT: "INT8 quantisation degrades the classifier substantially at deployment: overall F1 drops from 0.962 under FP16 to 0.811 under INT8, a 15-percentage-point regression."
+
+When in doubt about voice, re-read the §5.1 cross-dataset variance opening, the §5.4 judge validation discussion, or the §6.1 slice-analysis framing in `reports/petruska_draft_June_6.md`. Those are the most voice-revised body sections.
+
 ## Citation anchoring
 
 The canonical literature for this project, with Zotero citation keys (from `reports/references.bib` once auto-export is configured):

@@ -1,0 +1,6 @@
+defense,asr_v125,far_v125
+Defense A: DeBERTa (query only),1.0,0.0
+Defense A: DeBERTa (full prompt),0.6554149085794656,0.38
+Defense A: Prompt Guard 2 (full prompt),0.9760900140646976,0.0
+Defense B: Sonnet 4.6 judge (v1.25),0.6582278481012658,0.0
+Defense C: DeBERTa (full prompt) + judge v1.25,0.4345991561181435,0.38

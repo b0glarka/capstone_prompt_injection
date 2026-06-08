@@ -1,4 +1,6 @@
-# Business-Oriented Evaluation of Prompt Injection Defenses for Enterprise AI Agent Deployments
+# From Benchmark to Deployment: Hardening AI Agents Against Prompt Injection
+
+## Cross-dataset evaluation and a business decision framework for layered defense
 
 Master of Science in Business Analytics, Capstone Final Report
 
@@ -17,16 +19,6 @@ Status: DRAFT skeleton, pre-populated from existing artifacts; sections marked [
 Target length: 20-25 pages
 
 ---
-
-# Executive Summary [DRAFT]
-
-This capstone evaluates two prompt-injection defenses for enterprise AI agent deployments: an input-side classifier defense (Defense A, instantiated with two pre-trained models, ProtectAI DeBERTa and Meta Prompt Guard 2) and an output-side LLM-as-judge defense (Defense B, Llama 3.3 70B agent with Claude Sonnet 4.6 as the primary judge and GPT-4o as a sensitivity-check second judge). Evaluation is on a frozen 4,546-row stratified sample drawn from three public benchmarks (deepset/prompt-injections, neuralchemy/Prompt-injection-dataset, and reshabhs/SPML_Chatbot_Prompt_Injection), with BIPIA [@yi2025Benchmarking] as an indirect-injection extension.
-
-The principal empirical finding is cross-dataset variance. The same input classifier delivers F1 of 0.59 [95% CI 0.52, 0.66] on the deepset benchmark and 0.95 [0.94, 0.96] on SPML, a 36-point spread that does not collapse under threshold tuning, ensemble methods, or substitution of the classifier. The variance is a property of the data distributions rather than the classifiers. Error-pattern analysis confirms that the input classifiers we tested rely heavily on canonical override-language keywords ("ignore previous instructions", "you are now X"); attacks that achieve the same effect through subtler social engineering or obfuscation slip through systematically.
-
-The Defense B sneak preview, run on the 24 hardest input-classifier misses across three attack classes, reveals that the layered defense (classifier + agent + judge) operates by three different mechanisms depending on the attack class. On subtle role-play injections, the judge catches half the cases the classifier missed. On blunt harmful-content jailbreaks, the agent's RLHF training refuses the request before the judge sees it. On obfuscated payloads, the agent fails to parse the embedded instruction. This refines the layered-defense thesis: combining defenses is empirically supported, but the value of each layer is conditional on the attack class it is asked to handle.
-
-The recommendation for enterprise deployments is layered: pre-trained input classifiers (preferably the OR-gated ensemble of DeBERTa and Prompt Guard 2) as the first line, an LLM-as-judge as the output-side check on flagged or borderline cases, and explicit per-subcategory monitoring in production to detect targeted attacks against known blind spots. The cost-weighted business decision framework in Section 7 maps these choices to deployment scenarios.
 
 # 1. Introduction [DRAFT]
 

@@ -1,0 +1,5 @@
+scope,n_injection,judge_blocked_n,hijacked_n,hijack_rate_v125_ambig_hij
+overall,251,0,55,0.21912350597609562
+deepset,84,0,19,0.2261904761904762
+neuralchemy,84,0,18,0.21428571428571427
+spml,83,0,18,0.21686746987951808

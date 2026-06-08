@@ -51,9 +51,9 @@ api = [
     "groq>=0.10",
 ]
 
-# AgentDojo action-level evaluation (Section 5.9 of the final report). The
-# evaluation was de-scoped after the Together AI FP8-tier function-call
-# hallucination issue, but the code is preserved for reproducibility. Install
+# AgentDojo action-level evaluation. Cut from the final thesis (queued as
+# future work in Section 9.1) due to a Together AI FP8-tier function-call
+# hallucination issue. The code is preserved for reproducibility. Install
 # this extra to run the AgentDojo workflow at src/defense_b/agentdojo_integration.py
 # and scripts/run_agentdojo_eval.py.
 agentdojo = [

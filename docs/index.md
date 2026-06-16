@@ -1,15 +1,6 @@
 ---
-title: "From Benchmark to Deployment: Hardening AI Agents Against Prompt Injection"
 layout: default
 ---
-
-# From Benchmark to Deployment
-
-## Hardening AI Agents Against Prompt Injection
-
-*A practical framework for choosing the right defenses when companies deploy AI agents to help their employees.*
-
-<!-- TODO: Boglarka, add your headshot here. Recommended size ~200x200px, square or circular crop. Replace path below with the file you upload to docs/. -->
 
 <p align="center">
   <img src="boga.jpg" alt="Boglarka Petruska" width="180" style="border-radius: 50%;">
@@ -44,11 +35,8 @@ The project was sponsored by Hiflylabs, a Hungarian data and AI consultancy, and
 ## Read more
 
 <div align="center" style="margin: 2em 0;">
-
-[📄 Read the full project (PDF, 135 pages)](https://github.com/b0glarka/capstone_prompt_injection/blob/main/reports/Petruska_2026_MS_Thesis_corr_06_12.pdf){: .btn .btn-primary style="margin-right: 1em;"}
-
-[💻 View the repository](https://github.com/b0glarka/capstone_prompt_injection){: .btn}
-
+  <a href="https://github.com/b0glarka/capstone_prompt_injection/blob/main/reports/Petruska_2026_MS_Thesis_corr_06_12.pdf" class="btn" style="margin-right: 1em;">📄 Read the full project (PDF, 135 pages)</a>
+  <a href="https://github.com/b0glarka/capstone_prompt_injection" class="btn">💻 View the repository</a>
 </div>
 
 The repository contains the source markdown, all code and notebooks, the evaluation pipeline, supporting reports, and reproduction instructions. The PDF is a self-contained read for anyone who just wants the project itself.

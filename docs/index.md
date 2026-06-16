@@ -34,7 +34,7 @@ The project was sponsored by Hiflylabs, a Hungarian data and AI consultancy, and
 
 ## Read more
 
-- [📄 Read the full project (PDF, 135 pages)](https://github.com/b0glarka/capstone_prompt_injection/blob/main/reports/Petruska_2026_MS_Thesis_corr_06_12.pdf)
+- [📄 Read the full project (PDF, 135 pages)](https://github.com/b0glarka/capstone_prompt_injection/raw/main/reports/Petruska_2026_MS_Thesis_corr_06_12.pdf)
 - [💻 View the repository](https://github.com/b0glarka/capstone_prompt_injection)
 
 The repository contains the source markdown, all code and notebooks, the evaluation pipeline, supporting reports, and reproduction instructions. The PDF is a self-contained read for anyone who just wants the project itself.
